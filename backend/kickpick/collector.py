@@ -43,14 +43,14 @@ def sync_match(client, match_id: int) -> None:
 def sync_team(client, team_id: int) -> None:
     try:
         parsed = fotmob.parse_team(client.team(team_id))
+        with SessionLocal.begin() as s:
+            store.save_squad(s, team_id, parsed)
     except fotmob.Throttled:
         raise
     except Exception:
         with SessionLocal.begin() as s:
             store.touch_squad(s, team_id)  # don't retry a broken team every minute
         raise
-    with SessionLocal.begin() as s:
-        store.save_squad(s, team_id, parsed)
 
 
 def sync_player(client, player_id: int) -> None:

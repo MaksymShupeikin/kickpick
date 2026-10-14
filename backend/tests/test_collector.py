@@ -176,3 +176,21 @@ def test_failed_full_sync_is_retried_next_tick(seeded):
     fake.calls.clear()
     collector.tick(fake, state, now=NOW + timedelta(minutes=1), budget=0)
     assert sum(c[0] == "league" for c in fake.calls) == len(COMPETITIONS)
+
+
+def test_failing_squad_save_does_not_block_backlog(seeded, monkeypatch):
+    real = store.save_squad
+    broken = []
+
+    def save_squad(s, team_id, parsed):
+        if not broken:
+            broken.append(team_id)
+        if team_id == broken[0]:
+            raise ValueError("bad member")
+        return real(s, team_id, parsed)
+
+    monkeypatch.setattr(collector.store, "save_squad", save_squad)
+    fake = FakeFotMob()
+    collector.tick(fake, {}, now=NOW, budget=10_000)
+    assert fake.calls.count(("team", broken[0])) == 1
+    assert any(c[0] == "player" for c in fake.calls)
