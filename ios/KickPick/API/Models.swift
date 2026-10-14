@@ -72,17 +72,61 @@ struct MatchDetails: Codable, Hashable {
     let stats: [MatchStat]
 }
 
-/// `/matches/{id}`: the match fields plus `details`.
+/// `/matches/{id}`: the match fields plus `details` and `lineups`.
 struct MatchPage: Decodable {
     let match: Match
     let details: MatchDetails?
+    let lineups: Lineups?
 
-    private enum Keys: String, CodingKey { case details }
+    private enum Keys: String, CodingKey { case details, lineups }
 
     init(from decoder: Decoder) throws {
         match = try Match(from: decoder)
-        details = try decoder.container(keyedBy: Keys.self).decodeIfPresent(MatchDetails.self, forKey: .details)
+        let container = try decoder.container(keyedBy: Keys.self)
+        details = try container.decodeIfPresent(MatchDetails.self, forKey: .details)
+        lineups = try container.decodeIfPresent(Lineups.self, forKey: .lineups)
     }
+}
+
+struct Lineups: Codable, Hashable {
+    let home: TeamLineup?
+    let away: TeamLineup?
+}
+
+struct TeamLineup: Codable, Hashable {
+    let formation: String?
+    let starters: [LineupPlayer]
+    let subs: [LineupPlayer]
+    let coach: PlayerRef?
+    let unavailable: [Absence]
+}
+
+/// x (0 left … 1 right) and y (0 own goal … 1 halfway) are within the team's own half.
+struct LineupPlayer: Codable, Hashable, Identifiable {
+    var id: Int { player.id }
+    let player: PlayerRef
+    let shirtNumber: Int?
+    let position: String?
+    let x: Double?
+    let y: Double?
+    let rating: Double?
+    let captain: Bool
+    let subIn: Int?
+    let subOut: Int?
+}
+
+struct Absence: Codable, Hashable, Identifiable {
+    var id: Int { player.id }
+    let player: PlayerRef
+    let reason: String?
+    let expectedReturn: String?
+}
+
+/// A club or competition the app may not know: any field can be missing.
+struct NamedRef: Codable, Hashable {
+    let id: Int?
+    let name: String?
+    let logoUrl: URL?
 }
 
 struct StandingRow: Codable, Hashable, Identifiable {
@@ -152,6 +196,23 @@ struct TeamPage: Codable, Hashable {
     let squad: [SquadEntry]
     let last: [Match]
     let next: [Match]
+    let transfers: Transfers
+}
+
+struct Transfers: Codable, Hashable {
+    let arrivals: [Transfer]
+    let departures: [Transfer]
+}
+
+/// `team` is the other club: where he came from, or where he went.
+struct Transfer: Codable, Hashable, Identifiable {
+    var id: String { "\(player.id)|\(date.timeIntervalSince1970)" }
+    let player: PlayerRef
+    let team: NamedRef?
+    let date: Date
+    let feeEur: Int?
+    let feeText: String?
+    let onLoan: Bool
 }
 
 struct Membership: Codable, Hashable, Identifiable {
@@ -161,14 +222,58 @@ struct Membership: Codable, Hashable, Identifiable {
     let stats: PlayerStats
 }
 
-struct PlayerPage: Codable, Hashable {
+struct PlayerPage: Decodable, Hashable {
     let id: Int
     let name: String
     let photoUrl: URL?
     let countryCode: String?
+    let countryName: String?
+    let flagUrl: URL?
     let position: String?
     let birthDate: String?
     let teams: [Membership]
+    let matches: [PlayerMatch]
+    let seasons: [SeasonStats]
+    let career: [CareerEntry]
+}
+
+/// A match he played: the match fields plus his rating and minutes on the pitch.
+struct PlayerMatch: Decodable, Hashable, Identifiable {
+    let match: Match
+    let rating: Double?
+    let minutes: Int
+    var id: Int { match.id }
+
+    private enum Keys: String, CodingKey { case rating, minutes }
+
+    init(from decoder: Decoder) throws {
+        match = try Match(from: decoder)
+        let container = try decoder.container(keyedBy: Keys.self)
+        rating = try container.decodeIfPresent(Double.self, forKey: .rating)
+        minutes = try container.decode(Int.self, forKey: .minutes)
+    }
+}
+
+struct SeasonStats: Codable, Hashable, Identifiable {
+    var id: String { "\(season)|\(competition.id ?? 0)|\(team.id ?? 0)" }
+    let season: String
+    let competition: NamedRef
+    let team: NamedRef
+    let appearances: Int?
+    let goals: Int?
+    let assists: Int?
+    let rating: Double?
+}
+
+struct CareerEntry: Codable, Hashable, Identifiable {
+    let id: Int
+    let kind: String
+    let team: NamedRef
+    let startDate: String?
+    let endDate: String?
+    let appearances: Int?
+    let goals: Int?
+    let assists: Int?
 }
 
 struct PlayerHit: Codable, Hashable, Identifiable {

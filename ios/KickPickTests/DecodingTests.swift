@@ -118,9 +118,55 @@ final class DecodingTests: XCTestCase {
 
     func testPlayerWithoutPositionDecodes() throws {
         let page = try decode(PlayerPage.self, """
-        {"id": 1, "name": "Lineup Only", "photo_url": null, "country_code": null, "position": null,
-         "birth_date": null, "teams": []}
+        {"id": 1, "name": "Lineup Only", "photo_url": null, "country_code": null, "country_name": null, "flag_url": null,
+         "position": null, "birth_date": null, "teams": [], "matches": [], "seasons": [], "career": []}
         """)
         XCTAssertNil(page.position)
+    }
+
+    func testMatchLineupsDecode() throws {
+        let page = try decode(MatchPage.self, matchJSON + """
+        , "details": null, "lineups": {"home": {"formation": "4-3-3", "starters": [{"player": {"id": 7, "name": "Bruno Silva",
+          "photo_url": null}, "shirt_number": 9, "position": "FW", "x": 0.5, "y": 0.87, "rating": 7.4, "captain": true,
+          "sub_in": null, "sub_out": 78}], "subs": [], "coach": null, "unavailable": [{"player": {"id": 8, "name": "A B",
+          "photo_url": null}, "reason": "injury", "expected_return": null}]}, "away": null}}
+        """)
+        XCTAssertEqual(page.lineups?.home?.starters.first?.subOut, 78)
+        XCTAssertEqual(page.lineups?.home?.unavailable.first?.reason, "injury")
+        XCTAssertNil(page.lineups?.away)
+        XCTAssertNil(try decode(MatchPage.self, matchJSON + #", "details": null, "lineups": null}"#).lineups)
+    }
+
+    func testPlayerPageDecodes() throws {
+        let page = try decode(PlayerPage.self, """
+        {"id": 1467236, "name": "Lamine Yamal", "photo_url": null, "country_code": "ESP", "country_name": "Spain",
+         "flag_url": "https://images.fotmob.com/image_resources/logo/teamlogo/esp.png", "position": "FW",
+         "birth_date": "2007-07-13", "teams": [],
+         "matches": [\(matchJSON), "rating": 8.1, "minutes": 78, "role": "starter"}],
+         "seasons": [{"season": "2025/2026", "competition": {"id": 87, "name": "LaLiga", "logo_url": null},
+           "team": {"id": 8634, "name": "Barcelona", "logo_url": null}, "appearances": 30, "goals": 12, "assists": 15,
+           "rating": 7.9}],
+         "career": [{"id": 5, "kind": "senior", "team": {"id": null, "name": "Barcelona B", "logo_url": null},
+           "start_date": "2023-04-29", "end_date": null, "appearances": 2, "goals": 0, "assists": 0}]}
+        """)
+        XCTAssertEqual(page.countryName, "Spain")
+        XCTAssertEqual(page.matches.first?.minutes, 78)
+        XCTAssertEqual(page.matches.first?.match.home.name, "Coventry City")
+        XCTAssertEqual(page.seasons.first?.competition.name, "LaLiga")
+        XCTAssertNil(page.career.first?.team.id)
+    }
+
+    func testTeamTransfersDecode() throws {
+        let team = try decode(TeamPage.self, """
+        {"id": 8634, "name": "Barcelona", "short_name": "Barcelona", "logo_url": null, "squad": [], "last": [], "next": [],
+         "transfers": {"arrivals": [{"player": {"id": 1, "name": "A", "photo_url": null},
+           "team": {"id": 9, "name": "Leeds United", "logo_url": null}, "date": "2026-07-01T00:00:00Z",
+           "fee_eur": 45000000, "fee_text": "fee", "on_loan": false}],
+          "departures": [{"player": {"id": 2, "name": "B", "photo_url": null}, "team": null,
+           "date": "2026-08-01T00:00:00+00:00", "fee_eur": null, "fee_text": "on loan", "on_loan": true}]}}
+        """)
+        XCTAssertEqual(team.transfers.arrivals.first?.team?.name, "Leeds United")
+        XCTAssertEqual(team.transfers.arrivals.first?.feeEur, 45_000_000)
+        XCTAssertNil(team.transfers.departures.first?.team)
     }
 }
