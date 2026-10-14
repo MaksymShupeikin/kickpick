@@ -181,4 +181,17 @@ final class DecodingTests: XCTestCase {
         let awayFront = PitchLayout.point(x: 0.5, y: 1, home: false, in: size)
         XCTAssertGreaterThanOrEqual(awayFront.y - homeFront.y, 2 * PitchLayout.midGap)
     }
+
+    func testCareerYears() throws {
+        func entry(_ start: String?, _ end: String?) throws -> CareerEntry {
+            let json = """
+            {"id": 1, "kind": "senior", "team": {"id": null, "name": "X", "logo_url": null},
+             "start_date": \(start.map { "\"\($0)\"" } ?? "null"), "end_date": \(end.map { "\"\($0)\"" } ?? "null"),
+             "appearances": null, "goals": null, "assists": null}
+            """
+            return try decode(CareerEntry.self, json)
+        }
+        XCTAssertEqual(try entry("2022-07-01", nil).years, "2022 – now")
+        XCTAssertEqual(try entry("2016-07-01", "2022-06-30").years, "2016 – 2022")
+    }
 }
