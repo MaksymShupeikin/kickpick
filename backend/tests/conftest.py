@@ -13,20 +13,26 @@ from alembic.config import Config  # noqa: E402
 from sqlalchemy import text  # noqa: E402
 
 BACKEND = Path(__file__).parents[1]
-TABLES = "competitions, seasons, teams, matches, standings, brackets, players, squad_members"
+TABLES = ("competitions, seasons, teams, matches, standings, brackets, players, squad_members, player_career, "
+          "player_seasons, player_market_values, team_transfers, match_lineups, fetch_failures")
 
 
 @pytest.fixture(scope="session")
-def engine():
+def alembic_cfg():
+    cfg = Config(str(BACKEND / "alembic.ini"))
+    cfg.set_main_option("script_location", str(BACKEND / "alembic"))
+    return cfg
+
+
+@pytest.fixture(scope="session")
+def engine(alembic_cfg):
     url = os.environ["DATABASE_URL"]
     base, name = url.rsplit("/", 1)
     assert name.endswith("_test"), f"refusing to recreate non-test database {name!r}"
     with psycopg.connect(base.replace("postgresql+psycopg", "postgresql") + "/postgres", autocommit=True) as conn:
         conn.execute(f'DROP DATABASE IF EXISTS "{name}" WITH (FORCE)')
         conn.execute(f'CREATE DATABASE "{name}"')
-    cfg = Config(str(BACKEND / "alembic.ini"))
-    cfg.set_main_option("script_location", str(BACKEND / "alembic"))
-    command.upgrade(cfg, "head")
+    command.upgrade(alembic_cfg, "head")
     from kickpick.db import engine
     return engine
 
