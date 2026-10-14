@@ -18,12 +18,14 @@ struct MatchesView: View {
                 if matches.isEmpty {
                     EmptyState(text: "No matches")
                 } else {
-                    ForEach(matches.grouped(by: \.competition.slug)) { group in
-                        let competition = group.items[0].competition
-                        CardSection(title: competition.name, logo: competition.logoUrl) {
-                            Rows(items: group.items) { match in
-                                NavigationLink(value: Route.match(match.id)) { MatchRow(match: match) }
-                                    .buttonStyle(.plain)
+                    VStack(alignment: .leading, spacing: 32) {
+                        ForEach(matches.grouped(by: \.competition.slug)) { group in
+                            let competition = group.items[0].competition
+                            CardSection(title: competition.name, logo: competition.logoUrl) {
+                                Rows(items: group.items) { match in
+                                    NavigationLink(value: Route.match(match.id)) { MatchRow(match: match) }
+                                        .buttonStyle(.plain)
+                                }
                             }
                         }
                     }

@@ -10,7 +10,7 @@ struct SearchableScreen<Content: View>: View {
         GeometryReader { geo in
             ZStack(alignment: .top) {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 24) {  // controls → content (design.md §5)
                         content
                     }
                     .padding(16)

@@ -39,7 +39,7 @@ struct CardSection<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             if let title {
                 HStack(spacing: 8) {
                     if let logo { Logo(url: logo, size: 20, label: title) }
