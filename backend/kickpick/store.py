@@ -32,9 +32,10 @@ def save_league(s: Session, competition_id: int, parsed: dict, is_current: bool)
     ).scalar_one()
     _upsert(s, Team, [t | {"search_name": search_name(t["name"])} for t in parsed["teams"]], ["id"])
     _upsert(s, Match, [m | {"season_id": season_id} for m in parsed["matches"]], ["id"])
-    s.execute(delete(Standing).where(Standing.season_id == season_id))
-    _upsert(s, Standing, [r | {"season_id": season_id} for r in parsed["standings"]],
-            ["season_id", "group_name", "team_id"])
+    if parsed["standings"]:
+        s.execute(delete(Standing).where(Standing.season_id == season_id))
+        _upsert(s, Standing, [r | {"season_id": season_id} for r in parsed["standings"]],
+                ["season_id", "group_name", "team_id"])
     if parsed["bracket"]:
         _upsert(s, Bracket, [{"season_id": season_id, "data": parsed["bracket"]}], ["season_id"])
     return season_id

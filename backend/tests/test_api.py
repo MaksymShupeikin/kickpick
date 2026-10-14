@@ -17,7 +17,9 @@ def data(db_module):
         store.save_competitions(s, COMPETITIONS)
         store.save_league(s, 47, fotmob.parse_league(load("league_pl.json")), is_current=True)
         store.save_league(s, 42, fotmob.parse_league(load("league_ucl_2025.json")), is_current=False)
-        store.save_league(s, 77, fotmob.parse_league(load("league_wc_2022.json")), is_current=False)
+        wc = fotmob.parse_league(load("league_wc_2022.json"))
+        third = [r | {"group_name": "Best 3rd placed teams"} for r in wc["standings"] if r["group_name"] == "A"]
+        store.save_league(s, 77, wc | {"standings": wc["standings"] + third}, is_current=False)  # FotMob's 2026 ranking table
         store.save_league(s, 50, fotmob.parse_league(load("league_euro_2028.json")), is_current=True)
         store.save_match(s, 5795369, fotmob.parse_match(load("match.json")))
         store.save_squad(s, 8634, fotmob.parse_team(load("team.json")))
@@ -46,7 +48,7 @@ def test_standings_single_and_groups():
     assert len(pl) == 1 and len(pl[0]["rows"]) == 20 and pl[0]["rows"][0]["position"] == 1
     assert pl[0]["rows"][0]["team"]["logo_url"].endswith(".png")
     wc = client.get("/competitions/world-cup/standings", params={"season": "2022"}).json()
-    assert [g["group"] for g in wc] == list("ABCDEFGH")
+    assert [g["group"] for g in wc] == list("ABCDEFGH") + ["Best 3rd placed teams"]
 
 
 def test_competition_matches_by_round():

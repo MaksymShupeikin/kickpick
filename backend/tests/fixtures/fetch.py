@@ -14,6 +14,7 @@ FIXTURES = {
     "league_euro_2028.json": ("/leagues", {"id": 50, "season": "2028"}, LEAGUE),
     "match.json": ("/matchDetails", {"matchId": 5795369}, ("header", "content")),  # own goal, red card, added time
     "team.json": ("/teams", {"id": 8634}, ("details", "squad")),
+    "team_national.json": ("/teams", {"id": 10155}, ("details", "squad")),  # squad.isNationalTeam: ccode is the club
 }
 
 

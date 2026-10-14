@@ -195,6 +195,8 @@ def parse_match(raw: dict) -> dict:
 
 def parse_team(raw: dict) -> dict:
     players, squad = {}, {}
+    # national squads put the player's CLUB in ccode/nationalTeamId; details.country is "INT" so there's no national code to store
+    national = (raw.get("squad") or {}).get("isNationalTeam")
     for group in (raw.get("squad") or {}).get("squad") or []:  # placeholder teams ("Winner SF 1") have no squad
         position = POSITIONS.get(group.get("title"))
         if not position:
@@ -203,8 +205,8 @@ def parse_team(raw: dict) -> dict:
             players[p["id"]] = {
                 "id": p["id"],
                 "name": p["name"],
-                "country_code": p.get("ccode"),
-                "national_team_id": p.get("nationalTeamId"),
+                **({"national_team_id": int(raw["details"]["id"])} if national
+                   else {"country_code": p.get("ccode"), "national_team_id": p.get("nationalTeamId")}),
                 "position": position,
                 "birth_date": date.fromisoformat(p["dateOfBirth"]) if p.get("dateOfBirth") else None,
             }

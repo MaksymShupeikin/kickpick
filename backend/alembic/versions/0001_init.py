@@ -9,7 +9,7 @@ down_revision = None
 
 def upgrade():
     op.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm")
-    # shortcut: the first migration mirrors models.py; every later migration must spell out its own ops
+    # shortcut: create_all mirrors models.py; freeze this into explicit op.create_table calls before adding 0002
     Base.metadata.create_all(op.get_bind())
 
 

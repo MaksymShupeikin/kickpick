@@ -54,3 +54,29 @@ def test_save_squad_replaces_members_and_touches_team(db):
         assert count(s, SquadMember) == 3
         assert count(s, Player) == len(squad["players"])
         assert s.get(Team, 8634).squad_updated_at is not None
+
+
+def test_national_squad_does_not_overwrite_player_nationality(db):
+    club = load("team.json")
+    national = {"details": {"id": 6720}, "squad": club["squad"] | {"isNationalTeam": True}}
+    with db.begin() as s:
+        store.save_competitions(s, COMPETITIONS)
+        store.save_league(s, 42, fotmob.parse_league(load("league_ucl_2025.json")), is_current=False)
+        s.add(Team(id=6720, name="Spain", short_name="Spain", search_name="spain"))
+        s.flush()
+        store.save_squad(s, 8634, fotmob.parse_team(club))
+        store.save_squad(s, 6720, fotmob.parse_team(national))
+    spaniard = next(p for p in fotmob.parse_team(club)["players"] if p["country_code"] == "ESP")["id"]
+    with db() as s:
+        p = s.get(Player, spaniard)
+        assert (p.country_code, p.national_team_id) == ("ESP", 6720)
+
+
+def test_empty_standings_keep_previous_table(db):
+    parsed = fotmob.parse_league(load("league_pl.json"))
+    with db.begin() as s:
+        store.save_competitions(s, COMPETITIONS)
+        store.save_league(s, 47, parsed, is_current=True)
+        store.save_league(s, 47, parsed | {"standings": []}, is_current=True)
+    with db() as s:
+        assert count(s, Standing) == 20

@@ -89,6 +89,12 @@ def test_parse_team_squad():
     assert {m["player_id"] for m in p["squad"]} == {pl["id"] for pl in p["players"]}
 
 
+def test_parse_national_team_squad_ignores_club_fields():
+    p = fotmob.parse_team(load("team_national.json"))
+    assert len(p["players"]) >= 20
+    assert all(pl["national_team_id"] == 10155 and "country_code" not in pl for pl in p["players"])
+
+
 def test_placeholder_team_has_empty_squad():
     raw = {"details": {"id": 1983, "name": "Winner SF 1", "shortName": "Winner SF 1"}, "squad": {"squad": None}}
     assert fotmob.parse_team(raw) == {"players": [], "squad": []}

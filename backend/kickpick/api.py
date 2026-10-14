@@ -113,7 +113,8 @@ def standings(slug: str, season: str | None = None, s: Session = Depends(db)):
             "drawn": st.drawn, "lost": st.lost, "goals_for": st.goals_for, "goals_against": st.goals_against,
             "points": st.points,
         })
-    return [{"group": g, "rows": r} for g, r in groups.items()]
+    # single-letter/number groups first; named tables ("Best 3rd placed teams") after
+    return [{"group": g, "rows": groups[g]} for g in sorted(groups, key=lambda g: (len(g) > 1, g))]
 
 
 @app.get("/competitions/{slug}/matches")
