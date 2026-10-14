@@ -99,4 +99,12 @@ final class DecodingTests: XCTestCase {
         XCTAssertFalse(try match("NS", offset: 86400).needsPolling)
         XCTAssertFalse(try match("FT", offset: -3600).needsPolling)
     }
+
+    func testPlayerWithoutPositionDecodes() throws {
+        let page = try decode(PlayerPage.self, """
+        {"id": 1, "name": "Lineup Only", "photo_url": null, "country_code": null, "position": null,
+         "birth_date": null, "teams": []}
+        """)
+        XCTAssertNil(page.position)
+    }
 }

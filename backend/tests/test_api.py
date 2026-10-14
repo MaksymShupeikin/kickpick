@@ -7,6 +7,7 @@ from fx import load
 from kickpick import fotmob, store
 from kickpick.api import app
 from kickpick.config import COMPETITIONS
+from kickpick.models import Player
 
 client = TestClient(app)
 
@@ -115,3 +116,10 @@ def test_search_rejects_and_escapes():
     assert client.get("/search", params={"q": "%%"}).json() == {"competitions": [], "teams": [], "players": []}
     assert client.get("/search", params={"q": "a"}).status_code == 422
     assert client.get("/search", params={"q": "   "}).status_code == 422
+
+
+def test_player_without_position(db_module):
+    with db_module.begin() as s:
+        s.add(Player(id=999_001, name="Lineup Only", search_name="lineup only"))
+    body = client.get("/players/999001").json()
+    assert body["position"] is None and body["teams"] == []

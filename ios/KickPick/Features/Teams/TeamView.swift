@@ -17,7 +17,7 @@ struct TeamView: View {
                     if !team.last.isEmpty { matches("Последние матчи", team.last) }
                     if !team.next.isEmpty { matches("Ближайшие", team.next) }
                     ForEach(team.squad.grouped(by: \.position)) { group in
-                        CardSection(title: Self.positions[group.key] ?? group.key) {
+                        CardSection(title: group.key.flatMap { Self.positions[$0] ?? $0 } ?? "Другие") {
                             Rows(items: group.items) { entry in
                                 NavigationLink(value: Route.player(entry.player.id)) { SquadRow(entry: entry) }
                                     .buttonStyle(.plain)

@@ -40,7 +40,8 @@ struct PlayerView: View {
 private extension PlayerPage {
     var facts: [(label: String, value: String)] {
         let positions = ["Coach": "Тренер", "GK": "Вратарь", "DF": "Защитник", "MF": "Полузащитник", "FW": "Нападающий"]
-        var out = [(label: "Позиция", value: positions[position] ?? position)]
+        var out: [(label: String, value: String)] = []
+        if let position { out.append((label: "Позиция", value: positions[position] ?? position)) }
         if let birthDate, let born = try? Date(birthDate + "T00:00:00Z", strategy: .iso8601),
            let age = Calendar.current.dateComponents([.year], from: born, to: .now).year {
             out.append((label: "Возраст", value: "\(age)"))

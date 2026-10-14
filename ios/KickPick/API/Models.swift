@@ -140,7 +140,7 @@ struct SquadEntry: Codable, Hashable, Identifiable {
     var id: Int { player.id }
     let player: PlayerRef
     let shirtNumber: Int?
-    let position: String
+    let position: String?
     let stats: PlayerStats
 }
 
@@ -166,7 +166,7 @@ struct PlayerPage: Codable, Hashable {
     let name: String
     let photoUrl: URL?
     let countryCode: String?
-    let position: String
+    let position: String?
     let birthDate: String?
     let teams: [Membership]
 }
