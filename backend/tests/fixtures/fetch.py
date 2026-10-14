@@ -1,11 +1,14 @@
 """Refresh FotMob fixtures: `uv run python tests/fixtures/fetch.py`. Keeps only the keys the parsers read."""
 import json
+import sys
 from pathlib import Path
 
 import httpx
 
 DIR = Path(__file__).parent
 API = "https://www.fotmob.com/api/data"
+PLAYER = ("id", "name", "birthDate", "playerInformation", "primaryTeam", "positionDescription", "careerHistory",
+          "marketValues", "trophies")
 LEAGUE = ("details", "allAvailableSeasons", "table", "fixtures", "playoff")
 FIXTURES = {
     "league_pl.json": ("/leagues", {"id": 47}, LEAGUE),
@@ -13,8 +16,10 @@ FIXTURES = {
     "league_wc_2022.json": ("/leagues", {"id": 77, "season": "2022"}, LEAGUE),
     "league_euro_2028.json": ("/leagues", {"id": 50, "season": "2028"}, LEAGUE),
     "match.json": ("/matchDetails", {"matchId": 5795369}, ("header", "content")),  # own goal, red card, added time
-    "team.json": ("/teams", {"id": 8634}, ("details", "squad")),
-    "team_national.json": ("/teams", {"id": 10155}, ("details", "squad")),  # squad.isNationalTeam: ccode is the club
+    "team.json": ("/teams", {"id": 8634}, ("details", "squad", "transfers")),
+    "team_national.json": ("/teams", {"id": 10155}, ("details", "squad", "transfers")),  # squad.isNationalTeam: ccode is the club
+    "player_modric.json": ("/playerData", {"id": 31097}, PLAYER),  # national team, trophies, long career
+    "player_yamal.json": ("/playerData", {"id": 1467236}, PLAYER),
 }
 
 
@@ -26,13 +31,15 @@ def trim(raw: dict, keys: tuple) -> dict:
         content = out["content"]
         out["content"] = {
             "matchFacts": {"events": content["matchFacts"]["events"]},
+            "lineup": content.get("lineup"),
             "stats": {"Periods": {"All": content["stats"]["Periods"]["All"]}},
         }
     return out
 
 
 if __name__ == "__main__":
-    for name, (path, params, keys) in FIXTURES.items():
+    for name in sys.argv[1:] or FIXTURES:
+        path, params, keys = FIXTURES[name]
         r = httpx.get(API + path, params=params, headers={"User-Agent": "Mozilla/5.0"}, timeout=20)
         r.raise_for_status()
         (DIR / name).write_text(json.dumps(trim(r.json(), keys), ensure_ascii=False))

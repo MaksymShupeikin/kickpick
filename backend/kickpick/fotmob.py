@@ -17,6 +17,8 @@ BACKOFF_START = 30.0
 BACKOFF_MAX = 1800.0
 POSITIONS = {"coach": "Coach", "keepers": "GK", "defenders": "DF", "midfielders": "MF", "attackers": "FW"}
 CARDS = {"Yellow": "yellow", "Red": "red", "YellowRed": "second_yellow"}
+LINEUP_POSITIONS = {0: "GK", 1: "DF", 2: "MF", 3: "FW"}
+CAREER_KINDS = {"senior": "senior", "national team": "national", "youth": "youth"}
 
 
 def team_logo(team_id: int) -> str:
@@ -110,6 +112,68 @@ def _score(s: dict) -> tuple[int | None, int | None]:
 
 def _team(t: dict) -> dict:
     return {"id": int(t["id"]), "name": t["name"], "short_name": t.get("shortName") or t["name"]}
+
+
+def _int(value) -> int | None:
+    """FotMob sends numbers as ints, floats or strings ("43", "", None)."""
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return None
+
+
+def _float(value) -> float | None:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _date(value) -> date | None:
+    """'2025-07-14T00:00:00', '2014-12-31T00:00:00+00:00', '2027-06-30' or {'utcTime': ...} → date."""
+    if isinstance(value, dict):
+        value = value.get("utcTime")
+    return date.fromisoformat(value[:10]) if value else None
+
+
+def _lineups(lineup: dict) -> tuple[list[dict], list[dict], dict]:
+    players, rows, formations = {}, {}, {}
+    for side in ("home", "away"):
+        team = lineup.get(f"{side}Team") or {}
+        if not team.get("id"):
+            continue
+        formations[side] = team.get("formation")
+        groups = (("starter", team.get("starters") or []), ("sub", team.get("subs") or []),
+                  ("coach", [team["coach"]] if team.get("coach") else []), ("unavailable", team.get("unavailable") or []))
+        for role, members in groups:
+            for p in members:
+                if not p.get("id"):
+                    continue
+                player_id = int(p["id"])
+                position = "Coach" if role == "coach" else LINEUP_POSITIONS.get(p.get("usualPlayingPositionId"))
+                players[player_id] = {"id": player_id, "name": p["name"], "country_code": p.get("countryCode"),
+                                      "national_team_id": _int(p.get("nationalTeamId")), "position": position}
+                performance = p.get("performance") or {}
+                subs = {e.get("type"): e.get("time") for e in performance.get("substitutionEvents") or []}
+                layout = p.get("verticalLayout") or {}
+                unavailable = p.get("unavailability") or {}
+                rows[player_id] = {
+                    "player_id": player_id,
+                    "team_id": int(team["id"]),
+                    "side": side,
+                    "role": role,
+                    "shirt_number": _int(p.get("shirtNumber")),
+                    "position": position,
+                    "x": _float(layout.get("x")),
+                    "y": _float(layout.get("y")),
+                    "rating": _float(performance.get("rating")),
+                    "is_captain": bool(p.get("isCaptain")),
+                    "sub_in": _int(subs.get("subIn")),
+                    "sub_out": _int(subs.get("subOut")),
+                    "unavailable_type": unavailable.get("type"),
+                    "expected_return": unavailable.get("expectedReturn"),
+                }
+    return list(players.values()), list(rows.values()), formations
 
 
 def _tables(raw: dict) -> list[tuple[str, list[dict]]]:
@@ -218,12 +282,16 @@ def parse_match(raw: dict) -> dict:
         elif e["type"] == "Substitution" and len(e.get("swap") or []) == 2:
             # swap[0] came on, swap[1] went off (checked against the lineup)
             events.append(event | {"type": "sub", "player": e["swap"][0]["name"], "note": e["swap"][1]["name"]})
+    players, lineups, formations = _lineups(content.get("lineup") or {})
     return {
         "status": _status(s),
         "live_minute": _live_minute(s),
         "home_score": home_score,
         "away_score": away_score,
         "details": {"events": events, "stats": _top_stats(content.get("stats"))},
+        "players": players,
+        "lineups": lineups,
+        "formations": formations,
     }
 
 
@@ -253,4 +321,79 @@ def parse_team(raw: dict) -> dict:
                 "red_cards": p.get("rcards"),
                 "rating": p.get("rating"),
             }
-    return {"players": list(players.values()), "squad": list(squad.values())}
+    transfers = {}
+    for t in (raw.get("transfers") or {}).get("allTransfers") or []:
+        if not t.get("playerId") or not t.get("transferDate"):
+            continue
+        fee = t.get("fee") or {}
+        row = {
+            "player_id": int(t["playerId"]),
+            "player_name": t.get("name") or "",
+            "from_team_id": _int(t.get("fromClubId")),
+            "from_team_name": t.get("fromClub"),
+            "to_team_id": _int(t.get("toClubId")) or 0,  # part of the key; 0 = no club / unknown
+            "to_team_name": t.get("toClub"),
+            "transfer_date": datetime.fromisoformat(t["transferDate"]),
+            "fee_eur": _int(fee.get("value") or t.get("amountEuroEstimated")),
+            "fee_text": fee.get("feeText"),
+            "on_loan": bool(t.get("onLoan")),
+            "contract_extension": bool(t.get("contractExtension")),
+        }
+        transfers[(row["player_id"], row["transfer_date"], row["to_team_id"])] = row
+    return {"players": list(players.values()), "squad": list(squad.values()), "transfers": list(transfers.values())}
+
+
+def parse_player(raw: dict) -> dict:
+    info = {i.get("title"): i for i in raw.get("playerInformation") or []}
+
+    def value(title: str, field: str = "numberValue"):
+        return ((info.get(title) or {}).get("value") or {}).get(field)
+
+    country = info.get("Country") or {}
+    trophies = [
+        {"team_id": t.get("teamId"), "team_name": t.get("teamName"), "league_id": x.get("leagueId"),
+         "league_name": x.get("leagueName"), "won": x.get("seasonsWon") or [], "runner_up": x.get("seasonsRunnerUp") or []}
+        for t in (raw.get("trophies") or {}).get("playerTrophies") or [] for x in t.get("tournaments") or []
+    ]
+    player = {
+        "id": int(raw["id"]),
+        "name": raw["name"],
+        "birth_date": _date(raw.get("birthDate")),
+        "height_cm": _int(value("Height")),
+        "foot": value("Preferred foot", "key"),
+        "country_code": country.get("countryCode"),
+        "national_team_id": _int(country.get("nationalTeamId")),
+        "market_value_eur": _int(value("Market value")),
+        "contract_end": _date(value("Contract end", "dateValue")),
+        "primary_team_id": _int((raw.get("primaryTeam") or {}).get("teamId")),
+        "primary_position": ((raw.get("positionDescription") or {}).get("primaryPosition") or {}).get("label"),
+        "trophies": trophies,
+    }
+    career, seasons = [], {}
+    for kind, item in ((raw.get("careerHistory") or {}).get("careerItems") or {}).items():
+        kind = CAREER_KINDS.get(kind, kind)
+        for e in item.get("teamEntries") or []:
+            career.append({
+                "kind": kind, "team_id": _int(e.get("teamId")), "team_name": e.get("team"),
+                "start_date": _date(e.get("startDate")), "end_date": _date(e.get("endDate")),
+                "transfer_type": (e.get("transferType") or {}).get("text"),
+                "appearances": _int(e.get("appearances")), "goals": _int(e.get("goals")), "assists": _int(e.get("assists")),
+            })
+        for entry in item.get("seasonEntries") or []:
+            for t in entry.get("tournamentStats") or []:
+                key = (t.get("seasonName") or entry.get("seasonName"), _int(entry.get("teamId")), _int(t.get("leagueId")))
+                if None in key:
+                    continue
+                seasons[key] = {
+                    "season": key[0], "team_id": key[1], "competition_id": key[2], "team_name": entry.get("team"),
+                    "competition_name": t.get("leagueName"), "appearances": _int(t.get("appearances")),
+                    "goals": _int(t.get("goals")), "assists": _int(t.get("assists")),
+                    "rating": _float((t.get("rating") or {}).get("rating")),
+                }
+    values = {}
+    for v in (raw.get("marketValues") or {}).get("values") or []:
+        valued_on = _date(v.get("date"))
+        if valued_on and _int(v.get("value")):
+            values[valued_on] = {"valued_on": valued_on, "value_eur": _int(v["value"]), "team_id": _int(v.get("teamId"))}
+    return {"player": player, "career": career, "seasons": list(seasons.values()), "market_values": list(values.values())}
+

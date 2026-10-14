@@ -1,3 +1,5 @@
+from datetime import date
+
 import httpx
 import pytest
 
@@ -97,7 +99,7 @@ def test_parse_national_team_squad_ignores_club_fields():
 
 def test_placeholder_team_has_empty_squad():
     raw = {"details": {"id": 1983, "name": "Winner SF 1", "shortName": "Winner SF 1"}, "squad": {"squad": None}}
-    assert fotmob.parse_team(raw) == {"players": [], "squad": []}
+    assert fotmob.parse_team(raw) == {"players": [], "squad": [], "transfers": []}
 
 
 def test_search_name_drops_accents_and_case():
@@ -206,3 +208,59 @@ def test_player_endpoint():
 
     fotmob.Client(min_interval=0, transport=httpx.MockTransport(handler)).player(31097)
     assert seen[0].path == "/api/data/playerData" and dict(seen[0].params) == {"id": "31097"}
+
+
+def test_parse_match_lineups():
+    p = fotmob.parse_match(load("match.json"))
+    starters = [r for r in p["lineups"] if r["role"] == "starter"]
+    assert len(starters) == 22 and {r["side"] for r in starters} == {"home", "away"}
+    assert all(r["position"] in {"GK", "DF", "MF", "FW"} for r in starters)
+    assert sum(r["position"] == "GK" for r in starters) == 2
+    assert any(r["is_captain"] for r in starters)
+    assert all(isinstance(r["shirt_number"], int) for r in starters)
+    came_on = [r for r in p["lineups"] if r["sub_in"] is not None]
+    assert came_on and all(r["role"] == "sub" for r in came_on)
+    assert any(r["sub_out"] is not None for r in starters)
+    coaches = [r for r in p["lineups"] if r["role"] == "coach"]
+    assert len(coaches) == 2 and all(r["position"] == "Coach" for r in coaches)
+    assert p["formations"]["home"] and p["formations"]["away"]
+    assert {pl["id"] for pl in p["players"]} == {r["player_id"] for r in p["lineups"]}
+    assert all(pl["country_code"] for pl in p["players"] if pl["position"] != "Coach")
+
+
+def test_parse_match_without_lineup():
+    raw = load("match.json")
+    raw["content"].pop("lineup")
+    p = fotmob.parse_match(raw)
+    assert (p["players"], p["lineups"], p["formations"]) == ([], [], {})
+
+
+def test_parse_player_profile():
+    p = fotmob.parse_player(load("player_modric.json"))
+    player = p["player"]
+    assert (player["id"], player["country_code"], player["national_team_id"]) == (31097, "CRO", 10155)
+    assert player["birth_date"] == date(1985, 9, 9) and player["height_cm"] == 174 and player["foot"] == "right"
+    assert player["market_value_eur"] > 0 and player["contract_end"] is not None and player["primary_position"]
+    assert any(t["league_id"] == 42 and t["won"] for t in player["trophies"])
+    assert {"senior", "national"} <= {c["kind"] for c in p["career"]}
+    real = next(c for c in p["career"] if c["team_id"] == 8633)
+    assert real["start_date"] < real["end_date"] and real["appearances"] > 300
+    assert len(p["seasons"]) > 20 and all(isinstance(s["competition_id"], int) for s in p["seasons"])
+    assert len({(s["season"], s["team_id"], s["competition_id"]) for s in p["seasons"]}) == len(p["seasons"])
+    assert len(p["market_values"]) > 10 and all(v["value_eur"] for v in p["market_values"])
+
+
+def test_parse_young_player_profile():
+    p = fotmob.parse_player(load("player_yamal.json"))
+    assert p["player"]["country_code"] == "ESP" and p["player"]["primary_team_id"] == 8634
+    assert p["seasons"] and p["career"]
+
+
+def test_parse_team_transfers():
+    p = fotmob.parse_team(load("team.json"))
+    transfers = p["transfers"]
+    assert transfers and all(t["transfer_date"].tzinfo for t in transfers)
+    assert any(t["fee_eur"] and t["fee_eur"] > 0 for t in transfers)
+    assert any(t["on_loan"] for t in transfers)
+    keys = [(t["player_id"], t["transfer_date"], t["to_team_id"]) for t in transfers]
+    assert len(keys) == len(set(keys))
