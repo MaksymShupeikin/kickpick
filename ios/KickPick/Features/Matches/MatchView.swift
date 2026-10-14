@@ -2,23 +2,84 @@ import SwiftUI
 
 struct MatchView: View {
     let id: Int
+    @State private var tab: Tab?  // nil until picked: the default depends on whether the match has started
+
+    enum Tab: Hashable { case events, stats, lineups }
 
     var body: some View {
         ScrollView {
             Loader(live: { $0.match.needsPolling }) { try await APIClient.shared.match(id) } content: { page in
-                VStack(spacing: 16) {
-                    MatchHeader(match: page.match)
-                    if let details = page.details {
-                        if !details.events.isEmpty { EventsCard(events: details.events) }
-                        if !details.stats.isEmpty { StatsCard(stats: details.stats) }
+                let selected = tab ?? (page.match.status == .notStarted ? .lineups : .events)
+                VStack(spacing: 24) {
+                    VStack(spacing: 12) {
+                        MatchHeader(match: page.match)
+                            .revealsInBar { MiniScore(match: page.match) }
+                        CompetitionLine(match: page.match)
+                    }
+                    SegmentedPicker(options: [(.events, "Events"), (.stats, "Stats"), (.lineups, "Lineups")],
+                                    selection: Binding(get: { selected }, set: { tab = $0 }))
+                    switch selected {
+                    case .events:
+                        if let events = page.details?.events, !events.isEmpty {
+                            EventsCard(events: events)
+                        } else {
+                            EmptyState(text: "No events yet")
+                        }
+                    case .stats:
+                        if let stats = page.details?.stats, !stats.isEmpty {
+                            StatsCard(stats: stats)
+                        } else {
+                            EmptyState(text: "No stats yet")
+                        }
+                    case .lineups:
+                        if let lineups = page.lineups {
+                            LineupsView(match: page.match, lineups: lineups)
+                        } else {
+                            EmptyState(text: "No lineups yet")
+                        }
                     }
                 }
-                .navigationTitle(page.match.competition.name)
             }
             .padding(16)
         }
         .screen()
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// Bar version of the header: both crests and the score (kick-off time before the start).
+private struct MiniScore: View {
+    let match: Match
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Logo(url: match.home.logoUrl, size: 24, label: match.home.name)
+            Text(match.homeScore.map { "\($0) – \(match.awayScore ?? 0)" }
+                 ?? match.kickoff.formatted(.dateTime.hour().minute().locale(.app)))
+                .font(.digits(20, relativeTo: .headline))
+                .monospacedDigit()
+                .foregroundStyle(Color.textPrimary)
+            Logo(url: match.away.logoUrl, size: 24, label: match.away.name)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(match.spokenSummary)
+    }
+}
+
+/// "Premier League · Matchday 7" under the header card.
+private struct CompetitionLine: View {
+    let match: Match
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Logo(url: match.competition.logoUrl, size: 20, label: match.competition.name)
+            Text(match.round.isEmpty ? match.competition.name : "\(match.competition.name) · \(roundTitle(match.round))")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Color.textSecondary)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
     }
 }
 
