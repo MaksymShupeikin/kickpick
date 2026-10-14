@@ -192,6 +192,6 @@ for _model in (Competition, Team, Player):
     Index(f"ix_{_model.__tablename__}_search", _model.search_name,
           postgresql_using="gin", postgresql_ops={"search_name": "gin_trgm_ops"})
 Index("ix_matches_pending_details", Match.kickoff.desc(),
-      postgresql_where=and_(Match.status == "FT", Match.details_final.is_(False)))
+      postgresql_where=and_(Match.status == "FT", ~Match.details_final))
 Index("ix_players_profile_queue", Player.last_match_at.desc().nulls_last(),
       postgresql_where=Player.profile_updated_at.is_(None))

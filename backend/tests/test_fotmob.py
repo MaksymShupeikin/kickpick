@@ -264,3 +264,24 @@ def test_parse_team_transfers():
     assert any(t["on_loan"] for t in transfers)
     keys = [(t["player_id"], t["transfer_date"], t["to_team_id"]) for t in transfers]
     assert len(keys) == len(set(keys))
+
+
+def test_malformed_dates_and_numbers_are_none():
+    assert fotmob._date("garbage") is None and fotmob._date(12) is None
+    assert fotmob._int(float("inf")) is None
+
+
+def test_transfer_with_bad_date_is_skipped():
+    raw = load("team.json")
+    rows = raw["transfers"]["allTransfers"]
+    good = len(fotmob.parse_team(raw)["transfers"])
+    rows.append({**rows[0], "playerId": 999999, "transferDate": "not a date"})
+    assert len(fotmob.parse_team(raw)["transfers"]) == good
+
+
+def test_retry_after_zero_still_respects_min_interval():
+    clock = FakeClock()
+    client = polite_client([httpx.Response(429, headers={"Retry-After": "0"})], clock)
+    with pytest.raises(fotmob.Throttled):
+        client.team(1)
+    assert client.wait_time() == 1.0

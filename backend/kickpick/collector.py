@@ -22,6 +22,10 @@ FULL_SYNC_EVERY = timedelta(hours=1)
 SQUAD_EVERY = timedelta(hours=24)
 PROFILE_REFRESH = timedelta(days=7)
 MAX_ATTEMPTS = 3
+LIVE_MAX_AGE = timedelta(days=1)  # a match FotMob leaves "started" forever stops costing requests
+RETRY_AFTER = timedelta(hours=1)  # a failed record waits this long before its next attempt
+BREAKER_FAILURES = 10
+BREAKER_PAUSE = timedelta(minutes=15)
 ORDER = {competition_id: i for i, (competition_id, *_) in enumerate(COMPETITIONS)}
 
 
@@ -45,7 +49,10 @@ def sync_team(client, team_id: int) -> None:
         parsed = fotmob.parse_team(client.team(team_id))
         with SessionLocal.begin() as s:
             store.save_squad(s, team_id, parsed)
-    except fotmob.Throttled:
+    except fotmob.Throttled as e:
+        if (e.status or 0) >= 500:
+            with SessionLocal.begin() as s:
+                store.touch_squad(s, team_id)  # a team that always makes FotMob 5xx must not stall the crawl
         raise
     except Exception:
         with SessionLocal.begin() as s:
@@ -74,7 +81,7 @@ JOBS = {
 
 def live_competitions(s, now: datetime) -> set[int]:
     soon = and_(Match.status == "NS", Match.kickoff.between(now - timedelta(hours=3), now + timedelta(minutes=15)))
-    q = select(Season.competition_id).join(Match, Match.season_id == Season.id).where(or_(Match.status == "LIVE", soon))
+    q = select(Season.competition_id).join(Match, Match.season_id == Season.id).where(or_(and_(Match.status == "LIVE", Match.kickoff > now - LIVE_MAX_AGE), soon))
     return set(s.scalars(q.distinct()))
 
 
@@ -89,15 +96,21 @@ def teams_needing_squads(s, now: datetime, limit: int) -> list[int]:
     return list(s.scalars(q))
 
 
-def _not_given_up(kind: str, key):
-    return ~exists().where(FetchFailure.kind == kind, FetchFailure.key == key, FetchFailure.attempts >= MAX_ATTEMPTS)
+def _gave_up(kind: str, key):
+    return exists().where(FetchFailure.kind == kind, FetchFailure.key == key, FetchFailure.attempts >= MAX_ATTEMPTS)
 
 
-def _pending_match(s, current: bool):
+def _not_given_up(kind: str, key, now: datetime):
+    """Not failed 3 times, and not failed within the last hour."""
+    return ~exists().where(FetchFailure.kind == kind, FetchFailure.key == key,
+                           or_(FetchFailure.attempts >= MAX_ATTEMPTS, FetchFailure.updated_at > now - RETRY_AFTER))
+
+
+def _pending_match(s, current: bool, now: datetime):
     match_id = s.scalar(
         select(Match.id).join(Season, Match.season_id == Season.id)
-        .where(Match.status == "FT", Match.details_final.is_(False), Season.is_current.is_(current),
-               _not_given_up("match", cast(Match.id, String)))
+        .where(Match.status == "FT", ~Match.details_final, Season.is_current.is_(current),
+               _not_given_up("match", cast(Match.id, String), now))
         .order_by(Match.kickoff.desc()).limit(1))
     return ("match", str(match_id)) if match_id else None
 
@@ -107,10 +120,11 @@ def _pending_team(s, now):
     return ("team", str(team_ids[0])) if team_ids else None
 
 
-def _pending_season(s):
+def _pending_season(s, now: datetime):
     synced = {tuple(r) for r in s.execute(select(Season.competition_id, Season.name))}
-    given_up = set(s.scalars(select(FetchFailure.key).where(FetchFailure.kind == "season",
-                                                            FetchFailure.attempts >= MAX_ATTEMPTS)))
+    given_up = set(s.scalars(select(FetchFailure.key).where(
+        FetchFailure.kind == "season",
+        or_(FetchFailure.attempts >= MAX_ATTEMPTS, FetchFailure.updated_at > now - RETRY_AFTER))))
     candidates = []
     for competition_id, available in s.execute(select(Competition.id, Competition.available_seasons)):
         seasons = available or []
@@ -123,11 +137,11 @@ def _pending_season(s):
     return None
 
 
-def _pending_player(s, in_squad: bool, now: datetime | None = None):
-    q = select(Player.id).where(_not_given_up("player", cast(Player.id, String)))
+def _pending_player(s, now: datetime, in_squad: bool, refresh: bool = False):
+    q = select(Player.id).where(_not_given_up("player", cast(Player.id, String), now))
     if in_squad:
         q = q.where(exists().where(SquadMember.player_id == Player.id))
-    if now:  # refresh: current-squad profiles older than a week
+    if refresh:  # refresh: current-squad profiles older than a week
         q = q.where(Player.profile_updated_at < now - PROFILE_REFRESH).order_by(Player.profile_updated_at)
     else:
         q = q.where(Player.profile_updated_at.is_(None)).order_by(Player.last_match_at.desc().nulls_last())
@@ -137,13 +151,13 @@ def _pending_player(s, in_squad: bool, now: datetime | None = None):
 
 def next_job(s, now: datetime) -> tuple[str, str] | None:
     finders = (
-        lambda: _pending_match(s, current=True),
+        lambda: _pending_match(s, True, now),
         lambda: _pending_team(s, now),
-        lambda: _pending_season(s),
-        lambda: _pending_player(s, in_squad=True),
-        lambda: _pending_match(s, current=False),
-        lambda: _pending_player(s, in_squad=False),
-        lambda: _pending_player(s, in_squad=True, now=now),
+        lambda: _pending_season(s, now),
+        lambda: _pending_player(s, now, in_squad=True),
+        lambda: _pending_match(s, False, now),
+        lambda: _pending_player(s, now, in_squad=False),
+        lambda: _pending_player(s, now, in_squad=True, refresh=True),
     )
     for find in finders:
         if job := find():
@@ -151,19 +165,27 @@ def next_job(s, now: datetime) -> tuple[str, str] | None:
     return None
 
 
-def run_job(client, kind: str, key: str) -> None:
-    """One backlog record. Throttling propagates (nobody's fault); any other error counts against the record."""
+def _fail(kind: str, key: str, error: str) -> None:
+    with SessionLocal.begin() as s:
+        store.record_failure(s, kind, key, error)
+
+
+def run_job(client, kind: str, key: str) -> bool:
+    """One backlog record; True on success. Throttling propagates (403/429/network: nobody's fault; 5xx also counts
+    against the record, so one that always breaks FotMob can't stall the crawl); any other error counts too."""
     try:
         JOBS[kind](client, key)
-    except fotmob.Throttled:
+    except fotmob.Throttled as e:
+        if (e.status or 0) >= 500:
+            _fail(kind, key, repr(e))
         raise
     except Exception as e:
         log.exception("%s %s failed", kind, key)
-        with SessionLocal.begin() as s:
-            store.record_failure(s, kind, key, repr(e))
-        return
+        _fail(kind, key, repr(e))
+        return False
     with SessionLocal.begin() as s:
         store.clear_failure(s, kind, key)
+    return True
 
 
 def _try(what: str, fn, *args) -> bool:
@@ -192,18 +214,32 @@ def tick(client, state: dict, now: datetime | None = None, budget: float = TICK_
     for competition_id in live:
         _try(f"live league {competition_id}", sync_competition, client, competition_id)
     with SessionLocal() as s:
-        live_ids = list(s.scalars(select(Match.id).where(Match.status == "LIVE")))
+        live_ids = list(s.scalars(select(Match.id).where(Match.status == "LIVE", Match.kickoff > now - LIVE_MAX_AGE)))
     for match_id in live_ids:
         _try(f"live match {match_id}", sync_match, client, match_id)
-    while clock() - started + client.wait_time() < budget:
+    ran: dict[str, int] = {}
+    failed = streak = 0
+    throttled = False
+    paused_until = state.get("backlog_paused_until")
+    while (paused_until is None or now >= paused_until) and clock() - started + client.wait_time() < budget:
         with SessionLocal() as s:
             job = next_job(s, now)
         if job is None:
             break
+        ran[job[0]] = ran.get(job[0], 0) + 1
         try:
-            run_job(client, *job)
+            ok = run_job(client, *job)
         except fotmob.Throttled:
+            throttled = True
             break  # the client is paused; mandatory steps of the next tick go first
+        streak = 0 if ok else streak + 1
+        failed += not ok
+        if streak >= BREAKER_FAILURES:
+            log.error("backlog breaker: %d failures in a row, pausing backlog for 15 min", streak)
+            state["backlog_paused_until"] = paused_until = now + BREAKER_PAUSE
+    kinds = ", ".join(f"{k} {n}" for k, n in ran.items())
+    log.info("tick: backlog %d jobs (%s), %d failed, throttled=%s, breaker=%s", sum(ran.values()), kinds, failed,
+             "yes" if throttled else "no", "on" if paused_until and now < paused_until else "off")
 
 
 def status() -> list[str]:
@@ -213,19 +249,31 @@ def status() -> list[str]:
 
         available = sum(len(a or []) for a in s.scalars(select(Competition.available_seasons)))
         seasons = count(Season)
+        matches = count(Match)
         finished = count(Match, Match.status == "FT")
         detailed = count(Match, Match.status == "FT", Match.details_final)
         players = count(Player)
         profiled = count(Player, Player.profile_updated_at.is_not(None))
-        squads = count(Team, Team.squad_updated_at.is_not(None))
-        given_up = count(FetchFailure, FetchFailure.attempts >= MAX_ATTEMPTS)
-    remaining = max(available - seasons, 0) + (finished - detailed) + (players - profiled)
-    hours = remaining * (REQUEST_INTERVAL + 0.25) / 3600
+        current = (select(Match.home_team_id.label("t")).join(Season, Match.season_id == Season.id).where(Season.is_current)
+                   .union(select(Match.away_team_id).join(Season, Match.season_id == Season.id).where(Season.is_current))
+                   .subquery())
+        teams = count(Team, Team.id.in_(select(current.c.t)))
+        squads = count(Team, Team.id.in_(select(current.c.t)), Team.squad_updated_at.is_not(None))
+        given_up = count(FetchFailure, FetchFailure.attempts >= MAX_ATTEMPTS,
+                         FetchFailure.kind.in_(("match", "player", "season")))
+        pending_matches = count(Match, Match.status == "FT", ~Match.details_final,
+                                ~_gave_up("match", cast(Match.id, String)))
+        pending_players = count(Player, Player.profile_updated_at.is_(None),
+                                ~_gave_up("player", cast(Player.id, String)))
+    unsynced = max(available - seasons, 0)
+    remaining = round(unsynced * matches / seasons) if seasons else 0
+    remaining += pending_matches + pending_players
+    hours = remaining * (REQUEST_INTERVAL + 0.7) / 3600  # interval + 0.25 jitter avg + ~0.45 latency/idle
     return [
         f"seasons    {seasons}/{available}",
         f"matches    {detailed}/{finished} finished matches with details and lineups",
         f"players    {profiled}/{players} with a profile (the total grows as lineups arrive)",
-        f"squads     {squads} teams",
+        f"squads     {squads}/{teams} teams of the current season",
         f"given up   {given_up} records after {MAX_ATTEMPTS} failed attempts",
         f"remaining  ~{remaining} requests, ~{hours:.1f} h",
     ]

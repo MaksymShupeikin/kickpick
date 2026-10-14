@@ -41,6 +41,10 @@ def search_name(text: str) -> str:
 class Throttled(Exception):
     """FotMob refused or failed (403/429/5xx/network): every request is paused; the record itself is fine."""
 
+    def __init__(self, reason: str, status: int | None = None):
+        super().__init__(reason)
+        self.status = status  # HTTP status, None for network errors
+
 
 class Client:
     def __init__(self, min_interval: float = 1.0, jitter: float = 0.5, transport: httpx.BaseTransport | None = None,
@@ -60,22 +64,22 @@ class Client:
         try:
             r = self.http.get(path, params=params)
         except httpx.TransportError as e:
-            raise self._pause(f"{type(e).__name__}: {e}", None) from e
+            raise self._pause(f"{type(e).__name__}: {e}", None, None) from e
         if r.status_code in (403, 429) or r.status_code >= 500:
-            raise self._pause(f"HTTP {r.status_code}", r.headers.get("Retry-After"))
+            raise self._pause(f"HTTP {r.status_code}", r.headers.get("Retry-After"), r.status_code)
         self.failures = 0
         self._next = self.clock() + self.min_interval + self.rand() * self.jitter
         r.raise_for_status()  # any other 4xx (e.g. 404) is this record's problem, not throttling
         return r.json()
 
-    def _pause(self, reason: str, retry_after: str | None) -> Throttled:
+    def _pause(self, reason: str, retry_after: str | None, status: int | None = None) -> Throttled:
         self.failures += 1
         pause = min(BACKOFF_START * 2 ** (self.failures - 1), BACKOFF_MAX)
         if retry_after and retry_after.isdigit():
-            pause = float(retry_after)
+            pause = max(float(retry_after), self.min_interval)
         self._next = self.clock() + pause
         log.warning("FotMob %s: pausing all requests for %.0f s", reason, pause)
-        return Throttled(reason)
+        return Throttled(reason, status)
 
     def league(self, league_id: int, season: str | None = None) -> dict:
         return self._get("/leagues", id=league_id, **({"season": season} if season else {}))
@@ -118,7 +122,7 @@ def _int(value) -> int | None:
     """FotMob sends numbers as ints, floats or strings ("43", "", None)."""
     try:
         return int(float(value))
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None
 
 
@@ -133,7 +137,10 @@ def _date(value) -> date | None:
     """'2025-07-14T00:00:00', '2014-12-31T00:00:00+00:00', '2027-06-30' or {'utcTime': ...} → date."""
     if isinstance(value, dict):
         value = value.get("utcTime")
-    return date.fromisoformat(value[:10]) if value else None
+    try:
+        return date.fromisoformat(value[:10])
+    except (TypeError, ValueError):
+        return None
 
 
 def _lineups(lineup: dict) -> tuple[list[dict], list[dict], dict]:
@@ -325,6 +332,10 @@ def parse_team(raw: dict) -> dict:
     for t in (raw.get("transfers") or {}).get("allTransfers") or []:
         if not t.get("playerId") or not t.get("transferDate"):
             continue
+        try:
+            transfer_date = datetime.fromisoformat(t["transferDate"])
+        except (TypeError, ValueError):
+            continue
         fee = t.get("fee") or {}
         row = {
             "player_id": int(t["playerId"]),
@@ -333,7 +344,7 @@ def parse_team(raw: dict) -> dict:
             "from_team_name": t.get("fromClub"),
             "to_team_id": _int(t.get("toClubId")) or 0,  # part of the key; 0 = no club / unknown
             "to_team_name": t.get("toClub"),
-            "transfer_date": datetime.fromisoformat(t["transferDate"]),
+            "transfer_date": transfer_date,
             "fee_eur": _int(fee.get("value") or t.get("amountEuroEstimated")),
             "fee_text": fee.get("feeText"),
             "on_loan": bool(t.get("onLoan")),
