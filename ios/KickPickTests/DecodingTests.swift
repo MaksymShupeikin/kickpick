@@ -25,6 +25,13 @@ final class DecodingTests: XCTestCase {
         XCTAssertEqual(match.weight(home: true), .even)  // still live: no winner yet
     }
 
+    func testSpokenSummary() throws {
+        let live = try decode(Match.self, matchJSON.replacingOccurrences(of: "45+2'", with: "67'") + "}")
+        XCTAssertTrue(live.spokenSummary.contains("идёт, 67'"))
+        let done = try decode(Match.self, matchJSON.replacingOccurrences(of: "LIVE", with: "FT") + "}")
+        XCTAssertTrue(done.spokenSummary.hasSuffix("завершён"))
+    }
+
     func testMatchPageWithDetailsDecodes() throws {
         let page = try decode(MatchPage.self, matchJSON + """
         , "details": {"events": [{"minute": 90, "added": 5, "type": "goal", "side": "away", "player": "A",

@@ -21,7 +21,14 @@ extension Match {
 
     var spokenSummary: String {
         let teams = homeScore.map { "\(home.name) \($0), \(away.name) \(awayScore ?? 0)" } ?? "\(home.name) — \(away.name)"
-        return "\(teams), \(statusText(showDate: true))"
+        let state: String
+        switch status {
+        case .finished: state = "завершён"
+        case .live: state = minute.map { "идёт, \($0)" } ?? "идёт"
+        case .notStarted: state = "начало " + kickoff.formatted(.dateTime.day().month().hour().minute().locale(.app))
+        case .cancelled: state = "отменён"
+        }
+        return "\(teams), \(state)"
     }
 
     static let placeholders: [Match] = (1...5).map { i in

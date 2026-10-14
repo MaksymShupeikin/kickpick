@@ -140,8 +140,10 @@ private struct EventIcon: View {
             card(Color.cardYellow)
         case "red", "second_yellow":
             card(Color.cardRed)
+        case "sub":
+            Image(systemName: "arrow.left.arrow.right").foregroundStyle(Color.textPrimary)
         default:
-            Image(systemName: "arrow.left.arrow.right").foregroundStyle(Color.textSecondary)
+            EmptyView()
         }
     }
 
