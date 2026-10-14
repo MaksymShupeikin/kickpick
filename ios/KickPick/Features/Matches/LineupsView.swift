@@ -159,7 +159,7 @@ private struct PitchPlayer: View {
                     .font(.digits(13, relativeTo: .caption2, bold: false))
                     .foregroundStyle(Color.textSecondary)
             }
-            .frame(width: 72)
+            .frame(width: 64)
             .contentShape(Rectangle())
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(player.player.name + (player.rating.map { String(format: ", rating %.1f", $0) } ?? ""))
