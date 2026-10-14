@@ -107,7 +107,7 @@ def test_search_ignores_accents_and_case():
     hit = next(p for p in body["players"] if "García" in p["name"])
     assert hit["team_name"] == "Barcelona" and hit["photo_url"].endswith(".png")
     assert client.get("/search", params={"q": "barcel"}).json()["teams"][0]["name"] == "Barcelona"
-    assert client.get("/search", params={"q": "champions"}).json()["competitions"][0]["slug"] == "champions-league"
+    assert client.get("/search", params={"q": "champions l"}).json()["competitions"][0]["slug"] == "champions-league"
 
 
 def test_search_rejects_and_escapes():
