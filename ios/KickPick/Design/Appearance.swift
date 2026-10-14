@@ -1,6 +1,6 @@
 import UIKit
 
-/// Condensed SF titles (design.md §4) and material bars.
+/// Condensed SF titles (design.md §4) and a material navigation bar; the tab bar is our own (KickPickApp).
 enum Appearance {
     static func apply() {
         let large = UIFontMetrics(forTextStyle: .largeTitle)
@@ -16,12 +16,5 @@ enum Appearance {
         UINavigationBar.appearance().scrollEdgeAppearance = top
         UINavigationBar.appearance().standardAppearance = scrolled
         UINavigationBar.appearance().compactAppearance = scrolled
-        if #unavailable(iOS 26) {  // iOS 26 draws its own glass tab bar
-            let tab = UITabBarAppearance()
-            tab.configureWithTransparentBackground()
-            tab.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-            UITabBar.appearance().standardAppearance = tab
-            UITabBar.appearance().scrollEdgeAppearance = tab
-        }
     }
 }

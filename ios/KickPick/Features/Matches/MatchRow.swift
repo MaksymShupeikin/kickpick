@@ -57,12 +57,15 @@ struct MatchStatusText: View {
             if match.status == .live {
                 Circle().fill(Color.cardRed).frame(width: 6, height: 6)
             }
-            Text(match.statusText(showDate: showDate))
-                .font(match.status == .live ? .digits(22, relativeTo: .title3) : .footnote.weight(.medium))
-                .foregroundStyle(match.status == .live ? Color.textPrimary : Color.textSecondary)
-                .monospacedDigit()
-                .lineLimit(2)
-                .minimumScaleFactor(0.7)
+            VStack(alignment: .leading, spacing: 2) {
+                // one Text per line ("18 дек." / "2022"), so a long month shrinks instead of wrapping
+                ForEach(match.statusText(showDate: showDate).components(separatedBy: "\n"), id: \.self) { line in
+                    Text(line).lineLimit(1).minimumScaleFactor(0.7)
+                }
+            }
+            .font(match.status == .live ? .digits(22, relativeTo: .title3) : .footnote.weight(.medium))
+            .foregroundStyle(match.status == .live ? Color.textPrimary : Color.textSecondary)
+            .monospacedDigit()
         }
     }
 }

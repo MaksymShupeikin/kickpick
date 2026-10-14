@@ -50,14 +50,18 @@ struct CompetitionView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if !seasons.isEmpty {
-                Menu {
-                    Picker("Сезон", selection: $season) {
-                        ForEach(seasons, id: \.self) { Text($0).tag(Optional($0)) }
+                GlassToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Picker("Сезон", selection: $season) {
+                            ForEach(seasons, id: \.self) { Text($0).tag(Optional($0)) }
+                        }
+                    } label: {
+                        Text(season ?? competition.currentSeason ?? "Сезон").font(.subheadline.weight(.semibold))
                     }
-                } label: {
-                    Text(season ?? competition.currentSeason ?? "Сезон").font(.subheadline.weight(.semibold))
+                    .menuStyle(.button)
+                    .buttonStyle(.glass)
+                    .accessibilityLabel("Сезон")
                 }
-                .accessibilityLabel("Сезон")
             }
         }
         .task { seasons = (try? await APIClient.shared.seasons(competition.slug)) ?? [] }
