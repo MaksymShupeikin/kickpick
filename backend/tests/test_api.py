@@ -95,6 +95,26 @@ def test_match_with_details():
     assert client.get("/matches/1").status_code == 404
 
 
+def test_match_lineups():
+    lineups = client.get("/matches/5795369").json()["lineups"]
+    home, away = lineups["home"], lineups["away"]
+    assert home["formation"] == "4-2-3-1" and len(home["starters"]) == 11 and len(away["starters"]) == 11
+    spots = [(p["y"], p["x"]) for p in home["starters"]]
+    assert spots == sorted(spots)  # goalkeeper first, then line by line
+    assert home["starters"][0]["player"]["photo_url"].endswith(".png")
+    assert home["coach"]["name"] and away["coach"]["name"]
+    assert home["unavailable"][0]["reason"] == "injury" and away["unavailable"] == []
+    subs = home["subs"] + away["subs"]
+    assert any(p["sub_in"] for p in subs)
+    for side in (home, away):
+        unused = [p["sub_in"] is None for p in side["subs"]]
+        assert unused == sorted(unused)  # those who came on are listed first
+
+
+def test_match_without_lineups():
+    assert client.get("/matches/5795468").json()["lineups"] is None
+
+
 def test_team_page():
     t = client.get("/teams/8634").json()
     assert t["logo_url"].endswith("/teamlogo/8634.png")

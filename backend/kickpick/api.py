@@ -12,7 +12,7 @@ from kickpick import collector
 from kickpick.config import COMPETITIONS
 from kickpick.db import SessionLocal
 from kickpick.fotmob import league_logo, player_photo, search_name, team_logo
-from kickpick.models import Bracket, Competition, Match, Player, Season, SquadMember, Standing, Team
+from kickpick.models import Bracket, Competition, Match, MatchLineup, Player, Season, SquadMember, Standing, Team
 
 app = FastAPI(title="KickPick")
 ORDER = {competition_id: i for i, (competition_id, *_) in enumerate(COMPETITIONS)}
@@ -69,6 +69,41 @@ def bracket_json(data: dict) -> dict:
 
     return {"rounds": [r | {"matchups": [pair(m) for m in r["matchups"]]} for r in data["rounds"]],
             "third_place": pair(data["third_place"])}
+
+
+def lineups_json(s: Session, m: Match) -> dict | None:
+    rows = s.execute(select(MatchLineup, Player).join(Player, MatchLineup.player_id == Player.id)
+                     .where(MatchLineup.match_id == m.id)).all()
+    if not rows:
+        return None
+
+    def ref(p: Player) -> dict:
+        return {"id": p.id, "name": p.name, "photo_url": player_photo(p.id)}
+
+    def entry(lineup: MatchLineup, p: Player) -> dict:
+        return {"player": ref(p), "shirt_number": lineup.shirt_number, "position": lineup.position, "x": lineup.x,
+                "y": lineup.y, "rating": lineup.rating, "captain": lineup.is_captain, "sub_in": lineup.sub_in,
+                "sub_out": lineup.sub_out}
+
+    def side(name: str, formation: str | None) -> dict | None:
+        mine = [r for r in rows if r[0].side == name]
+        if not mine:
+            return None
+
+        def role(kind: str) -> list:
+            return [r for r in mine if r[0].role == kind]
+
+        starters = sorted(role("starter"), key=lambda r: (r[0].y or 0, r[0].x or 0))
+        subs = sorted(role("sub"), key=lambda r: (r[0].sub_in is None, r[0].sub_in or 0, r[0].shirt_number or 999))
+        coach = role("coach")
+        return {"formation": formation,
+                "starters": [entry(*r) for r in starters],
+                "subs": [entry(*r) for r in subs],
+                "coach": ref(coach[0][1]) if coach else None,
+                "unavailable": [{"player": ref(p), "reason": u.unavailable_type, "expected_return": u.expected_return}
+                                for u, p in role("unavailable")]}
+
+    return {"home": side("home", m.home_formation), "away": side("away", m.away_formation)}
 
 
 def find_season(s: Session, slug: str, season: str | None) -> Season:
@@ -167,7 +202,7 @@ def match(match_id: int, s: Session = Depends(db)):
     row = s.execute(MATCHES.where(Match.id == match_id)).first()
     if not row:
         raise HTTPException(404, "match not found")
-    return match_json(row) | {"details": row[0].details}
+    return match_json(row) | {"details": row[0].details, "lineups": lineups_json(s, row[0])}
 
 
 @app.get("/teams/{team_id}")
