@@ -13,6 +13,7 @@ struct MatchView: View {
                 VStack(spacing: 24) {
                     VStack(spacing: 12) {
                         MatchHeader(match: page.match)
+                            .accessibilityAddTraits(.isHeader)
                             .revealsInBar { MiniScore(match: page.match) }
                         CompetitionLine(match: page.match)
                     }
@@ -39,6 +40,7 @@ struct MatchView: View {
                         }
                     }
                 }
+                .onAppear { if tab == nil { tab = selected } }
             }
             .padding(16)
         }
@@ -73,6 +75,7 @@ private struct CompetitionLine: View {
     var body: some View {
         HStack(spacing: 8) {
             Logo(url: match.competition.logoUrl, size: 20, label: match.competition.name)
+                .accessibilityHidden(true)
             Text(match.round.isEmpty ? match.competition.name : "\(match.competition.name) · \(roundTitle(match.round))")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Color.textSecondary)

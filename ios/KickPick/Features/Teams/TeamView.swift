@@ -17,6 +17,7 @@ struct TeamView: View {
                         Text(team.name)
                             .font(.title2.weight(.bold).width(.condensed))
                             .foregroundStyle(Color.textPrimary)
+                            .accessibilityAddTraits(.isHeader)
                             .revealsInBar {
                                 HStack(spacing: 8) {
                                     Logo(url: team.logoUrl, size: 20, label: team.name)

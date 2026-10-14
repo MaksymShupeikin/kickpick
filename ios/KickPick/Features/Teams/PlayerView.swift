@@ -40,6 +40,7 @@ private struct PlayerHeader: View {
                     .font(.title2.weight(.bold).width(.condensed))
                     .foregroundStyle(Color.textPrimary)
                     .multilineTextAlignment(.center)
+                    .accessibilityAddTraits(.isHeader)
                     .revealsInBar {
                         Text(player.name).font(.headline.width(.condensed)).foregroundStyle(Color.textPrimary)
                     }
