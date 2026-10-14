@@ -14,5 +14,31 @@ services:
       interval: 5s
       retries: 10
 
+  api:
+    build: ./backend
+    command: sh -c "alembic upgrade head && uvicorn kickpick.api:app --host 0.0.0.0 --port 8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://kickpick:kickpick@db:5432/kickpick
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      retries: 20
+    restart: unless-stopped
+
+  collector:
+    build: ./backend
+    command: python -m kickpick.collector
+    environment:
+      DATABASE_URL: postgresql+psycopg://kickpick:kickpick@db:5432/kickpick
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   pgdata:
