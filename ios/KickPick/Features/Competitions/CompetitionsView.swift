@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CompetitionsView: View {
     private struct Kind: Hashable { let kind: String; let title: String }
-    private static let kinds = [Kind(kind: "league", title: "Leagues"), Kind(kind: "cup", title: "European Cups"),
+    private static let kinds = [Kind(kind: "cup", title: "European Cups"), Kind(kind: "league", title: "Leagues"),
                                 Kind(kind: "international", title: "International")]
 
     var body: some View {
