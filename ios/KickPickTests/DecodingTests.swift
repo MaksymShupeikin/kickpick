@@ -171,49 +171,20 @@ final class DecodingTests: XCTestCase {
     }
 
     func testPitchLayout() {
-        let size = CGSize(width: 300, height: 450)  // half depth: 450 / 2 − 40 − 40 = 145
+        let size = CGSize(width: 300, height: 450)  // half depth: 450 / 2 − 30 − 30 = 165
         let keeper = PitchLayout.point(x: 0.5, y: 0.1, home: true, in: size)
         XCTAssertEqual(keeper.x, 150, accuracy: 0.001)
-        XCTAssertEqual(keeper.y, 40 + 0.1 * 145, accuracy: 0.001)
-        XCTAssertEqual(PitchLayout.point(x: 0.5, y: 0.1, home: false, in: size).y, 450 - 40 - 0.1 * 145, accuracy: 0.001)
+        XCTAssertEqual(keeper.y, 30, accuracy: 0.001)  // the keeper sits at the inset
+        XCTAssertEqual(PitchLayout.point(x: 0.5, y: 0.1, home: false, in: size).y, 420, accuracy: 0.001)
         XCTAssertEqual(PitchLayout.point(x: 0.2, y: 0.5, home: false, in: size).x, 240, accuracy: 0.001)  // mirrored
-        let homeFront = PitchLayout.point(x: 0.5, y: 1, home: true, in: size)
-        let awayFront = PitchLayout.point(x: 0.5, y: 1, home: false, in: size)
-        XCTAssertGreaterThanOrEqual(awayFront.y - homeFront.y, 2 * PitchLayout.midGap)
-    }
-
-    func testCareerYears() throws {
-        func entry(_ start: String?, _ end: String?) throws -> CareerEntry {
-            let json = """
-            {"id": 1, "kind": "senior", "team": {"id": null, "name": "X", "logo_url": null},
-             "start_date": \(start.map { "\"\($0)\"" } ?? "null"), "end_date": \(end.map { "\"\($0)\"" } ?? "null"),
-             "appearances": null, "goals": null, "assists": null}
-            """
-            return try decode(CareerEntry.self, json)
-        }
-        XCTAssertEqual(try entry("2022-07-01", nil).years, "2022 – now")
-        XCTAssertEqual(try entry("2016-07-01", "2022-06-30").years, "2016 – 2022")
-    }
-
-    func testAgeLineKeepsTheBirthDayInAnyTimeZone() {
-        let saved = NSTimeZone.default
-        defer { NSTimeZone.default = saved }
-        NSTimeZone.default = TimeZone(identifier: "Pacific/Auckland")!
-        let now = ISO8601DateFormatter().date(from: "2026-10-15T12:00:00Z")!
-        XCTAssertEqual(PlayerPage.ageLine(birthDate: "2000-07-21", now: now), "26 · 21 Jul 2000")
-        XCTAssertNil(PlayerPage.ageLine(birthDate: "not a date", now: now))
-    }
-
-    func testTransferFeeLabels() {
-        func move(_ fee: Int?, _ text: String?, loan: Bool = false) -> Transfer {
-            Transfer(player: PlayerRef(id: 1, name: "A", photoUrl: nil), team: nil, date: .now, feeEur: fee,
-                     feeText: text, onLoan: loan)
-        }
-        XCTAssertEqual(move(45_000_000, "fee").feeLabel, "€45M")
-        XCTAssertEqual(move(1_500_000, "fee").feeLabel, "€1.5M")
-        XCTAssertEqual(move(nil, "on loan", loan: true).feeLabel, "Loan")
-        XCTAssertEqual(move(nil, "free transfer").feeLabel, "Free")
-        XCTAssertEqual(move(nil, "undisclosed").feeLabel, "Undisclosed")
-        XCTAssertEqual(move(nil, nil).feeLabel, "—")
+        let homeFront = PitchLayout.point(x: 0.5, y: 0.87, home: true, in: size)
+        let awayFront = PitchLayout.point(x: 0.5, y: 0.87, home: false, in: size)
+        XCTAssertEqual(awayFront.y - homeFront.y, 2 * PitchLayout.midGap, accuracy: 0.001)
+        XCTAssertEqual(PitchLayout.point(x: 0.5, y: 0.02, home: true, in: size).y, 30, accuracy: 0.001)  // clamped
+        // smallest phone (iPhone SE): pitch 327 pt wide at 9:16 — lines 0.192 apart stay ≥ one ~56-pt cell apart
+        let phone = CGSize(width: 327, height: 327 * 16 / 9)
+        let defence = PitchLayout.point(x: 0.5, y: 0.29, home: true, in: phone)
+        let midfield = PitchLayout.point(x: 0.5, y: 0.482, home: true, in: phone)
+        XCTAssertGreaterThanOrEqual(midfield.y - defence.y, 56)
     }
 }

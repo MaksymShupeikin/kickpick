@@ -46,11 +46,15 @@ struct LineupsView: View {
 /// Where a starter stands on the drawn pitch. Home plays down from the top, away up from the bottom, mirrored
 /// left-right so both read from the viewer's side.
 enum PitchLayout {
-    static let inset: CGFloat = 40   // half a player cell: keeps goalkeepers inside the card
-    static let midGap: CGFloat = 40  // keeps the two front lines apart
+    static let inset: CGFloat = 30   // half a player cell: keeps goalkeepers inside the card
+    static let midGap: CGFloat = 30  // keeps the two front lines apart
+    /// FotMob's y runs from about 0.10 (keeper) to 0.87 (front line); that span fills the half, so lines
+    /// (≈ 0.19 apart) stay a full player cell apart.
+    static let depthRange = 0.10...0.87
 
     static func point(x: Double, y: Double, home: Bool, in size: CGSize) -> CGPoint {
-        let depth = CGFloat(y) * (size.height / 2 - inset - midGap)
+        let t = min(max((y - depthRange.lowerBound) / (depthRange.upperBound - depthRange.lowerBound), 0), 1)
+        let depth = CGFloat(t) * (size.height / 2 - inset - midGap)
         return home ? CGPoint(x: CGFloat(x) * size.width, y: inset + depth)
                     : CGPoint(x: CGFloat(1 - x) * size.width, y: size.height - inset - depth)
     }
@@ -115,7 +119,7 @@ private struct Pitch: View {
                 }
             }
         }
-        .aspectRatio(2.0 / 3.0, contentMode: .fit)
+        .aspectRatio(9.0 / 16.0, contentMode: .fit)
         .padding(.horizontal, 8)
     }
 }
@@ -148,15 +152,15 @@ private struct PitchPlayer: View {
 
     var body: some View {
         NavigationLink(value: Route.player(player.player.id)) {
-            VStack(spacing: 2) {
-                Logo(url: player.player.photoUrl, size: 36, label: player.player.name, round: true)
+            VStack(spacing: 1) {
+                Logo(url: player.player.photoUrl, size: 28, label: player.player.name, round: true)
                 Text(player.player.name.split(separator: " ").last.map(String.init) ?? player.player.name)
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(Color.textPrimary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
                 Text(player.rating.map { String(format: "%.1f", $0) } ?? " ")  // " " keeps every cell the same height
-                    .font(.digits(13, relativeTo: .caption2, bold: false))
+                    .font(.digits(11, relativeTo: .caption2, bold: false))
                     .foregroundStyle(Color.textSecondary)
             }
             .frame(width: 64)
