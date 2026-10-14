@@ -1,0 +1,3648 @@
+{
+ "name": "LaLiga",
+ "season": "2026/2027",
+ "matches": [
+  {
+   "id": "5868011",
+   "round": "1",
+   "utc": "2026-08-15T17:30:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Getafe",
+   "score": "3 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868019",
+   "round": "1",
+   "utc": "2026-08-15T19:30:00Z",
+   "home": "Sevilla",
+   "away": "Rayo Vallecano",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868017",
+   "round": "1",
+   "utc": "2026-08-16T15:00:00Z",
+   "home": "Racing Santander",
+   "away": "Villarreal",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868015",
+   "round": "1",
+   "utc": "2026-08-16T17:00:00Z",
+   "home": "Espanyol",
+   "away": "Levante",
+   "score": "3 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868014",
+   "round": "1",
+   "utc": "2026-08-17T19:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Elche",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868012",
+   "round": "1",
+   "utc": "2026-08-19T19:05:00Z",
+   "home": "Atlético Madrid",
+   "away": "Málaga",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868029",
+   "round": "2",
+   "utc": "2026-08-20T19:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Deportivo Alavés",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868023",
+   "round": "2",
+   "utc": "2026-08-21T19:00:00Z",
+   "home": "Real Betis",
+   "away": "Real Sociedad",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868021",
+   "round": "2",
+   "utc": "2026-08-22T15:00:00Z",
+   "home": "Athletic Club",
+   "away": "Sevilla",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868030",
+   "round": "2",
+   "utc": "2026-08-22T17:30:00Z",
+   "home": "Valencia",
+   "away": "Celta Vigo",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868025",
+   "round": "2",
+   "utc": "2026-08-22T19:30:00Z",
+   "home": "Espanyol",
+   "away": "Real Madrid",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868022",
+   "round": "2",
+   "utc": "2026-08-23T15:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Villarreal",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868026",
+   "round": "2",
+   "utc": "2026-08-23T17:30:00Z",
+   "home": "Getafe",
+   "away": "Racing Santander",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868024",
+   "round": "2",
+   "utc": "2026-08-23T19:30:00Z",
+   "home": "Elche",
+   "away": "Barcelona",
+   "score": "0 - 5",
+   "status": "FT"
+  },
+  {
+   "id": "5868028",
+   "round": "2",
+   "utc": "2026-08-24T17:30:00Z",
+   "home": "Osasuna",
+   "away": "Levante",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868027",
+   "round": "2",
+   "utc": "2026-08-24T19:30:00Z",
+   "home": "Málaga",
+   "away": "Deportivo A Coruña",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868020",
+   "round": "1",
+   "utc": "2026-08-25T19:00:00Z",
+   "home": "Valencia",
+   "away": "Real Betis",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868018",
+   "round": "1",
+   "utc": "2026-08-26T19:00:00Z",
+   "home": "Real Madrid",
+   "away": "Real Sociedad",
+   "score": "4 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868013",
+   "round": "1",
+   "utc": "2026-08-27T18:30:00Z",
+   "home": "Celta Vigo",
+   "away": "Osasuna",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868016",
+   "round": "1",
+   "utc": "2026-08-27T19:00:00Z",
+   "home": "Barcelona",
+   "away": "Athletic Club",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868037",
+   "round": "3",
+   "utc": "2026-08-28T17:00:00Z",
+   "home": "Racing Santander",
+   "away": "Elche",
+   "score": "3 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868031",
+   "round": "3",
+   "utc": "2026-08-28T19:30:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Villarreal",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868035",
+   "round": "3",
+   "utc": "2026-08-29T15:00:00Z",
+   "home": "Levante",
+   "away": "Real Betis",
+   "score": "5 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868039",
+   "round": "3",
+   "utc": "2026-08-29T17:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Espanyol",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868040",
+   "round": "3",
+   "utc": "2026-08-29T19:30:00Z",
+   "home": "Sevilla",
+   "away": "Atlético Madrid",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868038",
+   "round": "3",
+   "utc": "2026-08-30T15:00:00Z",
+   "home": "Real Madrid",
+   "away": "Málaga",
+   "score": "4 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868033",
+   "round": "3",
+   "utc": "2026-08-30T17:30:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Valencia",
+   "score": "3 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868032",
+   "round": "3",
+   "utc": "2026-08-30T19:30:00Z",
+   "home": "Celta Vigo",
+   "away": "Athletic Club",
+   "score": "0 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868036",
+   "round": "3",
+   "utc": "2026-08-31T17:30:00Z",
+   "home": "Osasuna",
+   "away": "Getafe",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868034",
+   "round": "3",
+   "utc": "2026-08-31T19:30:00Z",
+   "home": "Barcelona",
+   "away": "Rayo Vallecano",
+   "score": "5 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868070",
+   "round": "6",
+   "utc": "2026-09-03T19:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Celta Vigo",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868043",
+   "round": "4",
+   "utc": "2026-09-04T19:00:00Z",
+   "home": "Real Betis",
+   "away": "Real Madrid",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868042",
+   "round": "4",
+   "utc": "2026-09-05T14:15:00Z",
+   "home": "Athletic Club",
+   "away": "Atlético Madrid",
+   "score": "3 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868048",
+   "round": "4",
+   "utc": "2026-09-05T16:30:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Racing Santander",
+   "score": "3 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868050",
+   "round": "4",
+   "utc": "2026-09-05T19:00:00Z",
+   "home": "Villarreal",
+   "away": "Deportivo A Coruña",
+   "score": "2 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868049",
+   "round": "4",
+   "utc": "2026-09-06T14:15:00Z",
+   "home": "Valencia",
+   "away": "Barcelona",
+   "score": "0 - 5",
+   "status": "FT"
+  },
+  {
+   "id": "5868041",
+   "round": "4",
+   "utc": "2026-09-06T16:30:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Osasuna",
+   "score": "5 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868047",
+   "round": "4",
+   "utc": "2026-09-06T16:30:00Z",
+   "home": "Málaga",
+   "away": "Levante",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868045",
+   "round": "4",
+   "utc": "2026-09-06T19:00:00Z",
+   "home": "Espanyol",
+   "away": "Sevilla",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868046",
+   "round": "4",
+   "utc": "2026-09-07T17:00:00Z",
+   "home": "Getafe",
+   "away": "Celta Vigo",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868044",
+   "round": "4",
+   "utc": "2026-09-07T19:30:00Z",
+   "home": "Elche",
+   "away": "Real Sociedad",
+   "score": "2 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868059",
+   "round": "5",
+   "utc": "2026-09-11T19:00:00Z",
+   "home": "Sevilla",
+   "away": "Valencia",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868056",
+   "round": "5",
+   "utc": "2026-09-12T12:00:00Z",
+   "home": "Racing Santander",
+   "away": "Deportivo Alavés",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868055",
+   "round": "5",
+   "utc": "2026-09-12T14:15:00Z",
+   "home": "Osasuna",
+   "away": "Espanyol",
+   "score": "0 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868051",
+   "round": "5",
+   "utc": "2026-09-12T16:30:00Z",
+   "home": "Athletic Club",
+   "away": "Elche",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868057",
+   "round": "5",
+   "utc": "2026-09-12T19:00:00Z",
+   "home": "Real Madrid",
+   "away": "Rayo Vallecano",
+   "score": "4 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868052",
+   "round": "5",
+   "utc": "2026-09-13T12:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Málaga",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868054",
+   "round": "5",
+   "utc": "2026-09-13T14:15:00Z",
+   "home": "Levante",
+   "away": "Barcelona",
+   "score": "2 - 4",
+   "status": "FT"
+  },
+  {
+   "id": "5868053",
+   "round": "5",
+   "utc": "2026-09-13T16:30:00Z",
+   "home": "Getafe",
+   "away": "Deportivo A Coruña",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868058",
+   "round": "5",
+   "utc": "2026-09-13T19:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Atlético Madrid",
+   "score": "0 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868060",
+   "round": "5",
+   "utc": "2026-09-14T19:00:00Z",
+   "home": "Villarreal",
+   "away": "Real Betis",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868069",
+   "round": "6",
+   "utc": "2026-09-15T17:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Espanyol",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868061",
+   "round": "6",
+   "utc": "2026-09-15T18:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Valencia",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868065",
+   "round": "6",
+   "utc": "2026-09-15T19:30:00Z",
+   "home": "Elche",
+   "away": "Real Madrid",
+   "score": "2 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868062",
+   "round": "6",
+   "utc": "2026-09-16T17:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Osasuna",
+   "score": "4 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868064",
+   "round": "6",
+   "utc": "2026-09-16T17:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Sevilla",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868066",
+   "round": "6",
+   "utc": "2026-09-16T19:30:00Z",
+   "home": "Barcelona",
+   "away": "Racing Santander",
+   "score": "7 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868063",
+   "round": "6",
+   "utc": "2026-09-17T17:00:00Z",
+   "home": "Real Betis",
+   "away": "Getafe",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868068",
+   "round": "6",
+   "utc": "2026-09-17T19:30:00Z",
+   "home": "Málaga",
+   "away": "Villarreal",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868075",
+   "round": "7",
+   "utc": "2026-09-18T19:00:00Z",
+   "home": "Espanyol",
+   "away": "Elche",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868077",
+   "round": "7",
+   "utc": "2026-09-19T12:00:00Z",
+   "home": "Osasuna",
+   "away": "Rayo Vallecano",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868071",
+   "round": "7",
+   "utc": "2026-09-19T14:15:00Z",
+   "home": "Athletic Club",
+   "away": "Deportivo Alavés",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868073",
+   "round": "7",
+   "utc": "2026-09-19T16:30:00Z",
+   "home": "Celta Vigo",
+   "away": "Racing Santander",
+   "score": "5 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868078",
+   "round": "7",
+   "utc": "2026-09-19T19:00:00Z",
+   "home": "Sevilla",
+   "away": "Barcelona",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868076",
+   "round": "7",
+   "utc": "2026-09-20T12:00:00Z",
+   "home": "Getafe",
+   "away": "Málaga",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868072",
+   "round": "7",
+   "utc": "2026-09-20T14:15:00Z",
+   "home": "Atlético Madrid",
+   "away": "Real Madrid",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868074",
+   "round": "7",
+   "utc": "2026-09-20T16:30:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Real Betis",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868080",
+   "round": "7",
+   "utc": "2026-09-20T16:30:00Z",
+   "home": "Villarreal",
+   "away": "Levante",
+   "score": "3 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868079",
+   "round": "7",
+   "utc": "2026-09-20T19:00:00Z",
+   "home": "Valencia",
+   "away": "Real Sociedad",
+   "score": "2 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868086",
+   "round": "8",
+   "utc": "2026-10-09T19:00:00Z",
+   "home": "Málaga",
+   "away": "Espanyol",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5868088",
+   "round": "8",
+   "utc": "2026-10-10T12:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Athletic Club",
+   "score": "0 - 0",
+   "status": "CANC"
+  },
+  {
+   "id": "5868081",
+   "round": "8",
+   "utc": "2026-10-10T14:15:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Atlético Madrid",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868084",
+   "round": "8",
+   "utc": "2026-10-10T16:30:00Z",
+   "home": "Barcelona",
+   "away": "Getafe",
+   "score": "3 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868089",
+   "round": "8",
+   "utc": "2026-10-10T19:00:00Z",
+   "home": "Real Madrid",
+   "away": "Villarreal",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868083",
+   "round": "8",
+   "utc": "2026-10-11T12:00:00Z",
+   "home": "Elche",
+   "away": "Celta Vigo",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5868090",
+   "round": "8",
+   "utc": "2026-10-11T14:15:00Z",
+   "home": "Real Sociedad",
+   "away": "Deportivo A Coruña",
+   "score": "3 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868082",
+   "round": "8",
+   "utc": "2026-10-11T16:30:00Z",
+   "home": "Real Betis",
+   "away": "Osasuna",
+   "score": "5 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868087",
+   "round": "8",
+   "utc": "2026-10-11T19:00:00Z",
+   "home": "Racing Santander",
+   "away": "Valencia",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5868085",
+   "round": "8",
+   "utc": "2026-10-12T19:00:00Z",
+   "home": "Levante",
+   "away": "Sevilla",
+   "score": "3 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5868093",
+   "round": "9",
+   "utc": "2026-10-16T19:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868094",
+   "round": "9",
+   "utc": "2026-10-17T12:00:00Z",
+   "home": "Espanyol",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868100",
+   "round": "9",
+   "utc": "2026-10-17T14:15:00Z",
+   "home": "Villarreal",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868091",
+   "round": "9",
+   "utc": "2026-10-17T16:30:00Z",
+   "home": "Real Betis",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868099",
+   "round": "9",
+   "utc": "2026-10-17T19:00:00Z",
+   "home": "Valencia",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868097",
+   "round": "9",
+   "utc": "2026-10-18T12:00:00Z",
+   "home": "Osasuna",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868092",
+   "round": "9",
+   "utc": "2026-10-18T14:15:00Z",
+   "home": "Celta Vigo",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868096",
+   "round": "9",
+   "utc": "2026-10-18T16:30:00Z",
+   "home": "Málaga",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868098",
+   "round": "9",
+   "utc": "2026-10-18T19:00:00Z",
+   "home": "Real Madrid",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868095",
+   "round": "9",
+   "utc": "2026-10-19T19:00:00Z",
+   "home": "Getafe",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868067",
+   "round": "6",
+   "utc": "2026-10-21T18:00:00Z",
+   "home": "Levante",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868101",
+   "round": "10",
+   "utc": "2026-10-23T19:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868107",
+   "round": "10",
+   "utc": "2026-10-24T12:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868106",
+   "round": "10",
+   "utc": "2026-10-24T14:15:00Z",
+   "home": "Racing Santander",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868110",
+   "round": "10",
+   "utc": "2026-10-24T16:30:00Z",
+   "home": "Valencia",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868103",
+   "round": "10",
+   "utc": "2026-10-24T19:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868102",
+   "round": "10",
+   "utc": "2026-10-25T13:00:00Z",
+   "home": "Athletic Club",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868104",
+   "round": "10",
+   "utc": "2026-10-25T15:15:00Z",
+   "home": "Celta Vigo",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868108",
+   "round": "10",
+   "utc": "2026-10-25T17:30:00Z",
+   "home": "Real Sociedad",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868105",
+   "round": "10",
+   "utc": "2026-10-25T20:00:00Z",
+   "home": "Barcelona",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868109",
+   "round": "10",
+   "utc": "2026-10-26T20:00:00Z",
+   "home": "Sevilla",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868120",
+   "round": "11",
+   "utc": "2026-10-30T20:00:00Z",
+   "home": "Villarreal",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868117",
+   "round": "11",
+   "utc": "2026-10-31T13:00:00Z",
+   "home": "Levante",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868119",
+   "round": "11",
+   "utc": "2026-10-31T15:15:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868112",
+   "round": "11",
+   "utc": "2026-10-31T17:30:00Z",
+   "home": "Real Betis",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868115",
+   "round": "11",
+   "utc": "2026-10-31T20:00:00Z",
+   "home": "Barcelona",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868116",
+   "round": "11",
+   "utc": "2026-11-01T13:00:00Z",
+   "home": "Getafe",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868118",
+   "round": "11",
+   "utc": "2026-11-01T15:15:00Z",
+   "home": "Racing Santander",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868114",
+   "round": "11",
+   "utc": "2026-11-01T17:30:00Z",
+   "home": "Elche",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868111",
+   "round": "11",
+   "utc": "2026-11-01T20:00:00Z",
+   "home": "Athletic Club",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868113",
+   "round": "11",
+   "utc": "2026-11-02T20:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868128",
+   "round": "12",
+   "utc": "2026-11-06T20:00:00Z",
+   "home": "Sevilla",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868125",
+   "round": "12",
+   "utc": "2026-11-07T13:00:00Z",
+   "home": "Málaga",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868124",
+   "round": "12",
+   "utc": "2026-11-07T15:15:00Z",
+   "home": "Espanyol",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868126",
+   "round": "12",
+   "utc": "2026-11-07T17:30:00Z",
+   "home": "Osasuna",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868129",
+   "round": "12",
+   "utc": "2026-11-07T20:00:00Z",
+   "home": "Valencia",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868123",
+   "round": "12",
+   "utc": "2026-11-08T13:00:00Z",
+   "home": "Elche",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868127",
+   "round": "12",
+   "utc": "2026-11-08T15:15:00Z",
+   "home": "Real Sociedad",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868122",
+   "round": "12",
+   "utc": "2026-11-08T17:30:00Z",
+   "home": "Celta Vigo",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868130",
+   "round": "12",
+   "utc": "2026-11-08T17:30:00Z",
+   "home": "Villarreal",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868121",
+   "round": "12",
+   "utc": "2026-11-08T20:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868132",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868133",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868131",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868134",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Getafe",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868135",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Levante",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868136",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Osasuna",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868137",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868138",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868139",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868140",
+   "round": "13",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868142",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868143",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868144",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Elche",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868145",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868146",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Levante",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868147",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Málaga",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868141",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Real Betis",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868148",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868149",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868150",
+   "round": "14",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Valencia",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868152",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868153",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868154",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868151",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868155",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Getafe",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868156",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Osasuna",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868157",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868158",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868159",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868160",
+   "round": "15",
+   "utc": "2026-12-06T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868161",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868163",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868164",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Elche",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868165",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868166",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Levante",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868167",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Málaga",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868162",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Real Betis",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868168",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868169",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868170",
+   "round": "16",
+   "utc": "2026-12-13T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868172",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868175",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868173",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868171",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868174",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868176",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Getafe",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868177",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Osasuna",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868178",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868179",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868180",
+   "round": "17",
+   "utc": "2026-12-20T14:00:00Z",
+   "home": "Valencia",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868182",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868183",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868184",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Levante",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868185",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Málaga",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868186",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868187",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868181",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Real Betis",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868188",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868189",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868190",
+   "round": "18",
+   "utc": "2027-01-03T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868192",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868193",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868191",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868194",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868195",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Elche",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868196",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868197",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Osasuna",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868198",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868199",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868200",
+   "round": "19",
+   "utc": "2027-01-10T14:00:00Z",
+   "home": "Valencia",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868201",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868204",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868203",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868205",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Getafe",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868206",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Levante",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868207",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Málaga",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868208",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868209",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868202",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Real Betis",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868210",
+   "round": "20",
+   "utc": "2027-01-17T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868212",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868211",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868213",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868214",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Elche",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868215",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868216",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Getafe",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868217",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868218",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868219",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868220",
+   "round": "21",
+   "utc": "2027-01-24T14:00:00Z",
+   "home": "Valencia",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868221",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868224",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868223",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868225",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Levante",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868226",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Málaga",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868227",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Osasuna",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868228",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868222",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Real Betis",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868229",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868230",
+   "round": "22",
+   "utc": "2027-01-31T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868232",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868237",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868231",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868234",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868235",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Elche",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868236",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868238",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Getafe",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868233",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Real Betis",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868239",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868240",
+   "round": "23",
+   "utc": "2027-02-07T14:00:00Z",
+   "home": "Valencia",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868241",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868242",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Elche",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868243",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Levante",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868244",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Osasuna",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868245",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868246",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868247",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868248",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868249",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Valencia",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868250",
+   "round": "24",
+   "utc": "2027-02-14T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868252",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868253",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868256",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868251",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868254",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868255",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868257",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Málaga",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868258",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868259",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868260",
+   "round": "25",
+   "utc": "2027-02-21T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868261",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868263",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868264",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Getafe",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868265",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Levante",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868266",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Málaga",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868267",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Osasuna",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868268",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868262",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Real Betis",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868269",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868270",
+   "round": "26",
+   "utc": "2027-02-28T14:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868272",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868276",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868271",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868273",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868274",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Elche",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868275",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868277",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868278",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868279",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Valencia",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868280",
+   "round": "27",
+   "utc": "2027-03-07T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868282",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Athletic Club",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868285",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Barcelona",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868281",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868284",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Elche",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868286",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Getafe",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868287",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Málaga",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868288",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Osasuna",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868289",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868283",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Real Betis",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868290",
+   "round": "28",
+   "utc": "2027-03-14T14:00:00Z",
+   "home": "Real Madrid",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868291",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868292",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868293",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Espanyol",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868294",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Levante",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868295",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Racing Santander",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868296",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868297",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868298",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Sevilla",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868299",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Valencia",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868300",
+   "round": "29",
+   "utc": "2027-03-21T14:00:00Z",
+   "home": "Villarreal",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868301",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Athletic Club",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868305",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Barcelona",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868303",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868304",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Elche",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868306",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Getafe",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868307",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Levante",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868308",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Málaga",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868302",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Real Betis",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868309",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Real Madrid",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868310",
+   "round": "30",
+   "utc": "2027-04-04T13:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868312",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868313",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868311",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868314",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Espanyol",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868315",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Osasuna",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868316",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Racing Santander",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868317",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868318",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Sevilla",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868319",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Valencia",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868320",
+   "round": "31",
+   "utc": "2027-04-11T13:00:00Z",
+   "home": "Villarreal",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868322",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868326",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Barcelona",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868321",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868324",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868325",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Elche",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868327",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Getafe",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868328",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Levante",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868329",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Málaga",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868323",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Real Betis",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868330",
+   "round": "32",
+   "utc": "2027-04-18T13:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868331",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Athletic Club",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868332",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868333",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Espanyol",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868334",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Getafe",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868335",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Osasuna",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868336",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Racing Santander",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868337",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Real Madrid",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868338",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Sevilla",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868339",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Valencia",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868340",
+   "round": "33",
+   "utc": "2027-04-21T13:00:00Z",
+   "home": "Villarreal",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868341",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868346",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Barcelona",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868343",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868344",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868345",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Elche",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868347",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Levante",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868348",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Málaga",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868349",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868342",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Real Betis",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868350",
+   "round": "34",
+   "utc": "2027-05-02T13:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868352",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Athletic Club",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868351",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868354",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Getafe",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868355",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Osasuna",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868356",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Racing Santander",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868357",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868353",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Real Betis",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868358",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Real Madrid",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868359",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Valencia",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868360",
+   "round": "35",
+   "utc": "2027-05-09T13:00:00Z",
+   "home": "Villarreal",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868361",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868362",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868363",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Elche",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868364",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Espanyol",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868365",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Levante",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868366",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Málaga",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868367",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Osasuna",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868368",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Real Madrid",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868369",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868370",
+   "round": "36",
+   "utc": "2027-05-16T13:00:00Z",
+   "home": "Sevilla",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868372",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Atlético Madrid",
+   "away": "Athletic Club",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868375",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Barcelona",
+   "away": "Málaga",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868373",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Celta Vigo",
+   "away": "Real Sociedad",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868371",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Deportivo Alavés",
+   "away": "Real Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868374",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Deportivo A Coruña",
+   "away": "Espanyol",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868376",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Racing Santander",
+   "away": "Levante",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868377",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Rayo Vallecano",
+   "away": "Real Betis",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868378",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Sevilla",
+   "away": "Getafe",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868379",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Valencia",
+   "away": "Elche",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868380",
+   "round": "37",
+   "utc": "2027-05-23T13:00:00Z",
+   "home": "Villarreal",
+   "away": "Osasuna",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868381",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Athletic Club",
+   "away": "Rayo Vallecano",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868383",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Elche",
+   "away": "Racing Santander",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868384",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Espanyol",
+   "away": "Deportivo Alavés",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868385",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Getafe",
+   "away": "Barcelona",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868386",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Levante",
+   "away": "Celta Vigo",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868387",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Málaga",
+   "away": "Sevilla",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868388",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Osasuna",
+   "away": "Valencia",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868382",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Real Betis",
+   "away": "Atlético Madrid",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868389",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Real Madrid",
+   "away": "Deportivo A Coruña",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5868390",
+   "round": "38",
+   "utc": "2027-05-30T13:00:00Z",
+   "home": "Real Sociedad",
+   "away": "Villarreal",
+   "score": null,
+   "status": "NS"
+  }
+ ],
+ "standings": [
+  {
+   "pos": 1,
+   "team": "Barcelona",
+   "p": 8,
+   "w": 8,
+   "d": 0,
+   "l": 0,
+   "goals": "34-7",
+   "gd": 27,
+   "pts": 24
+  },
+  {
+   "pos": 2,
+   "team": "Atlético Madrid",
+   "p": 8,
+   "w": 6,
+   "d": 1,
+   "l": 1,
+   "goals": "18-8",
+   "gd": 10,
+   "pts": 19
+  },
+  {
+   "pos": 3,
+   "team": "Real Betis",
+   "p": 8,
+   "w": 6,
+   "d": 1,
+   "l": 1,
+   "goals": "14-9",
+   "gd": 5,
+   "pts": 19
+  },
+  {
+   "pos": 4,
+   "team": "Real Madrid",
+   "p": 8,
+   "w": 6,
+   "d": 0,
+   "l": 2,
+   "goals": "19-8",
+   "gd": 11,
+   "pts": 18
+  },
+  {
+   "pos": 5,
+   "team": "Sevilla",
+   "p": 8,
+   "w": 4,
+   "d": 2,
+   "l": 2,
+   "goals": "13-12",
+   "gd": 1,
+   "pts": 14
+  },
+  {
+   "pos": 6,
+   "team": "Real Sociedad",
+   "p": 8,
+   "w": 4,
+   "d": 1,
+   "l": 3,
+   "goals": "12-15",
+   "gd": -3,
+   "pts": 13
+  },
+  {
+   "pos": 7,
+   "team": "Deportivo Alavés",
+   "p": 8,
+   "w": 3,
+   "d": 2,
+   "l": 3,
+   "goals": "12-8",
+   "gd": 4,
+   "pts": 11
+  },
+  {
+   "pos": 8,
+   "team": "Deportivo A Coruña",
+   "p": 8,
+   "w": 2,
+   "d": 4,
+   "l": 2,
+   "goals": "12-11",
+   "gd": 1,
+   "pts": 10
+  },
+  {
+   "pos": 9,
+   "team": "Celta Vigo",
+   "p": 8,
+   "w": 1,
+   "d": 5,
+   "l": 2,
+   "goals": "8-6",
+   "gd": 2,
+   "pts": 8
+  },
+  {
+   "pos": 10,
+   "team": "Athletic Club",
+   "p": 6,
+   "w": 2,
+   "d": 2,
+   "l": 2,
+   "goals": "7-6",
+   "gd": 1,
+   "pts": 8
+  },
+  {
+   "pos": 11,
+   "team": "Villarreal",
+   "p": 8,
+   "w": 2,
+   "d": 2,
+   "l": 4,
+   "goals": "13-13",
+   "gd": 0,
+   "pts": 8
+  },
+  {
+   "pos": 12,
+   "team": "Espanyol",
+   "p": 8,
+   "w": 2,
+   "d": 2,
+   "l": 4,
+   "goals": "11-11",
+   "gd": 0,
+   "pts": 8
+  },
+  {
+   "pos": 13,
+   "team": "Rayo Vallecano",
+   "p": 7,
+   "w": 2,
+   "d": 2,
+   "l": 3,
+   "goals": "11-16",
+   "gd": -5,
+   "pts": 8
+  },
+  {
+   "pos": 14,
+   "team": "Getafe",
+   "p": 8,
+   "w": 2,
+   "d": 2,
+   "l": 4,
+   "goals": "4-10",
+   "gd": -6,
+   "pts": 8
+  },
+  {
+   "pos": 15,
+   "team": "Racing Santander",
+   "p": 8,
+   "w": 2,
+   "d": 2,
+   "l": 4,
+   "goals": "13-23",
+   "gd": -10,
+   "pts": 8
+  },
+  {
+   "pos": 16,
+   "team": "Osasuna",
+   "p": 8,
+   "w": 2,
+   "d": 2,
+   "l": 4,
+   "goals": "8-18",
+   "gd": -10,
+   "pts": 8
+  },
+  {
+   "pos": 17,
+   "team": "Levante",
+   "p": 7,
+   "w": 1,
+   "d": 3,
+   "l": 3,
+   "goals": "11-15",
+   "gd": -4,
+   "pts": 6
+  },
+  {
+   "pos": 18,
+   "team": "Elche",
+   "p": 8,
+   "w": 1,
+   "d": 3,
+   "l": 4,
+   "goals": "11-17",
+   "gd": -6,
+   "pts": 6
+  },
+  {
+   "pos": 19,
+   "team": "Valencia",
+   "p": 8,
+   "w": 1,
+   "d": 2,
+   "l": 5,
+   "goals": "6-15",
+   "gd": -9,
+   "pts": 5
+  },
+  {
+   "pos": 20,
+   "team": "Málaga",
+   "p": 8,
+   "w": 0,
+   "d": 4,
+   "l": 4,
+   "goals": "4-13",
+   "gd": -9,
+   "pts": 4
+  }
+ ]
+}

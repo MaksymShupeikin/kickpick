@@ -1,0 +1,2960 @@
+{
+ "name": "Ligue 1",
+ "season": "2026/2027",
+ "matches": [
+  {
+   "id": "5802905",
+   "round": "1",
+   "utc": "2026-08-21T18:45:00Z",
+   "home": "Marseille",
+   "away": "Strasbourg",
+   "score": "4 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802904",
+   "round": "1",
+   "utc": "2026-08-22T15:15:00Z",
+   "home": "Lens",
+   "away": "Auxerre",
+   "score": "5 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802903",
+   "round": "1",
+   "utc": "2026-08-22T18:45:00Z",
+   "home": "Le Mans",
+   "away": "Brest",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802906",
+   "round": "1",
+   "utc": "2026-08-22T18:45:00Z",
+   "home": "Nice",
+   "away": "Lorient",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802908",
+   "round": "1",
+   "utc": "2026-08-22T18:45:00Z",
+   "home": "Toulouse",
+   "away": "Lyon",
+   "score": "0 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802909",
+   "round": "1",
+   "utc": "2026-08-22T18:45:00Z",
+   "home": "Troyes",
+   "away": "Paris FC",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802901",
+   "round": "1",
+   "utc": "2026-08-23T13:00:00Z",
+   "home": "Angers",
+   "away": "Lille",
+   "score": "0 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802902",
+   "round": "1",
+   "utc": "2026-08-23T15:15:00Z",
+   "home": "Le Havre",
+   "away": "Monaco",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5803105",
+   "round": "1",
+   "utc": "2026-08-23T18:45:00Z",
+   "home": "Rennes",
+   "away": "Paris Saint-Germain",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802918",
+   "round": "2",
+   "utc": "2026-08-28T19:00:00Z",
+   "home": "Lille",
+   "away": "Paris Saint-Germain",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802917",
+   "round": "2",
+   "utc": "2026-08-29T15:15:00Z",
+   "home": "Strasbourg",
+   "away": "Lens",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802910",
+   "round": "2",
+   "utc": "2026-08-29T18:45:00Z",
+   "home": "Auxerre",
+   "away": "Angers",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5802911",
+   "round": "2",
+   "utc": "2026-08-29T18:45:00Z",
+   "home": "Brest",
+   "away": "Toulouse",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802912",
+   "round": "2",
+   "utc": "2026-08-29T18:45:00Z",
+   "home": "Lorient",
+   "away": "Troyes",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802913",
+   "round": "2",
+   "utc": "2026-08-29T18:45:00Z",
+   "home": "Lyon",
+   "away": "Le Havre",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802915",
+   "round": "2",
+   "utc": "2026-08-30T13:00:00Z",
+   "home": "Paris FC",
+   "away": "Nice",
+   "score": "3 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802916",
+   "round": "2",
+   "utc": "2026-08-30T15:15:00Z",
+   "home": "Rennes",
+   "away": "Le Mans",
+   "score": "3 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802914",
+   "round": "2",
+   "utc": "2026-08-30T18:45:00Z",
+   "home": "Monaco",
+   "away": "Marseille",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802926",
+   "round": "3",
+   "utc": "2026-09-03T18:45:00Z",
+   "home": "Toulouse",
+   "away": "Lille",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802922",
+   "round": "3",
+   "utc": "2026-09-04T17:00:00Z",
+   "home": "Lyon",
+   "away": "Auxerre",
+   "score": "3 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802925",
+   "round": "3",
+   "utc": "2026-09-04T19:05:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Monaco",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802921",
+   "round": "3",
+   "utc": "2026-09-05T15:15:00Z",
+   "home": "Lens",
+   "away": "Lorient",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802920",
+   "round": "3",
+   "utc": "2026-09-05T18:45:00Z",
+   "home": "Le Havre",
+   "away": "Brest",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802924",
+   "round": "3",
+   "utc": "2026-09-05T18:45:00Z",
+   "home": "Nice",
+   "away": "Le Mans",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802927",
+   "round": "3",
+   "utc": "2026-09-06T13:00:00Z",
+   "home": "Troyes",
+   "away": "Strasbourg",
+   "score": "2 - 6",
+   "status": "FT"
+  },
+  {
+   "id": "5802919",
+   "round": "3",
+   "utc": "2026-09-06T15:15:00Z",
+   "home": "Angers",
+   "away": "Rennes",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802923",
+   "round": "3",
+   "utc": "2026-09-06T18:45:00Z",
+   "home": "Marseille",
+   "away": "Paris FC",
+   "score": "2 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5802935",
+   "round": "4",
+   "utc": "2026-09-11T18:45:00Z",
+   "home": "Rennes",
+   "away": "Marseille",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802936",
+   "round": "4",
+   "utc": "2026-09-12T15:15:00Z",
+   "home": "Strasbourg",
+   "away": "Monaco",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802928",
+   "round": "4",
+   "utc": "2026-09-12T18:45:00Z",
+   "home": "Auxerre",
+   "away": "Nice",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802930",
+   "round": "4",
+   "utc": "2026-09-12T18:45:00Z",
+   "home": "Le Havre",
+   "away": "Angers",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802933",
+   "round": "4",
+   "utc": "2026-09-12T18:45:00Z",
+   "home": "Lorient",
+   "away": "Toulouse",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802934",
+   "round": "4",
+   "utc": "2026-09-12T18:45:00Z",
+   "home": "Paris FC",
+   "away": "Lyon",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802932",
+   "round": "4",
+   "utc": "2026-09-13T13:00:00Z",
+   "home": "Lille",
+   "away": "Troyes",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802931",
+   "round": "4",
+   "utc": "2026-09-13T15:15:00Z",
+   "home": "Le Mans",
+   "away": "Lens",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802929",
+   "round": "4",
+   "utc": "2026-09-13T18:45:00Z",
+   "home": "Brest",
+   "away": "Paris Saint-Germain",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802941",
+   "round": "5",
+   "utc": "2026-09-18T18:45:00Z",
+   "home": "Monaco",
+   "away": "Lens",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802943",
+   "round": "5",
+   "utc": "2026-09-19T15:15:00Z",
+   "home": "Paris FC",
+   "away": "Strasbourg",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802937",
+   "round": "5",
+   "utc": "2026-09-19T18:45:00Z",
+   "home": "Angers",
+   "away": "Troyes",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802939",
+   "round": "5",
+   "utc": "2026-09-19T18:45:00Z",
+   "home": "Le Mans",
+   "away": "Lorient",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802940",
+   "round": "5",
+   "utc": "2026-09-19T18:45:00Z",
+   "home": "Lyon",
+   "away": "Rennes",
+   "score": "4 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802944",
+   "round": "5",
+   "utc": "2026-09-19T18:45:00Z",
+   "home": "Toulouse",
+   "away": "Le Havre",
+   "score": "3 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802938",
+   "round": "5",
+   "utc": "2026-09-20T13:00:00Z",
+   "home": "Auxerre",
+   "away": "Brest",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802942",
+   "round": "5",
+   "utc": "2026-09-20T15:15:00Z",
+   "home": "Nice",
+   "away": "Lille",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802945",
+   "round": "5",
+   "utc": "2026-09-20T18:45:00Z",
+   "home": "Marseille",
+   "away": "Paris Saint-Germain",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802947",
+   "round": "6",
+   "utc": "2026-10-09T18:45:00Z",
+   "home": "Lens",
+   "away": "Lyon",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802948",
+   "round": "6",
+   "utc": "2026-10-10T15:15:00Z",
+   "home": "Lille",
+   "away": "Le Havre",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802946",
+   "round": "6",
+   "utc": "2026-10-10T18:45:00Z",
+   "home": "Brest",
+   "away": "Angers",
+   "score": "5 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802949",
+   "round": "6",
+   "utc": "2026-10-10T18:45:00Z",
+   "home": "Lorient",
+   "away": "Paris FC",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5802950",
+   "round": "6",
+   "utc": "2026-10-10T18:45:00Z",
+   "home": "Monaco",
+   "away": "Toulouse",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802952",
+   "round": "6",
+   "utc": "2026-10-10T18:45:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Le Mans",
+   "score": "3 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802951",
+   "round": "6",
+   "utc": "2026-10-11T13:00:00Z",
+   "home": "Nice",
+   "away": "Strasbourg",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802953",
+   "round": "6",
+   "utc": "2026-10-11T15:15:00Z",
+   "home": "Rennes",
+   "away": "Auxerre",
+   "score": "4 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5802954",
+   "round": "6",
+   "utc": "2026-10-11T18:45:00Z",
+   "home": "Troyes",
+   "away": "Marseille",
+   "score": "0 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5802957",
+   "round": "7",
+   "utc": "2026-10-16T18:45:00Z",
+   "home": "Le Mans",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802962",
+   "round": "7",
+   "utc": "2026-10-17T15:15:00Z",
+   "home": "Strasbourg",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802958",
+   "round": "7",
+   "utc": "2026-10-17T18:45:00Z",
+   "home": "Lille",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802963",
+   "round": "7",
+   "utc": "2026-10-17T18:45:00Z",
+   "home": "Troyes",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802955",
+   "round": "7",
+   "utc": "2026-10-18T13:00:00Z",
+   "home": "Angers",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802956",
+   "round": "7",
+   "utc": "2026-10-18T15:15:00Z",
+   "home": "Le Havre",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802959",
+   "round": "7",
+   "utc": "2026-10-18T15:15:00Z",
+   "home": "Lorient",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802961",
+   "round": "7",
+   "utc": "2026-10-18T15:15:00Z",
+   "home": "Paris FC",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802960",
+   "round": "7",
+   "utc": "2026-10-18T18:45:00Z",
+   "home": "Lyon",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802966",
+   "round": "8",
+   "utc": "2026-10-23T18:45:00Z",
+   "home": "Brest",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802971",
+   "round": "8",
+   "utc": "2026-10-24T15:15:00Z",
+   "home": "Toulouse",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802967",
+   "round": "8",
+   "utc": "2026-10-24T18:45:00Z",
+   "home": "Lens",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802969",
+   "round": "8",
+   "utc": "2026-10-25T14:00:00Z",
+   "home": "Monaco",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802964",
+   "round": "8",
+   "utc": "2026-10-25T16:15:00Z",
+   "home": "Angers",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802965",
+   "round": "8",
+   "utc": "2026-10-25T16:15:00Z",
+   "home": "Auxerre",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802968",
+   "round": "8",
+   "utc": "2026-10-25T16:15:00Z",
+   "home": "Marseille",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802970",
+   "round": "8",
+   "utc": "2026-10-25T16:15:00Z",
+   "home": "Rennes",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802972",
+   "round": "8",
+   "utc": "2026-10-25T19:45:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802973",
+   "round": "9",
+   "utc": "2026-10-30T18:00:00Z",
+   "home": "Le Havre",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802974",
+   "round": "9",
+   "utc": "2026-10-30T20:05:00Z",
+   "home": "Lille",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802978",
+   "round": "9",
+   "utc": "2026-10-31T16:15:00Z",
+   "home": "Nice",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802975",
+   "round": "9",
+   "utc": "2026-10-31T19:45:00Z",
+   "home": "Lorient",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802976",
+   "round": "9",
+   "utc": "2026-10-31T19:45:00Z",
+   "home": "Lyon",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802981",
+   "round": "9",
+   "utc": "2026-10-31T19:45:00Z",
+   "home": "Troyes",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802980",
+   "round": "9",
+   "utc": "2026-11-01T14:00:00Z",
+   "home": "Strasbourg",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802979",
+   "round": "9",
+   "utc": "2026-11-01T16:15:00Z",
+   "home": "Paris FC",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802977",
+   "round": "9",
+   "utc": "2026-11-01T19:45:00Z",
+   "home": "Marseille",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802989",
+   "round": "10",
+   "utc": "2026-11-06T19:45:00Z",
+   "home": "Toulouse",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802983",
+   "round": "10",
+   "utc": "2026-11-07T16:15:00Z",
+   "home": "Auxerre",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802987",
+   "round": "10",
+   "utc": "2026-11-07T19:45:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802988",
+   "round": "10",
+   "utc": "2026-11-08T14:00:00Z",
+   "home": "Rennes",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802982",
+   "round": "10",
+   "utc": "2026-11-08T16:15:00Z",
+   "home": "Angers",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802984",
+   "round": "10",
+   "utc": "2026-11-08T16:15:00Z",
+   "home": "Brest",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802985",
+   "round": "10",
+   "utc": "2026-11-08T16:15:00Z",
+   "home": "Le Havre",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802986",
+   "round": "10",
+   "utc": "2026-11-08T16:15:00Z",
+   "home": "Le Mans",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802990",
+   "round": "10",
+   "utc": "2026-11-08T19:45:00Z",
+   "home": "Lens",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802999",
+   "round": "11",
+   "utc": "2026-11-20T19:45:00Z",
+   "home": "Troyes",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802996",
+   "round": "11",
+   "utc": "2026-11-21T16:15:00Z",
+   "home": "Nice",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802991",
+   "round": "11",
+   "utc": "2026-11-21T19:45:00Z",
+   "home": "Lens",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802992",
+   "round": "11",
+   "utc": "2026-11-21T19:45:00Z",
+   "home": "Lille",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802995",
+   "round": "11",
+   "utc": "2026-11-21T19:45:00Z",
+   "home": "Monaco",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802998",
+   "round": "11",
+   "utc": "2026-11-21T19:45:00Z",
+   "home": "Strasbourg",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802997",
+   "round": "11",
+   "utc": "2026-11-22T14:00:00Z",
+   "home": "Paris FC",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802993",
+   "round": "11",
+   "utc": "2026-11-22T16:15:00Z",
+   "home": "Lorient",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802994",
+   "round": "11",
+   "utc": "2026-11-22T19:45:00Z",
+   "home": "Marseille",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803002",
+   "round": "12",
+   "utc": "2026-11-27T19:45:00Z",
+   "home": "Brest",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803000",
+   "round": "12",
+   "utc": "2026-11-28T16:15:00Z",
+   "home": "Angers",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803003",
+   "round": "12",
+   "utc": "2026-11-28T19:45:00Z",
+   "home": "Le Havre",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803004",
+   "round": "12",
+   "utc": "2026-11-28T19:45:00Z",
+   "home": "Le Mans",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803006",
+   "round": "12",
+   "utc": "2026-11-28T19:45:00Z",
+   "home": "Nice",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803007",
+   "round": "12",
+   "utc": "2026-11-28T19:45:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803001",
+   "round": "12",
+   "utc": "2026-11-29T14:00:00Z",
+   "home": "Auxerre",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803008",
+   "round": "12",
+   "utc": "2026-11-29T16:15:00Z",
+   "home": "Toulouse",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803005",
+   "round": "12",
+   "utc": "2026-11-29T19:45:00Z",
+   "home": "Lyon",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803009",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Lens",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803010",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Lille",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803011",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Marseille",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803012",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Monaco",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803013",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Paris FC",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803014",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Rennes",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803015",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Strasbourg",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803016",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Toulouse",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803017",
+   "round": "13",
+   "utc": "2026-12-05T16:00:00Z",
+   "home": "Troyes",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803018",
+   "round": "14",
+   "utc": "2026-12-12T16:00:00Z",
+   "home": "Angers",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803019",
+   "round": "14",
+   "utc": "2026-12-12T16:00:00Z",
+   "home": "Auxerre",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803020",
+   "round": "14",
+   "utc": "2026-12-12T16:00:00Z",
+   "home": "Brest",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803021",
+   "round": "14",
+   "utc": "2026-12-12T16:00:00Z",
+   "home": "Le Havre",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803022",
+   "round": "14",
+   "utc": "2026-12-12T16:00:00Z",
+   "home": "Lorient",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803023",
+   "round": "14",
+   "utc": "2026-12-12T16:00:00Z",
+   "home": "Nice",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803024",
+   "round": "14",
+   "utc": "2026-12-12T16:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803025",
+   "round": "14",
+   "utc": "2026-12-12T16:00:00Z",
+   "home": "Rennes",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803026",
+   "round": "14",
+   "utc": "2026-12-13T19:45:00Z",
+   "home": "Lyon",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803027",
+   "round": "15",
+   "utc": "2027-01-02T16:00:00Z",
+   "home": "Brest",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803028",
+   "round": "15",
+   "utc": "2027-01-02T16:00:00Z",
+   "home": "Le Mans",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803029",
+   "round": "15",
+   "utc": "2027-01-02T16:00:00Z",
+   "home": "Lille",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803030",
+   "round": "15",
+   "utc": "2027-01-02T16:00:00Z",
+   "home": "Lorient",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803031",
+   "round": "15",
+   "utc": "2027-01-02T16:00:00Z",
+   "home": "Monaco",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803032",
+   "round": "15",
+   "utc": "2027-01-02T16:00:00Z",
+   "home": "Paris FC",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803033",
+   "round": "15",
+   "utc": "2027-01-02T16:00:00Z",
+   "home": "Toulouse",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803034",
+   "round": "15",
+   "utc": "2027-01-02T16:00:00Z",
+   "home": "Troyes",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803035",
+   "round": "15",
+   "utc": "2027-01-03T19:45:00Z",
+   "home": "Lens",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803036",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Angers",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803037",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Auxerre",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803038",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Lyon",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803039",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Marseille",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803040",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Monaco",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803041",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Nice",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803042",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Paris FC",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803043",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Rennes",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803044",
+   "round": "16",
+   "utc": "2027-01-16T16:00:00Z",
+   "home": "Strasbourg",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803045",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Le Havre",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803046",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Le Mans",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803047",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Lens",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803048",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Lille",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803049",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Lorient",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803050",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803051",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Strasbourg",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803052",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Toulouse",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803053",
+   "round": "17",
+   "utc": "2027-01-23T16:00:00Z",
+   "home": "Troyes",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803054",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Angers",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803055",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Brest",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803056",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Le Mans",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803057",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Lyon",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803058",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Marseille",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803059",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Monaco",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803060",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Paris FC",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803061",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Rennes",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803062",
+   "round": "18",
+   "utc": "2027-01-30T16:00:00Z",
+   "home": "Toulouse",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803063",
+   "round": "19",
+   "utc": "2027-02-06T16:00:00Z",
+   "home": "Auxerre",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803064",
+   "round": "19",
+   "utc": "2027-02-06T16:00:00Z",
+   "home": "Le Havre",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803065",
+   "round": "19",
+   "utc": "2027-02-06T16:00:00Z",
+   "home": "Lens",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803066",
+   "round": "19",
+   "utc": "2027-02-06T16:00:00Z",
+   "home": "Lorient",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803067",
+   "round": "19",
+   "utc": "2027-02-06T16:00:00Z",
+   "home": "Nice",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803068",
+   "round": "19",
+   "utc": "2027-02-06T16:00:00Z",
+   "home": "Rennes",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803069",
+   "round": "19",
+   "utc": "2027-02-06T16:00:00Z",
+   "home": "Strasbourg",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803070",
+   "round": "19",
+   "utc": "2027-02-06T16:00:00Z",
+   "home": "Troyes",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803071",
+   "round": "19",
+   "utc": "2027-02-07T19:45:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803072",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Auxerre",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803073",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Brest",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803074",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Le Mans",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803075",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Lille",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803076",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Lorient",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803077",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Lyon",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803078",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Marseille",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803079",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Paris FC",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803080",
+   "round": "20",
+   "utc": "2027-02-13T16:00:00Z",
+   "home": "Toulouse",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803081",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Angers",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803082",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Le Havre",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803083",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Lens",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803084",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Lille",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803085",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Monaco",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803086",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Nice",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803087",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803088",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Rennes",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803089",
+   "round": "21",
+   "utc": "2027-02-20T16:00:00Z",
+   "home": "Strasbourg",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803090",
+   "round": "22",
+   "utc": "2027-02-27T16:00:00Z",
+   "home": "Auxerre",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803091",
+   "round": "22",
+   "utc": "2027-02-27T16:00:00Z",
+   "home": "Brest",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803092",
+   "round": "22",
+   "utc": "2027-02-27T16:00:00Z",
+   "home": "Le Mans",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803093",
+   "round": "22",
+   "utc": "2027-02-27T16:00:00Z",
+   "home": "Lorient",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803094",
+   "round": "22",
+   "utc": "2027-02-27T16:00:00Z",
+   "home": "Lyon",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803095",
+   "round": "22",
+   "utc": "2027-02-27T16:00:00Z",
+   "home": "Marseille",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803096",
+   "round": "22",
+   "utc": "2027-02-27T16:00:00Z",
+   "home": "Strasbourg",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803097",
+   "round": "22",
+   "utc": "2027-02-27T16:00:00Z",
+   "home": "Troyes",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803098",
+   "round": "22",
+   "utc": "2027-02-28T19:45:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803099",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Angers",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803100",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Le Havre",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803101",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Lens",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803102",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Lille",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803103",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Monaco",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803104",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Paris FC",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5802907",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803106",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Toulouse",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803107",
+   "round": "23",
+   "utc": "2027-03-06T16:00:00Z",
+   "home": "Troyes",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803108",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Auxerre",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803109",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Brest",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803110",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Le Havre",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803111",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Le Mans",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803112",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Lyon",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803113",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Marseille",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803114",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Nice",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803115",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Paris FC",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803116",
+   "round": "24",
+   "utc": "2027-03-13T16:00:00Z",
+   "home": "Strasbourg",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803117",
+   "round": "25",
+   "utc": "2027-03-20T16:00:00Z",
+   "home": "Angers",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803118",
+   "round": "25",
+   "utc": "2027-03-20T16:00:00Z",
+   "home": "Lens",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803119",
+   "round": "25",
+   "utc": "2027-03-20T16:00:00Z",
+   "home": "Lorient",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803120",
+   "round": "25",
+   "utc": "2027-03-20T16:00:00Z",
+   "home": "Monaco",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803121",
+   "round": "25",
+   "utc": "2027-03-20T16:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803122",
+   "round": "25",
+   "utc": "2027-03-20T16:00:00Z",
+   "home": "Rennes",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803123",
+   "round": "25",
+   "utc": "2027-03-20T16:00:00Z",
+   "home": "Toulouse",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803124",
+   "round": "25",
+   "utc": "2027-03-20T16:00:00Z",
+   "home": "Troyes",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803125",
+   "round": "25",
+   "utc": "2027-03-21T19:45:00Z",
+   "home": "Marseille",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803126",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Angers",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803127",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Auxerre",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803128",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Brest",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803129",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Le Havre",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803130",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Le Mans",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803131",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Lille",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803132",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Nice",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803133",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Paris FC",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803134",
+   "round": "26",
+   "utc": "2027-04-03T15:00:00Z",
+   "home": "Strasbourg",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803135",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Le Mans",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803136",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Lille",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803137",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Lorient",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803138",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Lyon",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803139",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Marseille",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803140",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Monaco",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803141",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Nice",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803142",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803143",
+   "round": "27",
+   "utc": "2027-04-10T15:00:00Z",
+   "home": "Troyes",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803144",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Angers",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803145",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Auxerre",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803146",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Brest",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803147",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Le Havre",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803148",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Lens",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803149",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Monaco",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803150",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803151",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Rennes",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803152",
+   "round": "28",
+   "utc": "2027-04-17T15:00:00Z",
+   "home": "Toulouse",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803153",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Le Mans",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803154",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Lille",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803155",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Lorient",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803156",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Lyon",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803157",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Marseille",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803158",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Nice",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803159",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Paris FC",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803160",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Strasbourg",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803161",
+   "round": "29",
+   "utc": "2027-04-24T15:00:00Z",
+   "home": "Troyes",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803162",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Auxerre",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803163",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Le Havre",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803164",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Lens",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803165",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Monaco",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803166",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803167",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Rennes",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803168",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Strasbourg",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803169",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Toulouse",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803170",
+   "round": "30",
+   "utc": "2027-05-01T15:00:00Z",
+   "home": "Troyes",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803171",
+   "round": "31",
+   "utc": "2027-05-08T15:00:00Z",
+   "home": "Angers",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803172",
+   "round": "31",
+   "utc": "2027-05-08T15:00:00Z",
+   "home": "Brest",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803173",
+   "round": "31",
+   "utc": "2027-05-08T15:00:00Z",
+   "home": "Le Mans",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803174",
+   "round": "31",
+   "utc": "2027-05-08T15:00:00Z",
+   "home": "Lens",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803175",
+   "round": "31",
+   "utc": "2027-05-08T15:00:00Z",
+   "home": "Lorient",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803176",
+   "round": "31",
+   "utc": "2027-05-08T15:00:00Z",
+   "home": "Nice",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803177",
+   "round": "31",
+   "utc": "2027-05-08T15:00:00Z",
+   "home": "Paris FC",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803178",
+   "round": "31",
+   "utc": "2027-05-08T15:00:00Z",
+   "home": "Rennes",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803179",
+   "round": "31",
+   "utc": "2027-05-09T18:45:00Z",
+   "home": "Lyon",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803180",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Auxerre",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803181",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Brest",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803182",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Lille",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803183",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Lyon",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803184",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Marseille",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803185",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Monaco",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803186",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803187",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Strasbourg",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803188",
+   "round": "32",
+   "utc": "2027-05-16T15:00:00Z",
+   "home": "Toulouse",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803189",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Angers",
+   "away": "Brest",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803190",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Le Havre",
+   "away": "Lille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803191",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Le Mans",
+   "away": "Strasbourg",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803192",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Lens",
+   "away": "Rennes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803193",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Lorient",
+   "away": "Lyon",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803194",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Nice",
+   "away": "Monaco",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803195",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Paris FC",
+   "away": "Marseille",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803196",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Toulouse",
+   "away": "Auxerre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803197",
+   "round": "33",
+   "utc": "2027-05-22T15:00:00Z",
+   "home": "Troyes",
+   "away": "Paris Saint-Germain",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803198",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Auxerre",
+   "away": "Le Havre",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803199",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Brest",
+   "away": "Lens",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803200",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Lille",
+   "away": "Le Mans",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803201",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Lyon",
+   "away": "Paris FC",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803202",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Marseille",
+   "away": "Lorient",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803203",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Monaco",
+   "away": "Troyes",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803204",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Paris Saint-Germain",
+   "away": "Toulouse",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803205",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Rennes",
+   "away": "Angers",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5803206",
+   "round": "34",
+   "utc": "2027-05-29T19:00:00Z",
+   "home": "Strasbourg",
+   "away": "Nice",
+   "score": null,
+   "status": "NS"
+  }
+ ],
+ "standings": [
+  {
+   "pos": 1,
+   "team": "Monaco",
+   "p": 6,
+   "w": 4,
+   "d": 2,
+   "l": 0,
+   "goals": "10-5",
+   "gd": 5,
+   "pts": 14
+  },
+  {
+   "pos": 2,
+   "team": "Lille",
+   "p": 6,
+   "w": 4,
+   "d": 1,
+   "l": 1,
+   "goals": "9-4",
+   "gd": 5,
+   "pts": 13
+  },
+  {
+   "pos": 3,
+   "team": "Rennes",
+   "p": 6,
+   "w": 4,
+   "d": 1,
+   "l": 1,
+   "goals": "12-10",
+   "gd": 2,
+   "pts": 13
+  },
+  {
+   "pos": 4,
+   "team": "Lyon",
+   "p": 6,
+   "w": 3,
+   "d": 2,
+   "l": 1,
+   "goals": "11-4",
+   "gd": 7,
+   "pts": 11
+  },
+  {
+   "pos": 5,
+   "team": "Paris FC",
+   "p": 6,
+   "w": 3,
+   "d": 2,
+   "l": 1,
+   "goals": "8-4",
+   "gd": 4,
+   "pts": 11
+  },
+  {
+   "pos": 6,
+   "team": "Paris Saint-Germain",
+   "p": 6,
+   "w": 3,
+   "d": 2,
+   "l": 1,
+   "goals": "11-8",
+   "gd": 3,
+   "pts": 11
+  },
+  {
+   "pos": 7,
+   "team": "Brest",
+   "p": 6,
+   "w": 2,
+   "d": 2,
+   "l": 2,
+   "goals": "12-9",
+   "gd": 3,
+   "pts": 8
+  },
+  {
+   "pos": 8,
+   "team": "Lorient",
+   "p": 6,
+   "w": 2,
+   "d": 2,
+   "l": 2,
+   "goals": "6-6",
+   "gd": 0,
+   "pts": 8
+  },
+  {
+   "pos": 9,
+   "team": "Nice",
+   "p": 6,
+   "w": 2,
+   "d": 2,
+   "l": 2,
+   "goals": "5-7",
+   "gd": -2,
+   "pts": 8
+  },
+  {
+   "pos": 10,
+   "team": "Lens",
+   "p": 6,
+   "w": 2,
+   "d": 1,
+   "l": 3,
+   "goals": "11-10",
+   "gd": 1,
+   "pts": 7
+  },
+  {
+   "pos": 11,
+   "team": "Strasbourg",
+   "p": 6,
+   "w": 2,
+   "d": 1,
+   "l": 3,
+   "goals": "11-12",
+   "gd": -1,
+   "pts": 7
+  },
+  {
+   "pos": 12,
+   "team": "Angers",
+   "p": 6,
+   "w": 2,
+   "d": 1,
+   "l": 3,
+   "goals": "7-10",
+   "gd": -3,
+   "pts": 7
+  },
+  {
+   "pos": 13,
+   "team": "Marseille",
+   "p": 6,
+   "w": 2,
+   "d": 0,
+   "l": 4,
+   "goals": "9-8",
+   "gd": 1,
+   "pts": 6
+  },
+  {
+   "pos": 14,
+   "team": "Le Mans",
+   "p": 6,
+   "w": 1,
+   "d": 3,
+   "l": 2,
+   "goals": "10-12",
+   "gd": -2,
+   "pts": 6
+  },
+  {
+   "pos": 15,
+   "team": "Toulouse",
+   "p": 6,
+   "w": 1,
+   "d": 3,
+   "l": 2,
+   "goals": "9-11",
+   "gd": -2,
+   "pts": 6
+  },
+  {
+   "pos": 16,
+   "team": "Auxerre",
+   "p": 6,
+   "w": 2,
+   "d": 0,
+   "l": 4,
+   "goals": "8-16",
+   "gd": -8,
+   "pts": 6
+  },
+  {
+   "pos": 17,
+   "team": "Troyes",
+   "p": 6,
+   "w": 1,
+   "d": 1,
+   "l": 4,
+   "goals": "4-13",
+   "gd": -9,
+   "pts": 4
+  },
+  {
+   "pos": 18,
+   "team": "Le Havre",
+   "p": 6,
+   "w": 0,
+   "d": 2,
+   "l": 4,
+   "goals": "4-8",
+   "gd": -4,
+   "pts": 2
+  }
+ ]
+}

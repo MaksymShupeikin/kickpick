@@ -1,0 +1,2960 @@
+{
+ "name": "Eredivisie",
+ "season": "2026/2027",
+ "matches": [
+  {
+   "id": "5781701",
+   "round": "1",
+   "utc": "2026-08-07T18:00:00Z",
+   "home": "Cambuur",
+   "away": "Excelsior",
+   "score": "0 - 4",
+   "status": "FT"
+  },
+  {
+   "id": "5781698",
+   "round": "1",
+   "utc": "2026-08-08T14:30:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Telstar",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781702",
+   "round": "1",
+   "utc": "2026-08-08T16:45:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "Willem II",
+   "score": "4 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781700",
+   "round": "1",
+   "utc": "2026-08-08T18:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Fortuna Sittard",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781699",
+   "round": "1",
+   "utc": "2026-08-08T19:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "ADO Den Haag",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781696",
+   "round": "1",
+   "utc": "2026-08-09T10:15:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "Feyenoord",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781704",
+   "round": "1",
+   "utc": "2026-08-09T12:30:00Z",
+   "home": "FC Groningen",
+   "away": "FC Utrecht",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781697",
+   "round": "1",
+   "utc": "2026-08-09T12:30:00Z",
+   "home": "PEC Zwolle",
+   "away": "Ajax",
+   "score": "0 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781703",
+   "round": "1",
+   "utc": "2026-08-09T14:45:00Z",
+   "home": "SC Heerenveen",
+   "away": "FC Twente",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781710",
+   "round": "2",
+   "utc": "2026-08-14T18:00:00Z",
+   "home": "Telstar",
+   "away": "Sparta Rotterdam",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781706",
+   "round": "2",
+   "utc": "2026-08-15T14:30:00Z",
+   "home": "Willem II",
+   "away": "NEC Nijmegen",
+   "score": "1 - 4",
+   "status": "FT"
+  },
+  {
+   "id": "5781707",
+   "round": "2",
+   "utc": "2026-08-15T16:45:00Z",
+   "home": "FC Utrecht",
+   "away": "AZ Alkmaar",
+   "score": "1 - 4",
+   "status": "FT"
+  },
+  {
+   "id": "5781711",
+   "round": "2",
+   "utc": "2026-08-15T18:00:00Z",
+   "home": "Excelsior",
+   "away": "PSV Eindhoven",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781713",
+   "round": "2",
+   "utc": "2026-08-15T19:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "Cambuur",
+   "score": "3 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781712",
+   "round": "2",
+   "utc": "2026-08-16T10:15:00Z",
+   "home": "ADO Den Haag",
+   "away": "FC Groningen",
+   "score": "1 - 4",
+   "status": "FT"
+  },
+  {
+   "id": "5781705",
+   "round": "2",
+   "utc": "2026-08-16T12:30:00Z",
+   "home": "FC Twente",
+   "away": "PEC Zwolle",
+   "score": "3 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781708",
+   "round": "2",
+   "utc": "2026-08-16T12:30:00Z",
+   "home": "Feyenoord",
+   "away": "Go Ahead Eagles",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781709",
+   "round": "2",
+   "utc": "2026-08-16T14:45:00Z",
+   "home": "Ajax",
+   "away": "SC Heerenveen",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781716",
+   "round": "3",
+   "utc": "2026-08-22T14:30:00Z",
+   "home": "Fortuna Sittard",
+   "away": "AZ Alkmaar",
+   "score": "0 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781715",
+   "round": "3",
+   "utc": "2026-08-22T16:45:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "FC Utrecht",
+   "score": "3 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781719",
+   "round": "3",
+   "utc": "2026-08-22T19:00:00Z",
+   "home": "SC Heerenveen",
+   "away": "PEC Zwolle",
+   "score": "0 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781717",
+   "round": "3",
+   "utc": "2026-08-23T10:15:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "ADO Den Haag",
+   "score": "3 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781714",
+   "round": "3",
+   "utc": "2026-08-23T12:30:00Z",
+   "home": "PSV Eindhoven",
+   "away": "FC Groningen",
+   "score": "5 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781721",
+   "round": "3",
+   "utc": "2026-08-23T14:45:00Z",
+   "home": "Cambuur",
+   "away": "Feyenoord",
+   "score": "2 - 5",
+   "status": "FT"
+  },
+  {
+   "id": "5781729",
+   "round": "4",
+   "utc": "2026-08-28T18:00:00Z",
+   "home": "FC Groningen",
+   "away": "Fortuna Sittard",
+   "score": "2 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781723",
+   "round": "4",
+   "utc": "2026-08-29T14:30:00Z",
+   "home": "Excelsior",
+   "away": "Sparta Rotterdam",
+   "score": "2 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781724",
+   "round": "4",
+   "utc": "2026-08-29T16:45:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Go Ahead Eagles",
+   "score": "5 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781725",
+   "round": "4",
+   "utc": "2026-08-29T19:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "NEC Nijmegen",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781726",
+   "round": "4",
+   "utc": "2026-08-30T10:15:00Z",
+   "home": "FC Utrecht",
+   "away": "PSV Eindhoven",
+   "score": "1 - 6",
+   "status": "FT"
+  },
+  {
+   "id": "5781727",
+   "round": "4",
+   "utc": "2026-08-30T12:30:00Z",
+   "home": "Feyenoord",
+   "away": "ADO Den Haag",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781728",
+   "round": "4",
+   "utc": "2026-08-30T12:30:00Z",
+   "home": "Willem II",
+   "away": "SC Heerenveen",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781730",
+   "round": "4",
+   "utc": "2026-08-30T14:45:00Z",
+   "home": "Telstar",
+   "away": "Ajax",
+   "score": "0 - 4",
+   "status": "FT"
+  },
+  {
+   "id": "5781731",
+   "round": "4",
+   "utc": "2026-08-30T18:00:00Z",
+   "home": "Cambuur",
+   "away": "FC Twente",
+   "score": "1 - 4",
+   "status": "FT"
+  },
+  {
+   "id": "5781738",
+   "round": "5",
+   "utc": "2026-09-04T18:00:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "PEC Zwolle",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781737",
+   "round": "5",
+   "utc": "2026-09-05T14:30:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Feyenoord",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781735",
+   "round": "5",
+   "utc": "2026-09-05T18:00:00Z",
+   "home": "Ajax",
+   "away": "PSV Eindhoven",
+   "score": "1 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781739",
+   "round": "5",
+   "utc": "2026-09-05T19:00:00Z",
+   "home": "Willem II",
+   "away": "Excelsior",
+   "score": "0 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781732",
+   "round": "5",
+   "utc": "2026-09-06T10:15:00Z",
+   "home": "FC Groningen",
+   "away": "FC Twente",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781736",
+   "round": "5",
+   "utc": "2026-09-06T12:30:00Z",
+   "home": "SC Heerenveen",
+   "away": "AZ Alkmaar",
+   "score": "2 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781734",
+   "round": "5",
+   "utc": "2026-09-06T12:30:00Z",
+   "home": "Telstar",
+   "away": "Cambuur",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781740",
+   "round": "5",
+   "utc": "2026-09-06T14:45:00Z",
+   "home": "ADO Den Haag",
+   "away": "Fortuna Sittard",
+   "score": "2 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781733",
+   "round": "5",
+   "utc": "2026-09-08T12:00:00Z",
+   "home": "FC Utrecht",
+   "away": "Go Ahead Eagles",
+   "score": "3 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781720",
+   "round": "3",
+   "utc": "2026-09-08T16:45:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Excelsior",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781722",
+   "round": "3",
+   "utc": "2026-09-09T16:45:00Z",
+   "home": "FC Twente",
+   "away": "Telstar",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781742",
+   "round": "6",
+   "utc": "2026-09-11T18:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Willem II",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781746",
+   "round": "6",
+   "utc": "2026-09-12T14:30:00Z",
+   "home": "FC Twente",
+   "away": "ADO Den Haag",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781748",
+   "round": "6",
+   "utc": "2026-09-12T16:45:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "FC Groningen",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781747",
+   "round": "6",
+   "utc": "2026-09-12T18:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "Ajax",
+   "score": "1 - 5",
+   "status": "FT"
+  },
+  {
+   "id": "5781741",
+   "round": "6",
+   "utc": "2026-09-12T19:00:00Z",
+   "home": "Cambuur",
+   "away": "NEC Nijmegen",
+   "score": "3 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781745",
+   "round": "6",
+   "utc": "2026-09-13T10:15:00Z",
+   "home": "Excelsior",
+   "away": "FC Utrecht",
+   "score": "1 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781744",
+   "round": "6",
+   "utc": "2026-09-13T12:30:00Z",
+   "home": "SC Heerenveen",
+   "away": "Telstar",
+   "score": "0 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781749",
+   "round": "6",
+   "utc": "2026-09-13T14:45:00Z",
+   "home": "PEC Zwolle",
+   "away": "Feyenoord",
+   "score": "0 - 7",
+   "status": "FT"
+  },
+  {
+   "id": "5781743",
+   "round": "6",
+   "utc": "2026-09-13T18:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Sparta Rotterdam",
+   "score": "4 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781718",
+   "round": "3",
+   "utc": "2026-09-15T18:00:00Z",
+   "home": "Ajax",
+   "away": "Willem II",
+   "score": "5 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781754",
+   "round": "7",
+   "utc": "2026-09-18T18:00:00Z",
+   "home": "FC Groningen",
+   "away": "PEC Zwolle",
+   "score": "3 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781755",
+   "round": "7",
+   "utc": "2026-09-19T14:30:00Z",
+   "home": "ADO Den Haag",
+   "away": "Cambuur",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781756",
+   "round": "7",
+   "utc": "2026-09-19T16:45:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "SC Heerenveen",
+   "score": "0 - 4",
+   "status": "FT"
+  },
+  {
+   "id": "5781757",
+   "round": "7",
+   "utc": "2026-09-19T18:00:00Z",
+   "home": "Ajax",
+   "away": "Excelsior",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781758",
+   "round": "7",
+   "utc": "2026-09-19T19:00:00Z",
+   "home": "Willem II",
+   "away": "Fortuna Sittard",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781750",
+   "round": "7",
+   "utc": "2026-09-20T10:15:00Z",
+   "home": "Feyenoord",
+   "away": "FC Utrecht",
+   "score": "5 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781752",
+   "round": "7",
+   "utc": "2026-09-20T12:30:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Telstar",
+   "score": "1 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781753",
+   "round": "7",
+   "utc": "2026-09-20T12:30:00Z",
+   "home": "FC Twente",
+   "away": "PSV Eindhoven",
+   "score": "3 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781751",
+   "round": "7",
+   "utc": "2026-09-20T14:45:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Go Ahead Eagles",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781762",
+   "round": "8",
+   "utc": "2026-10-09T18:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "SC Heerenveen",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781765",
+   "round": "8",
+   "utc": "2026-10-10T14:30:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "Sparta Rotterdam",
+   "score": "3 - 3",
+   "status": "FT"
+  },
+  {
+   "id": "5781759",
+   "round": "8",
+   "utc": "2026-10-10T16:45:00Z",
+   "home": "Feyenoord",
+   "away": "AZ Alkmaar",
+   "score": "2 - 0",
+   "status": "FT"
+  },
+  {
+   "id": "5781767",
+   "round": "8",
+   "utc": "2026-10-10T18:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "FC Twente",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781764",
+   "round": "8",
+   "utc": "2026-10-10T19:00:00Z",
+   "home": "Ajax",
+   "away": "NEC Nijmegen",
+   "score": "1 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781761",
+   "round": "8",
+   "utc": "2026-10-11T10:15:00Z",
+   "home": "FC Utrecht",
+   "away": "Willem II",
+   "score": "3 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781763",
+   "round": "8",
+   "utc": "2026-10-11T12:30:00Z",
+   "home": "PEC Zwolle",
+   "away": "Cambuur",
+   "score": "0 - 1",
+   "status": "FT"
+  },
+  {
+   "id": "5781766",
+   "round": "8",
+   "utc": "2026-10-11T12:30:00Z",
+   "home": "Telstar",
+   "away": "ADO Den Haag",
+   "score": "2 - 2",
+   "status": "FT"
+  },
+  {
+   "id": "5781760",
+   "round": "8",
+   "utc": "2026-10-11T14:45:00Z",
+   "home": "Excelsior",
+   "away": "FC Groningen",
+   "score": "1 - 5",
+   "status": "FT"
+  },
+  {
+   "id": "5781769",
+   "round": "9",
+   "utc": "2026-10-16T18:00:00Z",
+   "home": "SC Heerenveen",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781776",
+   "round": "9",
+   "utc": "2026-10-17T14:30:00Z",
+   "home": "ADO Den Haag",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781774",
+   "round": "9",
+   "utc": "2026-10-17T18:00:00Z",
+   "home": "Telstar",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781768",
+   "round": "9",
+   "utc": "2026-10-17T19:00:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781775",
+   "round": "9",
+   "utc": "2026-10-18T10:15:00Z",
+   "home": "PEC Zwolle",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781771",
+   "round": "9",
+   "utc": "2026-10-18T12:30:00Z",
+   "home": "Cambuur",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781772",
+   "round": "9",
+   "utc": "2026-10-18T14:45:00Z",
+   "home": "FC Groningen",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781773",
+   "round": "9",
+   "utc": "2026-10-18T18:00:00Z",
+   "home": "FC Twente",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781770",
+   "round": "9",
+   "utc": "2026-10-18T18:00:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781781",
+   "round": "10",
+   "utc": "2026-10-23T18:00:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781784",
+   "round": "10",
+   "utc": "2026-10-24T14:30:00Z",
+   "home": "FC Utrecht",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781785",
+   "round": "10",
+   "utc": "2026-10-24T16:45:00Z",
+   "home": "Willem II",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781779",
+   "round": "10",
+   "utc": "2026-10-24T19:00:00Z",
+   "home": "ADO Den Haag",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781780",
+   "round": "10",
+   "utc": "2026-10-25T11:15:00Z",
+   "home": "Fortuna Sittard",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781777",
+   "round": "10",
+   "utc": "2026-10-25T13:30:00Z",
+   "home": "NEC Nijmegen",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781783",
+   "round": "10",
+   "utc": "2026-10-25T13:30:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781778",
+   "round": "10",
+   "utc": "2026-10-25T15:45:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781782",
+   "round": "10",
+   "utc": "2026-10-25T19:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781787",
+   "round": "11",
+   "utc": "2026-10-31T15:30:00Z",
+   "home": "Feyenoord",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781793",
+   "round": "11",
+   "utc": "2026-10-31T17:45:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781791",
+   "round": "11",
+   "utc": "2026-10-31T17:45:00Z",
+   "home": "SC Heerenveen",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781786",
+   "round": "11",
+   "utc": "2026-10-31T20:00:00Z",
+   "home": "Ajax",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781788",
+   "round": "11",
+   "utc": "2026-10-31T20:00:00Z",
+   "home": "Cambuur",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781792",
+   "round": "11",
+   "utc": "2026-11-01T11:15:00Z",
+   "home": "PEC Zwolle",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781794",
+   "round": "11",
+   "utc": "2026-11-01T13:30:00Z",
+   "home": "Excelsior",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781790",
+   "round": "11",
+   "utc": "2026-11-01T13:30:00Z",
+   "home": "Telstar",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781789",
+   "round": "11",
+   "utc": "2026-11-01T15:45:00Z",
+   "home": "FC Groningen",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781802",
+   "round": "12",
+   "utc": "2026-11-06T19:00:00Z",
+   "home": "Willem II",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781801",
+   "round": "12",
+   "utc": "2026-11-07T15:30:00Z",
+   "home": "Fortuna Sittard",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781799",
+   "round": "12",
+   "utc": "2026-11-07T17:45:00Z",
+   "home": "ADO Den Haag",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781800",
+   "round": "12",
+   "utc": "2026-11-07T20:00:00Z",
+   "home": "Excelsior",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781797",
+   "round": "12",
+   "utc": "2026-11-08T11:15:00Z",
+   "home": "SC Heerenveen",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781803",
+   "round": "12",
+   "utc": "2026-11-08T13:30:00Z",
+   "home": "FC Twente",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781798",
+   "round": "12",
+   "utc": "2026-11-08T15:45:00Z",
+   "home": "AZ Alkmaar",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781796",
+   "round": "12",
+   "utc": "2026-11-08T15:45:00Z",
+   "home": "Cambuur",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781795",
+   "round": "12",
+   "utc": "2026-11-08T19:00:00Z",
+   "home": "FC Utrecht",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781805",
+   "round": "13",
+   "utc": "2026-11-21T15:30:00Z",
+   "home": "NEC Nijmegen",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781811",
+   "round": "13",
+   "utc": "2026-11-21T17:45:00Z",
+   "home": "FC Utrecht",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781806",
+   "round": "13",
+   "utc": "2026-11-21T17:45:00Z",
+   "home": "Feyenoord",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781808",
+   "round": "13",
+   "utc": "2026-11-21T20:00:00Z",
+   "home": "FC Groningen",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781807",
+   "round": "13",
+   "utc": "2026-11-21T20:00:00Z",
+   "home": "Telstar",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781812",
+   "round": "13",
+   "utc": "2026-11-22T11:15:00Z",
+   "home": "FC Twente",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781804",
+   "round": "13",
+   "utc": "2026-11-22T13:30:00Z",
+   "home": "Ajax",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781810",
+   "round": "13",
+   "utc": "2026-11-22T13:30:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781809",
+   "round": "13",
+   "utc": "2026-11-22T15:45:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781815",
+   "round": "14",
+   "utc": "2026-11-27T19:00:00Z",
+   "home": "FC Groningen",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781816",
+   "round": "14",
+   "utc": "2026-11-28T15:30:00Z",
+   "home": "Excelsior",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781820",
+   "round": "14",
+   "utc": "2026-11-28T17:45:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781819",
+   "round": "14",
+   "utc": "2026-11-28T20:00:00Z",
+   "home": "Cambuur",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781821",
+   "round": "14",
+   "utc": "2026-11-29T11:15:00Z",
+   "home": "ADO Den Haag",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781817",
+   "round": "14",
+   "utc": "2026-11-29T13:30:00Z",
+   "home": "Feyenoord",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781814",
+   "round": "14",
+   "utc": "2026-11-29T13:30:00Z",
+   "home": "Fortuna Sittard",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781813",
+   "round": "14",
+   "utc": "2026-11-29T15:45:00Z",
+   "home": "PEC Zwolle",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781818",
+   "round": "14",
+   "utc": "2026-11-29T19:00:00Z",
+   "home": "NEC Nijmegen",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781826",
+   "round": "15",
+   "utc": "2026-12-04T19:00:00Z",
+   "home": "Telstar",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781823",
+   "round": "15",
+   "utc": "2026-12-05T15:30:00Z",
+   "home": "Willem II",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781830",
+   "round": "15",
+   "utc": "2026-12-05T17:45:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781824",
+   "round": "15",
+   "utc": "2026-12-05T19:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781829",
+   "round": "15",
+   "utc": "2026-12-05T20:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781827",
+   "round": "15",
+   "utc": "2026-12-06T11:15:00Z",
+   "home": "SC Heerenveen",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781822",
+   "round": "15",
+   "utc": "2026-12-06T13:30:00Z",
+   "home": "Ajax",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781828",
+   "round": "15",
+   "utc": "2026-12-06T13:30:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781825",
+   "round": "15",
+   "utc": "2026-12-06T15:45:00Z",
+   "home": "ADO Den Haag",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781835",
+   "round": "16",
+   "utc": "2026-12-12T15:30:00Z",
+   "home": "FC Utrecht",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781837",
+   "round": "16",
+   "utc": "2026-12-12T17:45:00Z",
+   "home": "SC Heerenveen",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781838",
+   "round": "16",
+   "utc": "2026-12-12T19:00:00Z",
+   "home": "FC Twente",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781836",
+   "round": "16",
+   "utc": "2026-12-12T20:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781834",
+   "round": "16",
+   "utc": "2026-12-13T11:15:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781839",
+   "round": "16",
+   "utc": "2026-12-13T13:30:00Z",
+   "home": "FC Groningen",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781833",
+   "round": "16",
+   "utc": "2026-12-13T13:30:00Z",
+   "home": "Willem II",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781831",
+   "round": "16",
+   "utc": "2026-12-13T15:45:00Z",
+   "home": "AZ Alkmaar",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781832",
+   "round": "16",
+   "utc": "2026-12-13T19:00:00Z",
+   "home": "Ajax",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781846",
+   "round": "17",
+   "utc": "2026-12-18T19:00:00Z",
+   "home": "Telstar",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781848",
+   "round": "17",
+   "utc": "2026-12-19T15:30:00Z",
+   "home": "Excelsior",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781840",
+   "round": "17",
+   "utc": "2026-12-19T17:45:00Z",
+   "home": "Fortuna Sittard",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781844",
+   "round": "17",
+   "utc": "2026-12-19T20:00:00Z",
+   "home": "FC Utrecht",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781847",
+   "round": "17",
+   "utc": "2026-12-20T11:15:00Z",
+   "home": "NEC Nijmegen",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781842",
+   "round": "17",
+   "utc": "2026-12-20T13:30:00Z",
+   "home": "Cambuur",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781843",
+   "round": "17",
+   "utc": "2026-12-20T13:30:00Z",
+   "home": "Feyenoord",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781841",
+   "round": "17",
+   "utc": "2026-12-20T15:45:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781845",
+   "round": "17",
+   "utc": "2026-12-20T19:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781850",
+   "round": "18",
+   "utc": "2027-01-08T19:00:00Z",
+   "home": "FC Twente",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781855",
+   "round": "18",
+   "utc": "2027-01-09T15:30:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781857",
+   "round": "18",
+   "utc": "2027-01-09T17:45:00Z",
+   "home": "PEC Zwolle",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781851",
+   "round": "18",
+   "utc": "2027-01-09T19:00:00Z",
+   "home": "Willem II",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781852",
+   "round": "18",
+   "utc": "2027-01-09T20:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781856",
+   "round": "18",
+   "utc": "2027-01-10T11:15:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781849",
+   "round": "18",
+   "utc": "2027-01-10T13:30:00Z",
+   "home": "ADO Den Haag",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781854",
+   "round": "18",
+   "utc": "2027-01-10T13:30:00Z",
+   "home": "Feyenoord",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781853",
+   "round": "18",
+   "utc": "2027-01-10T15:45:00Z",
+   "home": "FC Groningen",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781864",
+   "round": "19",
+   "utc": "2027-01-15T19:00:00Z",
+   "home": "SC Heerenveen",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781865",
+   "round": "19",
+   "utc": "2027-01-16T15:30:00Z",
+   "home": "Telstar",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781860",
+   "round": "19",
+   "utc": "2027-01-16T17:45:00Z",
+   "home": "Excelsior",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781862",
+   "round": "19",
+   "utc": "2027-01-16T19:00:00Z",
+   "home": "ADO Den Haag",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781858",
+   "round": "19",
+   "utc": "2027-01-16T20:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781859",
+   "round": "19",
+   "utc": "2027-01-17T11:15:00Z",
+   "home": "FC Utrecht",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781861",
+   "round": "19",
+   "utc": "2027-01-17T13:30:00Z",
+   "home": "Ajax",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781863",
+   "round": "19",
+   "utc": "2027-01-17T13:30:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781866",
+   "round": "19",
+   "utc": "2027-01-17T15:45:00Z",
+   "home": "Cambuur",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781870",
+   "round": "20",
+   "utc": "2027-01-22T19:00:00Z",
+   "home": "Excelsior",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781872",
+   "round": "20",
+   "utc": "2027-01-23T15:30:00Z",
+   "home": "Ajax",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781867",
+   "round": "20",
+   "utc": "2027-01-23T17:45:00Z",
+   "home": "Feyenoord",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781875",
+   "round": "20",
+   "utc": "2027-01-23T19:00:00Z",
+   "home": "FC Twente",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781871",
+   "round": "20",
+   "utc": "2027-01-23T20:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781868",
+   "round": "20",
+   "utc": "2027-01-24T11:15:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781873",
+   "round": "20",
+   "utc": "2027-01-24T13:30:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781869",
+   "round": "20",
+   "utc": "2027-01-24T13:30:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781874",
+   "round": "20",
+   "utc": "2027-01-24T15:45:00Z",
+   "home": "AZ Alkmaar",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781884",
+   "round": "21",
+   "utc": "2027-01-29T19:00:00Z",
+   "home": "FC Utrecht",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781878",
+   "round": "21",
+   "utc": "2027-01-30T15:30:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781877",
+   "round": "21",
+   "utc": "2027-01-30T17:45:00Z",
+   "home": "ADO Den Haag",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781882",
+   "round": "21",
+   "utc": "2027-01-30T19:00:00Z",
+   "home": "Willem II",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781881",
+   "round": "21",
+   "utc": "2027-01-30T20:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781883",
+   "round": "21",
+   "utc": "2027-01-31T11:15:00Z",
+   "home": "SC Heerenveen",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781880",
+   "round": "21",
+   "utc": "2027-01-31T13:30:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781879",
+   "round": "21",
+   "utc": "2027-01-31T13:30:00Z",
+   "home": "FC Twente",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781876",
+   "round": "21",
+   "utc": "2027-01-31T15:45:00Z",
+   "home": "FC Groningen",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781885",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "Cambuur",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781893",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "Excelsior",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781891",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "FC Groningen",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781888",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "Feyenoord",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781890",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781892",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781887",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781886",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "Telstar",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781889",
+   "round": "22",
+   "utc": "2027-02-13T19:00:00Z",
+   "home": "Willem II",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781896",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "Ajax",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781901",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781900",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "FC Twente",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781895",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "FC Utrecht",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781894",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "Feyenoord",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781899",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781902",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781897",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781898",
+   "round": "23",
+   "utc": "2027-02-20T19:00:00Z",
+   "home": "SC Heerenveen",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781908",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "ADO Den Haag",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781903",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "Ajax",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781906",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "Cambuur",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781907",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "Excelsior",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781911",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781910",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "NEC Nijmegen",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781905",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781904",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "Telstar",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781909",
+   "round": "24",
+   "utc": "2027-02-27T19:00:00Z",
+   "home": "Willem II",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781914",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "ADO Den Haag",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781913",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "FC Groningen",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781919",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "FC Twente",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781917",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "Feyenoord",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781920",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781916",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781915",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781912",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781918",
+   "round": "25",
+   "utc": "2027-03-06T19:00:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781922",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "Ajax",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781929",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781924",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "Cambuur",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781926",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "Excelsior",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781923",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "FC Utrecht",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781921",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781927",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "SC Heerenveen",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781925",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "Telstar",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781928",
+   "round": "26",
+   "utc": "2027-03-13T19:00:00Z",
+   "home": "Willem II",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781933",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "ADO Den Haag",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781932",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781934",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "FC Groningen",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781936",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "FC Twente",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781930",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "FC Utrecht",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781938",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "Feyenoord",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781931",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "NEC Nijmegen",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781937",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781935",
+   "round": "27",
+   "utc": "2027-03-20T19:00:00Z",
+   "home": "Telstar",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781942",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "Ajax",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781946",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "Cambuur",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781941",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "Excelsior",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781947",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781945",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781943",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781944",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "SC Heerenveen",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781940",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781939",
+   "round": "28",
+   "utc": "2027-04-03T18:00:00Z",
+   "home": "Willem II",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781955",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "ADO Den Haag",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781954",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "Cambuur",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781948",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "FC Groningen",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781956",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "FC Utrecht",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781949",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "NEC Nijmegen",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781951",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781952",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781950",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "Telstar",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781953",
+   "round": "29",
+   "utc": "2027-04-10T18:00:00Z",
+   "home": "Willem II",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781957",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781959",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "Excelsior",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781958",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "FC Twente",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781964",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "Feyenoord",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781965",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781960",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781963",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781962",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781961",
+   "round": "30",
+   "utc": "2027-04-24T18:00:00Z",
+   "home": "SC Heerenveen",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781967",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "Ajax",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781974",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "Excelsior",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781970",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "FC Groningen",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781971",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "Feyenoord",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781973",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781972",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "NEC Nijmegen",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781966",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "SC Heerenveen",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781968",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781969",
+   "round": "31",
+   "utc": "2027-05-01T18:00:00Z",
+   "home": "Telstar",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781976",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "ADO Den Haag",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781975",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "AZ Alkmaar",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781982",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "Cambuur",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781978",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "FC Twente",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781981",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "FC Utrecht",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781980",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "Fortuna Sittard",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781977",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "PEC Zwolle",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781983",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "PSV Eindhoven",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781979",
+   "round": "32",
+   "utc": "2027-05-08T18:00:00Z",
+   "home": "Willem II",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781989",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "Ajax",
+   "away": "Sparta Rotterdam",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781990",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "AZ Alkmaar",
+   "away": "PEC Zwolle",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781986",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "Excelsior",
+   "away": "ADO Den Haag",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781984",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "FC Groningen",
+   "away": "Cambuur",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781988",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "FC Twente",
+   "away": "Feyenoord",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781985",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "FC Utrecht",
+   "away": "Telstar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781992",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "Fortuna Sittard",
+   "away": "Willem II",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781987",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "Go Ahead Eagles",
+   "away": "SC Heerenveen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781991",
+   "round": "33",
+   "utc": "2027-05-16T12:30:00Z",
+   "home": "PSV Eindhoven",
+   "away": "NEC Nijmegen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5782001",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "ADO Den Haag",
+   "away": "AZ Alkmaar",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781993",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "Cambuur",
+   "away": "Ajax",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5782000",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "Feyenoord",
+   "away": "FC Groningen",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781994",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "NEC Nijmegen",
+   "away": "FC Utrecht",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781999",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "PEC Zwolle",
+   "away": "FC Twente",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781997",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "SC Heerenveen",
+   "away": "PSV Eindhoven",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781998",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "Sparta Rotterdam",
+   "away": "Fortuna Sittard",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781996",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "Telstar",
+   "away": "Excelsior",
+   "score": null,
+   "status": "NS"
+  },
+  {
+   "id": "5781995",
+   "round": "34",
+   "utc": "2027-05-23T12:30:00Z",
+   "home": "Willem II",
+   "away": "Go Ahead Eagles",
+   "score": null,
+   "status": "NS"
+  }
+ ],
+ "standings": [
+  {
+   "pos": 1,
+   "team": "Feyenoord",
+   "p": 8,
+   "w": 6,
+   "d": 2,
+   "l": 0,
+   "goals": "27-7",
+   "gd": 20,
+   "pts": 20
+  },
+  {
+   "pos": 2,
+   "team": "PSV Eindhoven",
+   "p": 8,
+   "w": 6,
+   "d": 1,
+   "l": 1,
+   "goals": "26-10",
+   "gd": 16,
+   "pts": 19
+  },
+  {
+   "pos": 3,
+   "team": "AZ Alkmaar",
+   "p": 8,
+   "w": 6,
+   "d": 1,
+   "l": 1,
+   "goals": "18-8",
+   "gd": 10,
+   "pts": 19
+  },
+  {
+   "pos": 4,
+   "team": "FC Twente",
+   "p": 8,
+   "w": 5,
+   "d": 2,
+   "l": 1,
+   "goals": "16-8",
+   "gd": 8,
+   "pts": 17
+  },
+  {
+   "pos": 5,
+   "team": "Ajax",
+   "p": 8,
+   "w": 4,
+   "d": 3,
+   "l": 1,
+   "goals": "22-10",
+   "gd": 12,
+   "pts": 15
+  },
+  {
+   "pos": 6,
+   "team": "FC Groningen",
+   "p": 8,
+   "w": 4,
+   "d": 2,
+   "l": 2,
+   "goals": "20-14",
+   "gd": 6,
+   "pts": 14
+  },
+  {
+   "pos": 7,
+   "team": "Fortuna Sittard",
+   "p": 8,
+   "w": 4,
+   "d": 2,
+   "l": 2,
+   "goals": "14-15",
+   "gd": -1,
+   "pts": 14
+  },
+  {
+   "pos": 8,
+   "team": "Go Ahead Eagles",
+   "p": 8,
+   "w": 2,
+   "d": 5,
+   "l": 1,
+   "goals": "19-17",
+   "gd": 2,
+   "pts": 11
+  },
+  {
+   "pos": 9,
+   "team": "Excelsior",
+   "p": 8,
+   "w": 3,
+   "d": 2,
+   "l": 3,
+   "goals": "16-14",
+   "gd": 2,
+   "pts": 11
+  },
+  {
+   "pos": 10,
+   "team": "SC Heerenveen",
+   "p": 8,
+   "w": 2,
+   "d": 3,
+   "l": 3,
+   "goals": "11-11",
+   "gd": 0,
+   "pts": 9
+  },
+  {
+   "pos": 11,
+   "team": "NEC Nijmegen",
+   "p": 8,
+   "w": 2,
+   "d": 3,
+   "l": 3,
+   "goals": "13-14",
+   "gd": -1,
+   "pts": 9
+  },
+  {
+   "pos": 12,
+   "team": "Cambuur",
+   "p": 8,
+   "w": 2,
+   "d": 2,
+   "l": 4,
+   "goals": "11-19",
+   "gd": -8,
+   "pts": 8
+  },
+  {
+   "pos": 13,
+   "team": "FC Utrecht",
+   "p": 8,
+   "w": 2,
+   "d": 2,
+   "l": 4,
+   "goals": "14-25",
+   "gd": -11,
+   "pts": 8
+  },
+  {
+   "pos": 14,
+   "team": "Sparta Rotterdam",
+   "p": 8,
+   "w": 1,
+   "d": 3,
+   "l": 4,
+   "goals": "13-20",
+   "gd": -7,
+   "pts": 6
+  },
+  {
+   "pos": 15,
+   "team": "Telstar",
+   "p": 8,
+   "w": 1,
+   "d": 3,
+   "l": 4,
+   "goals": "7-14",
+   "gd": -7,
+   "pts": 6
+  },
+  {
+   "pos": 16,
+   "team": "PEC Zwolle",
+   "p": 8,
+   "w": 1,
+   "d": 1,
+   "l": 6,
+   "goals": "6-21",
+   "gd": -15,
+   "pts": 4
+  },
+  {
+   "pos": 17,
+   "team": "ADO Den Haag",
+   "p": 8,
+   "w": 0,
+   "d": 3,
+   "l": 5,
+   "goals": "9-19",
+   "gd": -10,
+   "pts": 3
+  },
+  {
+   "pos": 18,
+   "team": "Willem II",
+   "p": 8,
+   "w": 0,
+   "d": 2,
+   "l": 6,
+   "goals": "7-23",
+   "gd": -16,
+   "pts": 2
+  }
+ ]
+}
