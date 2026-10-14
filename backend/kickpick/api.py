@@ -13,7 +13,7 @@ from kickpick.config import COMPETITIONS
 from kickpick.db import SessionLocal
 from kickpick.fotmob import country_flag, league_logo, player_photo, search_name, team_logo
 from kickpick.models import (Bracket, Competition, Match, MatchLineup, Player, PlayerCareer, PlayerSeason, Season,
-                             SquadMember, Standing, Team)
+                             SquadMember, Standing, Team, TeamTransfer)
 
 app = FastAPI(title="KickPick")
 ORDER = {competition_id: i for i, (competition_id, *_) in enumerate(COMPETITIONS)}
@@ -68,6 +68,14 @@ def minutes(lineup: MatchLineup) -> int:
     # shortcut: added time isn't counted (a 95-minute game reads 90'); derive the length from events if it matters
     start = lineup.sub_in if lineup.role == "sub" else 0
     return max((lineup.sub_out or 90) - start, 1)
+
+
+def transfer_json(t: TeamTransfer, other_id: int | None, other_name: str | None) -> dict:
+    """One move seen from our team; `team` is the other club."""
+    other = {"id": other_id, "name": other_name, "logo_url": other_id and team_logo(other_id)} if other_name else None
+    return {"player": {"id": t.player_id, "name": t.player_name, "photo_url": player_photo(t.player_id)},
+            "team": other, "date": t.transfer_date, "fee_eur": t.fee_eur, "fee_text": t.fee_text,
+            "on_loan": t.on_loan}
 
 
 def bracket_json(data: dict) -> dict:
@@ -225,15 +233,23 @@ def team(team_id: int, s: Session = Depends(db)):
     squad.sort(key=lambda r: (POSITIONS.index(r[1].position) if r[1].position in POSITIONS else len(POSITIONS),
                               r[0].shirt_number or 999))
     plays = MATCHES.where(or_(Match.home_team_id == team_id, Match.away_team_id == team_id))
-    last = s.execute(plays.where(Match.status == "FT").order_by(Match.kickoff.desc()).limit(10))
+    last = s.execute(plays.where(Match.status == "FT").order_by(Match.kickoff.desc()).limit(20))
     upcoming = s.execute(plays.where(Match.status.in_(("NS", "LIVE")),
                                      Match.kickoff > datetime.now(timezone.utc) - timedelta(hours=3))
-                         .order_by(Match.kickoff).limit(5))
+                         .order_by(Match.kickoff).limit(10))
+    moves = s.scalars(select(TeamTransfer)
+                      .where(or_(TeamTransfer.to_team_id == team_id, TeamTransfer.from_team_id == team_id),
+                             TeamTransfer.contract_extension.is_(False))
+                      .order_by(TeamTransfer.transfer_date.desc())).all()
     return team_json(found) | {
         "squad": [{"player": {"id": p.id, "name": p.name, "photo_url": player_photo(p.id)},
                    "shirt_number": m.shirt_number, "position": p.position, "stats": stats_json(m)} for m, p in squad],
         "last": [match_json(r) for r in last],
         "next": [match_json(r) for r in upcoming],
+        "transfers": {
+            "arrivals": [transfer_json(t, t.from_team_id, t.from_team_name) for t in moves if t.to_team_id == team_id][:20],
+            "departures": [transfer_json(t, t.to_team_id, t.to_team_name) for t in moves if t.from_team_id == team_id][:20],
+        },
     }
 
 

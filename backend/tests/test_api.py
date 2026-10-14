@@ -203,3 +203,14 @@ def test_player_recent_matches_and_minutes():
     came_on = client.get(f"/players/{sub['player_id']}").json()["matches"][0]
     assert came_on["minutes"] == (sub["sub_out"] or 90) - sub["sub_in"] and came_on["role"] == "sub"
     assert client.get(f"/players/{unused['player_id']}").json()["matches"] == []
+
+
+def test_team_transfers():
+    t = client.get("/teams/8634").json()
+    real = [x for x in fotmob.parse_team(load("team.json"))["transfers"] if not x["contract_extension"]]
+    arrivals, departures = t["transfers"]["arrivals"], t["transfers"]["departures"]
+    assert len(arrivals) == min(20, sum(x["to_team_id"] == 8634 for x in real))
+    assert len(departures) == min(20, sum(x["from_team_id"] == 8634 for x in real))
+    assert [x["date"] for x in departures] == sorted((x["date"] for x in departures), reverse=True)
+    assert all(x["player"]["photo_url"].endswith(".png") for x in arrivals + departures)
+    assert all(x["team"] is None or x["team"]["name"] for x in arrivals + departures)
