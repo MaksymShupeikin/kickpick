@@ -33,6 +33,11 @@ def player_photo(player_id: int) -> str:
     return f"{IMG}/playerimages/{player_id}.png"
 
 
+def country_flag(country_code: str) -> str:
+    """FotMob draws national flags under the team-logo path, keyed by the lower-case FIFA code."""
+    return f"{IMG}/logo/teamlogo/{country_code.lower()}.png"
+
+
 def search_name(text: str) -> str:
     # shortcut: NFKD drops accents (García → garcia) but keeps letters like ø/ł/ß; add a translation table if search misses them
     return "".join(c for c in unicodedata.normalize("NFKD", text.lower()) if not unicodedata.combining(c))

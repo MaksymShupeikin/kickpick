@@ -11,12 +11,15 @@ from sqlalchemy.orm import Session, aliased
 from kickpick import collector
 from kickpick.config import COMPETITIONS
 from kickpick.db import SessionLocal
-from kickpick.fotmob import league_logo, player_photo, search_name, team_logo
-from kickpick.models import Bracket, Competition, Match, MatchLineup, Player, Season, SquadMember, Standing, Team
+from kickpick.fotmob import country_flag, league_logo, player_photo, search_name, team_logo
+from kickpick.models import (Bracket, Competition, Match, MatchLineup, Player, PlayerCareer, PlayerSeason, Season,
+                             SquadMember, Standing, Team)
 
 app = FastAPI(title="KickPick")
 ORDER = {competition_id: i for i, (competition_id, *_) in enumerate(COMPETITIONS)}
 POSITIONS = ["Coach", "GK", "DF", "MF", "FW"]
+APPEARED = or_(MatchLineup.role == "starter", and_(MatchLineup.role == "sub", MatchLineup.sub_in.is_not(None)))
+CAREER_ORDER = ["senior", "national", "youth", "coach"]
 Home, Away = aliased(Team), aliased(Team)
 MATCHES = (select(Match, Season, Competition, Home, Away)
            .join(Season, Match.season_id == Season.id)
@@ -58,6 +61,13 @@ def match_json(row) -> dict:
 def stats_json(m: SquadMember) -> dict:
     return {"goals": m.goals, "assists": m.assists, "yellow_cards": m.yellow_cards,
             "red_cards": m.red_cards, "rating": m.rating}
+
+
+def minutes(lineup: MatchLineup) -> int:
+    """Minutes on the pitch from the substitution times."""
+    # shortcut: added time isn't counted (a 95-minute game reads 90'); derive the length from events if it matters
+    start = lineup.sub_in if lineup.role == "sub" else 0
+    return max((lineup.sub_out or 90) - start, 1)
 
 
 def bracket_json(data: dict) -> dict:
@@ -235,10 +245,35 @@ def player(player_id: int, s: Session = Depends(db)):
     rows = s.execute(select(SquadMember, Team).join(Team, SquadMember.team_id == Team.id)
                      .where(SquadMember.player_id == player_id)).all()
     rows.sort(key=lambda r: r[1].id == found.national_team_id)  # club first, national team last
+    national = s.get(Team, found.national_team_id) if found.national_team_id else None
+    played = s.execute(MATCHES.add_columns(MatchLineup).join(MatchLineup, MatchLineup.match_id == Match.id)
+                       .where(MatchLineup.player_id == player_id, APPEARED, Match.status.in_(("FT", "LIVE")))
+                       .order_by(Match.kickoff.desc()).limit(15)).all()
+    # "C": plain code-point order ("2025/2026" > "2025" > "2024/2025"), whatever the database locale
+    seasons = s.scalars(select(PlayerSeason).where(PlayerSeason.player_id == player_id)
+                        .order_by(PlayerSeason.season.collate("C").desc(),
+                                  PlayerSeason.appearances.desc().nulls_last())).all()
+    career = s.scalars(select(PlayerCareer).where(PlayerCareer.player_id == player_id)
+                       .order_by(PlayerCareer.start_date.desc().nulls_last())).all()
+    career = sorted(career, key=lambda c: CAREER_ORDER.index(c.kind) if c.kind in CAREER_ORDER else len(CAREER_ORDER))
     return {
         "id": found.id, "name": found.name, "photo_url": player_photo(found.id), "country_code": found.country_code,
+        "country_name": national.name if national else None,
+        "flag_url": country_flag(found.country_code) if found.country_code else None,
         "position": found.position, "birth_date": found.birth_date,
         "teams": [{"team": team_json(t), "shirt_number": m.shirt_number, "stats": stats_json(m)} for m, t in rows],
+        "matches": [match_json(r[:5]) | {"rating": r[5].rating, "minutes": minutes(r[5]), "role": r[5].role}
+                    for r in played],
+        "seasons": [{"season": x.season,
+                     "competition": {"id": x.competition_id, "name": x.competition_name,
+                                     "logo_url": league_logo(x.competition_id)},
+                     "team": {"id": x.team_id, "name": x.team_name, "logo_url": team_logo(x.team_id)},
+                     "appearances": x.appearances, "goals": x.goals, "assists": x.assists, "rating": x.rating}
+                    for x in seasons],
+        "career": [{"id": c.id, "kind": c.kind,
+                    "team": {"id": c.team_id, "name": c.team_name, "logo_url": c.team_id and team_logo(c.team_id)},
+                    "start_date": c.start_date, "end_date": c.end_date,
+                    "appearances": c.appearances, "goals": c.goals, "assists": c.assists} for c in career],
     }
 
 

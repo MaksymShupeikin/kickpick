@@ -24,6 +24,7 @@ def data(db_module):
         store.save_league(s, 50, fotmob.parse_league(load("league_euro_2028.json")), is_current=True)
         store.save_match(s, 5795369, fotmob.parse_match(load("match.json")))
         store.save_squad(s, 8634, fotmob.parse_team(load("team.json")))
+        store.save_player(s, 1467236, fotmob.parse_player(load("player_yamal.json")))  # in the Barcelona squad
 
 
 def test_health():
@@ -171,3 +172,34 @@ def test_player_without_position(db_module):
         s.add(Player(id=999_001, name="Lineup Only", search_name="lineup only"))
     body = client.get("/players/999001").json()
     assert body["position"] is None and body["teams"] == []
+    assert body["country_name"] is None and body["flag_url"] is None
+    assert body["matches"] == [] and body["seasons"] == [] and body["career"] == []
+
+
+def lineup_rows():
+    return fotmob.parse_match(load("match.json"))["lineups"]
+
+
+def test_player_country_seasons_and_career():
+    p = client.get("/players/1467236").json()
+    assert p["country_name"] == "Spain" and p["flag_url"].endswith("/teamlogo/esp.png")
+    assert p["seasons"] and p["seasons"][0]["competition"]["logo_url"].endswith(".png")
+    seasons = [x["season"] for x in p["seasons"]]
+    assert seasons == sorted(seasons, reverse=True)
+    order = ["senior", "national", "youth", "coach"]
+    kinds = [order.index(c["kind"]) for c in p["career"]]
+    assert kinds and kinds == sorted(kinds) and all(c["id"] for c in p["career"])
+    assert p["matches"] == []  # no lineup rows for him in the fixtures
+
+
+def test_player_recent_matches_and_minutes():
+    rows = lineup_rows()
+    starter = next(r for r in rows if r["role"] == "starter" and r["sub_out"])
+    sub = next(r for r in rows if r["role"] == "sub" and r["sub_in"])
+    unused = next(r for r in rows if r["role"] == "sub" and r["sub_in"] is None)
+    played = client.get(f"/players/{starter['player_id']}").json()["matches"]
+    assert [m["id"] for m in played] == [5795369] and played[0]["minutes"] == starter["sub_out"]
+    assert played[0]["home"]["logo_url"] and played[0]["role"] == "starter"
+    came_on = client.get(f"/players/{sub['player_id']}").json()["matches"][0]
+    assert came_on["minutes"] == (sub["sub_out"] or 90) - sub["sub_in"] and came_on["role"] == "sub"
+    assert client.get(f"/players/{unused['player_id']}").json()["matches"] == []
