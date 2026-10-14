@@ -22,7 +22,7 @@ struct CompetitionView: View {
                         }
                     }
                 case .matches:
-                    Loader(id: season, live: { $0.contains { $0.status == .live } }) {
+                    Loader(id: season, live: { $0.contains { $0.needsPolling } }) {
                         try await APIClient.shared.matches(competition.slug, season: season)
                     } content: { matches in
                         LazyVStack(alignment: .leading, spacing: 16) {

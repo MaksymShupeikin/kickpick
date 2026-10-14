@@ -5,7 +5,7 @@ struct MatchView: View {
 
     var body: some View {
         ScrollView {
-            Loader(live: { $0.match.status == .live }) { try await APIClient.shared.match(id) } content: { page in
+            Loader(live: { $0.match.needsPolling }) { try await APIClient.shared.match(id) } content: { page in
                 VStack(spacing: 16) {
                     MatchHeader(match: page.match)
                     if let details = page.details {
@@ -134,14 +134,18 @@ private struct EventIcon: View {
 
     var body: some View {
         switch type {
-        case "goal", "own_goal":
-            Image(systemName: "soccerball").foregroundStyle(Color.textPrimary)
+        case "goal":
+            Image(systemName: "soccerball").foregroundStyle(Color.textPrimary).accessibilityLabel("Гол")
+        case "own_goal":
+            Image(systemName: "soccerball").foregroundStyle(Color.textPrimary).accessibilityLabel("Автогол")
         case "yellow":
-            card(Color.cardYellow)
-        case "red", "second_yellow":
-            card(Color.cardRed)
+            card(Color.cardYellow).accessibilityLabel("Жёлтая карточка")
+        case "red":
+            card(Color.cardRed).accessibilityLabel("Красная карточка")
+        case "second_yellow":
+            card(Color.cardRed).accessibilityLabel("Вторая жёлтая")
         case "sub":
-            Image(systemName: "arrow.left.arrow.right").foregroundStyle(Color.textPrimary)
+            Image(systemName: "arrow.left.arrow.right").foregroundStyle(Color.textPrimary).accessibilityLabel("Замена")
         default:
             EmptyView()
         }

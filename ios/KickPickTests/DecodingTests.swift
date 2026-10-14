@@ -86,4 +86,17 @@ final class DecodingTests: XCTestCase {
         XCTAssertEqual(MatchStat.number("1.47"), 1.47)
         XCTAssertEqual(MatchStat.number("—"), 0)
     }
+
+    func testNeedsPolling() throws {
+        func match(_ status: String, offset: TimeInterval) throws -> Match {
+            let kickoff = ISO8601DateFormatter().string(from: Date.now.addingTimeInterval(offset))
+            let json = matchJSON.replacingOccurrences(of: "2026-10-12T19:00:00Z", with: kickoff)
+                .replacingOccurrences(of: "\"LIVE\"", with: "\"\(status)\"")
+            return try decode(Match.self, json + "}")
+        }
+        XCTAssertTrue(try match("LIVE", offset: -3600).needsPolling)
+        XCTAssertTrue(try match("NS", offset: 300).needsPolling)
+        XCTAssertFalse(try match("NS", offset: 86400).needsPolling)
+        XCTAssertFalse(try match("FT", offset: -3600).needsPolling)
+    }
 }

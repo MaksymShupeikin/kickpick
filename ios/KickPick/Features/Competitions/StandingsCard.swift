@@ -3,8 +3,15 @@ import SwiftUI
 struct StandingsCard: View {
     let group: StandingGroup
 
+    private var title: String? {
+        let g = group.group
+        if g.isEmpty { return nil }
+        if g.count == 1 { return "Группа \(g)" }
+        return g.hasPrefix("Best 3rd") ? "Лучшие третьи места" : g
+    }
+
     var body: some View {
-        CardSection(title: group.group.isEmpty ? nil : "Группа \(group.group)") {
+        CardSection(title: title) {
             HStack(spacing: 8) {
                 Text("#").frame(width: 24, alignment: .leading)
                 Text("Команда")

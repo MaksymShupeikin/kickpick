@@ -3,6 +3,11 @@ import SwiftUI
 enum TeamWeight { case winner, loser, even }
 
 extension Match {
+    /// Live, or about to kick off / just started: mirrors the collector's polling window, so NS → LIVE is seen.
+    var needsPolling: Bool {
+        status == .live || (status == .notStarted && (-15 * 60...3 * 3600).contains(Date.now.timeIntervalSince(kickoff)))
+    }
+
     func weight(home: Bool) -> TeamWeight {
         guard status == .finished, let h = homeScore, let a = awayScore, h != a else { return .even }
         return (h > a) == home ? .winner : .loser

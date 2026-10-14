@@ -13,7 +13,7 @@ struct MatchesView: View {
                         .buttonStyle(.glassIcon)
                         .accessibilityLabel("Выбрать дату")
                 }
-                Loader(id: day, placeholder: Match.placeholders, live: { $0.contains { $0.status == .live } }) {
+                Loader(id: day, placeholder: Match.placeholders, live: { $0.contains { $0.needsPolling } }) {
                     try await APIClient.shared.matches(from: day, to: Calendar.current.date(byAdding: .day, value: 1, to: day)!)
                 } content: { matches in
                     if matches.isEmpty {
