@@ -1,4 +1,6 @@
 """FotMob: HTTP client and parsers. The only module that knows FotMob's JSON format."""
+import logging
+import random
 import re
 import time
 import unicodedata
@@ -6,8 +8,13 @@ from datetime import date, datetime
 
 import httpx
 
+log = logging.getLogger("kickpick.fotmob")
 API = "https://www.fotmob.com/api/data"
 IMG = "https://images.fotmob.com/image_resources"
+USER_AGENT = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
+              "Chrome/141.0.0.0 Safari/537.36")
+BACKOFF_START = 30.0
+BACKOFF_MAX = 1800.0
 POSITIONS = {"coach": "Coach", "keepers": "GK", "defenders": "DF", "midfielders": "MF", "attackers": "FW"}
 CARDS = {"Yellow": "yellow", "Red": "red", "YellowRed": "second_yellow"}
 
@@ -29,20 +36,44 @@ def search_name(text: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFKD", text.lower()) if not unicodedata.combining(c))
 
 
+class Throttled(Exception):
+    """FotMob refused or failed (403/429/5xx/network): every request is paused; the record itself is fine."""
+
+
 class Client:
-    def __init__(self, min_interval: float = 0.5, transport: httpx.BaseTransport | None = None):
-        self.http = httpx.Client(base_url=API, headers={"User-Agent": "Mozilla/5.0"}, timeout=20, transport=transport)
-        self.min_interval = min_interval
-        self._last = 0.0
+    def __init__(self, min_interval: float = 1.0, jitter: float = 0.5, transport: httpx.BaseTransport | None = None,
+                 sleep=time.sleep, clock=time.monotonic, rand=random.random):
+        self.http = httpx.Client(base_url=API, headers={"User-Agent": USER_AGENT}, timeout=20, transport=transport)
+        self.min_interval, self.jitter = min_interval, jitter
+        self.sleep, self.clock, self.rand = sleep, clock, rand
+        self._next = 0.0  # earliest moment the next request may start
+        self.failures = 0  # consecutive throttling failures
+
+    def wait_time(self) -> float:
+        return max(0.0, self._next - self.clock())
 
     def _get(self, path: str, **params) -> dict:
-        wait = self._last + self.min_interval - time.monotonic()
-        if wait > 0:
-            time.sleep(wait)
-        self._last = time.monotonic()
-        r = self.http.get(path, params=params)
-        r.raise_for_status()
+        if (wait := self.wait_time()) > 0:
+            self.sleep(wait)
+        try:
+            r = self.http.get(path, params=params)
+        except httpx.TransportError as e:
+            raise self._pause(f"{type(e).__name__}: {e}", None) from e
+        if r.status_code in (403, 429) or r.status_code >= 500:
+            raise self._pause(f"HTTP {r.status_code}", r.headers.get("Retry-After"))
+        self.failures = 0
+        self._next = self.clock() + self.min_interval + self.rand() * self.jitter
+        r.raise_for_status()  # any other 4xx (e.g. 404) is this record's problem, not throttling
         return r.json()
+
+    def _pause(self, reason: str, retry_after: str | None) -> Throttled:
+        self.failures += 1
+        pause = min(BACKOFF_START * 2 ** (self.failures - 1), BACKOFF_MAX)
+        if retry_after and retry_after.isdigit():
+            pause = float(retry_after)
+        self._next = self.clock() + pause
+        log.warning("FotMob %s: pausing all requests for %.0f s", reason, pause)
+        return Throttled(reason)
 
     def league(self, league_id: int, season: str | None = None) -> dict:
         return self._get("/leagues", id=league_id, **({"season": season} if season else {}))
@@ -52,6 +83,9 @@ class Client:
 
     def team(self, team_id: int) -> dict:
         return self._get("/teams", id=team_id)
+
+    def player(self, player_id: int) -> dict:
+        return self._get("/playerData", id=player_id)
 
 
 def _status(s: dict) -> str:

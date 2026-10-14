@@ -120,3 +120,89 @@ def test_client_sends_season_param():
     fotmob.Client(min_interval=0, transport=httpx.MockTransport(handler)).league(42, "2025/2026")
     assert seen[0].path == "/api/data/leagues"
     assert dict(seen[0].params) == {"id": "42", "season": "2025/2026"}
+
+
+class FakeClock:
+    def __init__(self):
+        self.now = 0.0
+        self.slept = []
+
+    def __call__(self):
+        return self.now
+
+    def sleep(self, seconds):
+        self.slept.append(seconds)
+        self.now += seconds
+
+
+def polite_client(responses, clock, rand=lambda: 1.0):
+    queue = iter(responses)
+    return fotmob.Client(min_interval=1.0, jitter=0.5, transport=httpx.MockTransport(lambda request: next(queue)),
+                         sleep=clock.sleep, clock=clock, rand=rand)
+
+
+def test_client_spaces_requests_with_jitter():
+    clock = FakeClock()
+    client = polite_client([httpx.Response(200, json={}) for _ in range(3)], clock)
+    client.team(1)
+    client.team(2)
+    client.team(3)
+    assert clock.slept == [1.5, 1.5]  # 1.0 s interval + 1.0 × 0.5 s jitter
+
+
+def test_retry_after_sets_the_pause():
+    clock = FakeClock()
+    client = polite_client([httpx.Response(429, headers={"Retry-After": "120"}), httpx.Response(200, json={})], clock)
+    with pytest.raises(fotmob.Throttled):
+        client.team(1)
+    assert client.wait_time() == 120
+    client.team(1)
+    assert clock.slept == [120]
+
+
+def test_consecutive_failures_double_the_pause_up_to_30_minutes():
+    clock = FakeClock()
+    client = polite_client([httpx.Response(503) for _ in range(8)], clock)
+    pauses = []
+    for _ in range(8):
+        with pytest.raises(fotmob.Throttled):
+            client.team(1)
+        pauses.append(client.wait_time())
+    assert pauses == [30, 60, 120, 240, 480, 960, 1800, 1800]
+
+
+def test_success_resets_backoff_and_404_is_not_throttling():
+    clock = FakeClock()
+    client = polite_client([httpx.Response(403), httpx.Response(200, json={}), httpx.Response(404),
+                            httpx.Response(500)], clock)
+    with pytest.raises(fotmob.Throttled):
+        client.team(1)
+    client.team(1)
+    with pytest.raises(httpx.HTTPStatusError):
+        client.team(2)
+    assert client.failures == 0
+    with pytest.raises(fotmob.Throttled):
+        client.team(3)
+    assert client.wait_time() == 30
+
+
+def test_network_error_is_throttling():
+    def timeout(request):
+        raise httpx.ConnectTimeout("slow", request=request)
+
+    clock = FakeClock()
+    client = fotmob.Client(transport=httpx.MockTransport(timeout), sleep=clock.sleep, clock=clock, rand=lambda: 0.0)
+    with pytest.raises(fotmob.Throttled):
+        client.team(1)
+    assert client.wait_time() == 30
+
+
+def test_player_endpoint():
+    seen = []
+
+    def handler(request):
+        seen.append(request.url)
+        return httpx.Response(200, json={})
+
+    fotmob.Client(min_interval=0, transport=httpx.MockTransport(handler)).player(31097)
+    assert seen[0].path == "/api/data/playerData" and dict(seen[0].params) == {"id": "31097"}

@@ -1,7 +1,8 @@
 import os
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql+psycopg://kickpick:kickpick@localhost:5432/kickpick")
-HISTORY_SEASONS = int(os.environ.get("HISTORY_SEASONS", "5"))
+HISTORY_SEASONS = int(os.environ.get("HISTORY_SEASONS", "0"))  # 0 = every season FotMob lists (since 2010)
+REQUEST_INTERVAL = float(os.environ.get("REQUEST_INTERVAL", "1.0"))  # seconds between FotMob requests, +0–0.5 s jitter
 
 # (FotMob league id, slug, display name, kind) — order is the order in the app
 COMPETITIONS = [
@@ -11,6 +12,20 @@ COMPETITIONS = [
     (54, "bundesliga", "Bundesliga", "league"),
     (53, "ligue-1", "Ligue 1", "league"),
     (57, "eredivisie", "Eredivisie", "league"),
+    (61, "liga-portugal", "Liga Portugal", "league"),
+    (40, "belgian-pro-league", "Belgian Pro League", "league"),
+    (71, "super-lig", "Süper Lig", "league"),
+    (64, "scottish-premiership", "Scottish Premiership", "league"),
+    (48, "championship", "Championship", "league"),
+    (146, "2-bundesliga", "2. Bundesliga", "league"),
+    (86, "serie-b", "Serie B", "league"),
+    (140, "laliga2", "LaLiga 2", "league"),
+    (110, "ligue-2", "Ligue 2", "league"),
+    (536, "saudi-pro-league", "Saudi Pro League", "league"),
+    (130, "mls", "MLS", "league"),
+    (268, "brasileirao", "Brasileirão", "league"),
+    (112, "liga-profesional", "Liga Profesional", "league"),
+    (230, "liga-mx", "Liga MX", "league"),
     (42, "champions-league", "Champions League", "cup"),
     (73, "europa-league", "Europa League", "cup"),
     (10216, "conference-league", "Conference League", "cup"),
