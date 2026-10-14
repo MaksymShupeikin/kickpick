@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
@@ -7,7 +7,7 @@ from fx import load
 from kickpick import fotmob, store
 from kickpick.api import app
 from kickpick.config import COMPETITIONS
-from kickpick.models import Player
+from kickpick.models import Player, PlayerCareer, TeamTransfer
 
 client = TestClient(app)
 
@@ -214,3 +214,15 @@ def test_team_transfers():
     assert [x["date"] for x in departures] == sorted((x["date"] for x in departures), reverse=True)
     assert all(x["player"]["photo_url"].endswith(".png") for x in arrivals + departures)
     assert all(x["team"] is None or x["team"]["name"] for x in arrivals + departures)
+
+
+def test_team_id_zero_means_no_club(db_module):
+    with db_module.begin() as s:
+        s.add(Player(id=999_002, name="Youth Only", search_name="youth only"))
+        s.add(PlayerCareer(player_id=999_002, kind="youth", team_id=0, team_name="Arsenal U21"))
+        s.add(TeamTransfer(player_id=999_003, transfer_date=datetime(2030, 1, 1, tzinfo=timezone.utc), to_team_id=0,
+                           from_team_id=8634, player_name="Free Agent", to_team_name="Without Club",
+                           fee_text="free transfer", on_loan=False, contract_extension=False))
+    assert client.get("/players/999002").json()["career"][0]["team"] == {"id": None, "name": "Arsenal U21", "logo_url": None}
+    newest = client.get("/teams/8634").json()["transfers"]["departures"][0]
+    assert newest["team"] == {"id": None, "name": "Without Club", "logo_url": None}

@@ -70,9 +70,14 @@ def minutes(lineup: MatchLineup) -> int:
     return max((lineup.sub_out or 90) - start, 1)
 
 
+def club_json(team_id: int | None, name: str | None) -> dict:
+    """A club the app may not know: FotMob uses team id 0 for "no club", so 0 means no id and no crest."""
+    return {"id": team_id or None, "name": name, "logo_url": team_logo(team_id) if team_id else None}
+
+
 def transfer_json(t: TeamTransfer, other_id: int | None, other_name: str | None) -> dict:
     """One move seen from our team; `team` is the other club."""
-    other = {"id": other_id, "name": other_name, "logo_url": other_id and team_logo(other_id)} if other_name else None
+    other = club_json(other_id, other_name) if other_name else None
     return {"player": {"id": t.player_id, "name": t.player_name, "photo_url": player_photo(t.player_id)},
             "team": other, "date": t.transfer_date, "fee_eur": t.fee_eur, "fee_text": t.fee_text,
             "on_loan": t.on_loan}
@@ -283,11 +288,11 @@ def player(player_id: int, s: Session = Depends(db)):
         "seasons": [{"season": x.season,
                      "competition": {"id": x.competition_id, "name": x.competition_name,
                                      "logo_url": league_logo(x.competition_id)},
-                     "team": {"id": x.team_id, "name": x.team_name, "logo_url": team_logo(x.team_id)},
+                     "team": club_json(x.team_id, x.team_name),
                      "appearances": x.appearances, "goals": x.goals, "assists": x.assists, "rating": x.rating}
                     for x in seasons],
         "career": [{"id": c.id, "kind": c.kind,
-                    "team": {"id": c.team_id, "name": c.team_name, "logo_url": c.team_id and team_logo(c.team_id)},
+                    "team": club_json(c.team_id, c.team_name),
                     "start_date": c.start_date, "end_date": c.end_date,
                     "appearances": c.appearances, "goals": c.goals, "assists": c.assists} for c in career],
     }
