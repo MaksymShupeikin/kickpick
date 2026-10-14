@@ -124,7 +124,7 @@
 |---|---|---|
 | Герб клуба или сборной | `images.fotmob.com/image_resources/logo/teamlogo/{teamId}.png` | 24 в строке, 64 в шапке матча, 72 на экране команды |
 | Логотип турнира | `images.fotmob.com/image_resources/logo/leaguelogo/dark/{leagueId}.png` — монохромно-белый вариант для тёмного фона | 20 в заголовках групп, 40 в списке турниров |
-| Фото игрока | `images.fotmob.com/image_resources/playerimages/{playerId}.png` | 36 в составе, 96 в карточке |
+| Фото игрока | `images.fotmob.com/image_resources/playerimages/{playerId}.png` | 36 в списке состава, 28 на поле, 96 в карточке |
 
 - URL отдаёт наш API (`logo_url`, `photo_url`). Приложение URL не собирает.
 - Пока картинка грузится, на её месте стеклянный круг того же размера, поэтому вёрстка не прыгает.
