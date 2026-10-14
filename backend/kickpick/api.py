@@ -1,10 +1,11 @@
 """Read-only HTTP API for the iOS app, plus a crawl-progress dashboard."""
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse
-from sqlalchemy import func, or_, select
+from sqlalchemy import and_, func, or_, select
 from sqlalchemy.orm import Session, aliased
 
 from kickpick import collector
@@ -206,12 +207,47 @@ def player(player_id: int, s: Session = Depends(db)):
     }
 
 
+def like(term: str) -> str:
+    """LIKE pattern for `term` anywhere in the text; % and _ in the query are searched literally."""
+    return "%" + term.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+
+
+def team_ids(s: Session, term: str) -> list[int]:
+    return list(s.scalars(select(Team.id).where(Team.search_name.like(like(term), escape="\\"))))
+
+
+def find_matches(s: Session, term: str, limit: int = 10) -> list:
+    """One team ("manchester city") → its matches; two ("real madrid barcelona", "a vs b") → their meetings.
+    Nearest to today first."""
+    words = re.sub(r"\s*[-–—]\s*", " vs ", term).split()
+    separators = [i for i, w in enumerate(words) if w in ("vs", "v")]
+    if separators:
+        i = separators[0]
+        left, right = " ".join(words[:i]), " ".join(w for w in words[i + 1:] if w not in ("vs", "v"))
+        single, pairs = (None, [(left, right)]) if left and right else (left or right, [])
+    else:
+        single, pairs = " ".join(words), [(" ".join(words[:k]), " ".join(words[k:])) for k in range(1, len(words))]
+    if single and (ids := team_ids(s, single)):
+        cond = or_(Match.home_team_id.in_(ids), Match.away_team_id.in_(ids))
+    else:
+        for a, b in pairs:
+            ids_a, ids_b = team_ids(s, a), team_ids(s, b)
+            if ids_a and ids_b:
+                cond = or_(and_(Match.home_team_id.in_(ids_a), Match.away_team_id.in_(ids_b)),
+                           and_(Match.home_team_id.in_(ids_b), Match.away_team_id.in_(ids_a)))
+                break
+        else:
+            return []
+    nearest = func.abs(func.extract("epoch", Match.kickoff - func.now()))
+    return s.execute(MATCHES.where(cond).order_by(nearest).limit(limit)).all()
+
+
 @app.get("/search")
 def search(q: str = Query(min_length=2, max_length=50), s: Session = Depends(db)):
     term = search_name(q.strip())
     if len(term) < 2:
         raise HTTPException(422, "query must have at least 2 characters")
-    pattern = "%" + term.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+    pattern = like(term)
 
     def find(model, *where):
         return s.scalars(select(model).where(model.search_name.like(pattern, escape="\\"), *where)
@@ -232,4 +268,5 @@ def search(q: str = Query(min_length=2, max_length=50), s: Session = Depends(db)
         "teams": [team_json(t) for t in find(Team, Team.id.in_(select(SquadMember.team_id)))],
         "players": [{"id": p.id, "name": p.name, "photo_url": player_photo(p.id), "team_name": clubs.get(p.id)}
                     for p in players],
+        "matches": [match_json(r) for r in find_matches(s, term)],
     }

@@ -6,7 +6,7 @@ struct CompetitionsView: View {
                                 Kind(kind: "international", title: "Сборные")]
 
     var body: some View {
-        ScrollView {
+        SearchableScreen(title: "Турниры") {
             Loader { try await APIClient.shared.competitions() } content: { competitions in
                 VStack(alignment: .leading, spacing: 24) {
                     ForEach(Self.kinds, id: \.kind) { kind in
@@ -24,10 +24,7 @@ struct CompetitionsView: View {
                     }
                 }
             }
-            .padding(16)
         }
-        .screen()
-        .navigationTitle("Турниры")
     }
 }
 

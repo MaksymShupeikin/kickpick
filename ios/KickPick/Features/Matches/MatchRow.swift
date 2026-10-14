@@ -15,7 +15,10 @@ extension Match {
 
     /// Plain text, never a chip (design.md §8).
     func statusText(showDate: Bool) -> String {
-        let date = kickoff.formatted(.dateTime.day().month(.abbreviated).locale(.app))
+        var date = kickoff.formatted(.dateTime.day().month(.abbreviated).locale(.app))
+        if !Calendar.current.isDate(kickoff, equalTo: .now, toGranularity: .year) {
+            date += "\n" + kickoff.formatted(.dateTime.year().locale(.app))  // history search reaches back years
+        }
         switch status {
         case .live: return minute ?? "Идёт"
         case .finished: return showDate ? date : "Конец"
@@ -58,7 +61,7 @@ struct MatchStatusText: View {
                 .font(match.status == .live ? .digits(22, relativeTo: .title3) : .footnote.weight(.medium))
                 .foregroundStyle(match.status == .live ? Color.textPrimary : Color.textSecondary)
                 .monospacedDigit()
-                .lineLimit(1)
+                .lineLimit(2)
                 .minimumScaleFactor(0.7)
         }
     }

@@ -14,8 +14,6 @@ struct KickPickApp: App {
                     .tabItem { Label("Матчи", systemImage: "sportscourt") }
                 NavigationStack { CompetitionsView().withRoutes() }
                     .tabItem { Label("Турниры", systemImage: "trophy") }
-                NavigationStack { SearchView().withRoutes() }
-                    .tabItem { Label("Поиск", systemImage: "magnifyingglass") }
             }
             .tint(.white)
             .preferredColorScheme(.dark)

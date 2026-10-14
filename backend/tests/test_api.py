@@ -121,9 +121,29 @@ def test_search_ignores_accents_and_case():
 
 def test_search_rejects_and_escapes():
     assert client.get("/search", params={"q": "winner"}).json()["teams"] == []  # placeholders like "Winner SF 1"
-    assert client.get("/search", params={"q": "%%"}).json() == {"competitions": [], "teams": [], "players": []}
+    assert client.get("/search", params={"q": "%%"}).json() == {"competitions": [], "teams": [], "players": [],
+                                                                 "matches": []}
     assert client.get("/search", params={"q": "a"}).status_code == 422
     assert client.get("/search", params={"q": "   "}).status_code == 422
+
+
+def search_matches(q):
+    return [(m["home"]["name"], m["away"]["name"]) for m in client.get("/search", params={"q": q}).json()["matches"]]
+
+
+def test_search_matches_of_one_team():
+    found = search_matches("argentina")
+    assert 0 < len(found) <= 10 and all("Argentina" in pair for pair in found)
+    # the whole query names one team: Hull City or Coventry City against Manchester United must not sneak in
+    assert all("Manchester City" in pair for pair in search_matches("manchester city"))
+
+
+def test_search_head_to_head():
+    final = [{"Argentina", "France"}]
+    assert [set(p) for p in search_matches("argentina france")] == final
+    assert [set(p) for p in search_matches("France vs Argentina")] == final
+    assert [set(p) for p in search_matches("france - argentina")] == final
+    assert search_matches("argentina vs") == search_matches("argentina")  # one side only → that team's matches
 
 
 def test_player_without_position(db_module):

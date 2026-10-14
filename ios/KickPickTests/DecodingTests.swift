@@ -62,11 +62,26 @@ final class DecodingTests: XCTestCase {
         {"competitions": [{"slug": "champions-league", "name": "Champions League", "kind": "cup",
           "current_season": "2026/2027", "logo_url": null}],
          "teams": [{"id": 8634, "name": "Barcelona", "short_name": "Barcelona", "logo_url": null}],
-         "players": [{"id": 1, "name": "Joan García", "photo_url": null, "team_name": "Barcelona"}]}
+         "players": [{"id": 1, "name": "Joan García", "photo_url": null, "team_name": "Barcelona"}],
+         "matches": [\(matchJSON)}]}
         """)
         XCTAssertEqual(results.competitions[0].currentSeason, "2026/2027")
         XCTAssertEqual(results.players[0].teamName, "Barcelona")
+        XCTAssertEqual(results.matches[0].home.name, "Coventry City")
         XCTAssertFalse(results.isEmpty)
+        let onlyMatches = try decode(SearchResults.self, """
+        {"competitions": [], "teams": [], "players": [], "matches": [\(matchJSON)}]}
+        """)
+        XCTAssertFalse(onlyMatches.isEmpty)
+    }
+
+    func testOldMatchDatesShowTheYear() throws {
+        let old = try decode(Match.self, matchJSON.replacingOccurrences(of: "2026-10-12", with: "2022-12-18")
+            .replacingOccurrences(of: "LIVE", with: "FT") + "}")
+        XCTAssertTrue(old.statusText(showDate: true).hasSuffix("\n2022"))
+        let recent = try decode(Match.self, matchJSON.replacingOccurrences(of: "2026-10-12T19", with: ISO8601DateFormatter().string(from: .now).prefix(13))
+            .replacingOccurrences(of: "LIVE", with: "FT") + "}")
+        XCTAssertFalse(recent.statusText(showDate: true).contains("\n"))
     }
 
     func testQueryDatesAreUTC() {

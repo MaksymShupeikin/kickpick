@@ -182,8 +182,9 @@ struct SearchResults: Codable, Hashable {
     let competitions: [Competition]
     let teams: [TeamRef]
     let players: [PlayerHit]
+    let matches: [Match]
 
-    var isEmpty: Bool { competitions.isEmpty && teams.isEmpty && players.isEmpty }
+    var isEmpty: Bool { competitions.isEmpty && teams.isEmpty && players.isEmpty && matches.isEmpty }
 }
 
 extension JSONDecoder {
