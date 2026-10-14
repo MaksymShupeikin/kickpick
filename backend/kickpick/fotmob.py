@@ -224,7 +224,7 @@ def parse_league(raw: dict) -> dict:
         home_score, away_score = _score(s)
         matches.append({
             "id": int(m["id"]),
-            "round": str(m["round"]),
+            "round": str(m.get("round") or ""),  # older MLS seasons carry no round at all
             "kickoff": datetime.fromisoformat(s["utcTime"]),
             "home_team_id": home["id"],
             "away_team_id": away["id"],

@@ -44,6 +44,13 @@ def test_future_tournament_has_unknown_bracket_sides():
     assert len(p["matches"]) == 51
 
 
+def test_parse_league_match_without_round():
+    raw = load("league_pl.json")
+    for m in raw["fixtures"]["allMatches"]:
+        m.pop("round", None)  # like MLS 2016–2024
+    assert {m["round"] for m in fotmob.parse_league(raw)["matches"]} == {""}
+
+
 def test_parse_league_rejects_payload_without_matches():
     with pytest.raises(ValueError):
         fotmob.parse_league({"details": {"selectedSeason": "2026/2027"}, "fixtures": {"allMatches": []}})
