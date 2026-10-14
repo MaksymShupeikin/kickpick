@@ -3,7 +3,8 @@ from sqlalchemy import func, select
 from fx import load
 from kickpick import fotmob, store
 from kickpick.config import COMPETITIONS
-from kickpick.models import Match, Player, Season, SquadMember, Standing, Team
+from kickpick.models import (Competition, FetchFailure, Match, MatchLineup, Player, PlayerCareer, PlayerMarketValue,
+                             PlayerSeason, Season, SquadMember, Standing, Team, TeamTransfer)
 
 
 def count(s, model, *where):
@@ -80,3 +81,83 @@ def test_empty_standings_keep_previous_table(db):
         store.save_league(s, 47, parsed | {"standings": []}, is_current=True)
     with db() as s:
         assert count(s, Standing) == 20
+
+
+def seed_pl(db):
+    with db.begin() as s:
+        store.save_competitions(s, COMPETITIONS)
+        store.save_league(s, 47, fotmob.parse_league(load("league_pl.json")), is_current=True)
+
+
+def test_full_sync_stores_available_seasons(db):
+    seed_pl(db)
+    with db() as s:
+        seasons = s.get(Competition, 47).available_seasons
+    assert seasons == load("league_pl.json")["allAvailableSeasons"] and seasons[0] == "2026/2027"
+
+
+def test_save_match_stores_lineups_formations_and_last_match(db):
+    seed_pl(db)
+    parsed = fotmob.parse_match(load("match.json"))
+    with db.begin() as s:
+        store.save_match(s, 5795369, parsed)
+        store.save_match(s, 5795369, parsed)  # replaced, not duplicated
+    with db() as s:
+        match = s.get(Match, 5795369)
+        assert count(s, MatchLineup) == len(parsed["lineups"])
+        assert match.home_formation == parsed["formations"]["home"]
+        starter = parsed["lineups"][0]
+        player = s.get(Player, starter["player_id"])
+        assert player.last_match_at == match.kickoff and player.country_code
+
+
+def test_lineup_nulls_do_not_erase_player_fields(db):
+    seed_pl(db)
+    parsed = fotmob.parse_match(load("match.json"))
+    player_id = parsed["players"][0]["id"]
+    with db.begin() as s:
+        store.save_match(s, 5795369, parsed)
+        store.save_player(s, player_id, fotmob.parse_player(load("player_modric.json")))
+        blank = {**parsed, "players": [p | {"country_code": None, "position": None} for p in parsed["players"]]}
+        store.save_match(s, 5795369, blank)
+    with db() as s:
+        player = s.get(Player, player_id)
+        assert player.country_code == "CRO" and player.height_cm == 174 and player.profile_updated_at
+
+
+def test_save_player_replaces_career_seasons_and_values(db):
+    seed_pl(db)
+    parsed = fotmob.parse_player(load("player_modric.json"))
+    with db.begin() as s:
+        store.save_match(s, 5795369, fotmob.parse_match(load("match.json")))
+        player_id = s.scalar(select(MatchLineup.player_id).limit(1))
+        store.save_player(s, player_id, parsed)
+        store.save_player(s, player_id, parsed | {"career": parsed["career"][:2], "seasons": parsed["seasons"][:3],
+                                                  "market_values": parsed["market_values"][:1]})
+    with db() as s:
+        assert count(s, PlayerCareer) == 2 and count(s, PlayerSeason) == 3 and count(s, PlayerMarketValue) == 1
+        assert s.get(Player, player_id).trophies
+
+
+def test_transfers_accumulate_without_duplicates(db):
+    squad = fotmob.parse_team(load("team.json"))
+    with db.begin() as s:
+        store.save_competitions(s, COMPETITIONS)
+        store.save_league(s, 42, fotmob.parse_league(load("league_ucl_2025.json")), is_current=False)
+        store.save_squad(s, 8634, squad)
+        store.save_squad(s, 8634, squad)
+    with db() as s:
+        assert count(s, TeamTransfer) == len(squad["transfers"])
+
+
+def test_record_and_clear_failure(db):
+    with db.begin() as s:
+        store.record_failure(s, "match", "1", "boom")
+        store.record_failure(s, "match", "1", "boom again")
+    with db() as s:
+        failure = s.get(FetchFailure, ("match", "1"))
+        assert (failure.attempts, failure.last_error) == (2, "boom again")
+    with db.begin() as s:
+        store.clear_failure(s, "match", "1")
+    with db() as s:
+        assert s.get(FetchFailure, ("match", "1")) is None
