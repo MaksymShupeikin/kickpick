@@ -1,27 +1,26 @@
 import SwiftUI
 
-/// Raised capsule from design.md §6.2: light from above, two-layer shadow below.
+/// Raised capsule from design.md §6.2: the white one is lit from above with a two-layer shadow below;
+/// the glass one is exactly the card glass (§6.1), so buttons and cards share one light.
 struct RaisedCapsule: View {
     var white = true
     var pressed = false
 
     var body: some View {
         let shape = Capsule()
-        Group {
-            if white {
-                shape.fill(LinearGradient(colors: pressed ? [Color(white: 0.96), Color(white: 0.86)]
-                                                          : [.white, Color(white: 0.894)],
-                                          startPoint: .top, endPoint: .bottom))
-            } else {
-                GlassBackground(shape: shape)
-            }
+        if white {
+            shape.fill(LinearGradient(colors: pressed ? [Color(white: 0.96), Color(white: 0.86)]
+                                                      : [.white, Color(white: 0.894)],
+                                      startPoint: .top, endPoint: .bottom))
+                .overlay(shape.strokeBorder(LinearGradient(colors: [.white, .clear], startPoint: .top, endPoint: .center),
+                                            lineWidth: 1))
+                .overlay(shape.strokeBorder(LinearGradient(colors: [.clear, .black.opacity(0.12)],
+                                                           startPoint: .center, endPoint: .bottom), lineWidth: 1))
+                .shadow(color: .black.opacity(0.30), radius: 1, y: 1)
+                .shadow(color: .black.opacity(0.35), radius: pressed ? 4 : 16, y: pressed ? 2 : 8)
+        } else {
+            GlassBackground(shape: shape)
         }
-        .overlay(shape.strokeBorder(LinearGradient(colors: [.white.opacity(white ? 1 : 0.5), .clear],
-                                                   startPoint: .top, endPoint: .center), lineWidth: 1))
-        .overlay(shape.strokeBorder(LinearGradient(colors: [.clear, .black.opacity(0.12)],
-                                                   startPoint: .center, endPoint: .bottom), lineWidth: 1))
-        .shadow(color: .black.opacity(0.30), radius: 1, y: 1)
-        .shadow(color: .black.opacity(0.35), radius: pressed ? 4 : 16, y: pressed ? 2 : 8)
     }
 }
 
