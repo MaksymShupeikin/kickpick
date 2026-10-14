@@ -36,6 +36,8 @@ services:
     command: python -m kickpick.collector
     environment:
       DATABASE_URL: postgresql+psycopg://kickpick:kickpick@db:5432/kickpick
+      HISTORY_SEASONS: "11"     # newest 11 seasons per competition (2016/17 →); 0 = all FotMob has (since 2010)
+      REQUEST_INTERVAL: "0.5"   # seconds between FotMob requests (+0–0.5 s jitter)
     depends_on:
       api:
         condition: service_healthy

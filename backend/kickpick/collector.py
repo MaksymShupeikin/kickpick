@@ -120,16 +120,20 @@ def _pending_team(s, now):
     return ("team", str(team_ids[0])) if team_ids else None
 
 
+def _wanted_seasons(s) -> list[tuple[int, int, str]]:
+    """(depth, competition_id, season) for every season the crawl wants — HISTORY_SEASONS newest per competition."""
+    return [(depth, competition_id, name)
+            for competition_id, available in s.execute(select(Competition.id, Competition.available_seasons))
+            for depth, name in enumerate((available or [])[:HISTORY_SEASONS or None])]
+
+
 def _pending_season(s, now: datetime):
     synced = {tuple(r) for r in s.execute(select(Season.competition_id, Season.name))}
     given_up = set(s.scalars(select(FetchFailure.key).where(
         FetchFailure.kind == "season",
         or_(FetchFailure.attempts >= MAX_ATTEMPTS, FetchFailure.updated_at > now - RETRY_AFTER))))
-    candidates = []
-    for competition_id, available in s.execute(select(Competition.id, Competition.available_seasons)):
-        seasons = available or []
-        for depth, name in enumerate(seasons[:HISTORY_SEASONS] if HISTORY_SEASONS else seasons):
-            candidates.append((depth, ORDER.get(competition_id, len(ORDER)), competition_id, name))
+    candidates = [(depth, ORDER.get(competition_id, len(ORDER)), competition_id, name)
+                  for depth, competition_id, name in _wanted_seasons(s)]
     for _, _, competition_id, name in sorted(candidates):  # newest seasons of every competition first
         key = f"{competition_id}|{name}"
         if (competition_id, name) not in synced and key not in given_up:
@@ -247,7 +251,12 @@ def status() -> list[str]:
         def count(model, *where):
             return s.scalar(select(func.count()).select_from(model).where(*where))
 
-        available = sum(len(a or []) for a in s.scalars(select(Competition.available_seasons)))
+        wanted = {(competition_id, name) for _, competition_id, name in _wanted_seasons(s)}
+        synced = {tuple(r) for r in s.execute(select(Season.competition_id, Season.name))}
+        gave_up_seasons = set(s.scalars(select(FetchFailure.key).where(
+            FetchFailure.kind == "season", FetchFailure.attempts >= MAX_ATTEMPTS)))
+        available = len(wanted)
+        unsynced = sum(key not in synced and f"{key[0]}|{key[1]}" not in gave_up_seasons for key in wanted)
         seasons = count(Season)
         matches = count(Match)
         finished = count(Match, Match.status == "FT")
@@ -265,12 +274,11 @@ def status() -> list[str]:
                                 ~_gave_up("match", cast(Match.id, String)))
         pending_players = count(Player, Player.profile_updated_at.is_(None),
                                 ~_gave_up("player", cast(Player.id, String)))
-    unsynced = max(available - seasons, 0)
     remaining = round(unsynced * matches / seasons) if seasons else 0
     remaining += pending_matches + pending_players
     hours = remaining * (REQUEST_INTERVAL + 0.7) / 3600  # interval + 0.25 jitter avg + ~0.45 latency/idle
     return [
-        f"seasons    {seasons}/{available}",
+        f"seasons    {available - unsynced}/{available}",
         f"matches    {detailed}/{finished} finished matches with details and lineups",
         f"players    {profiled}/{players} with a profile (the total grows as lineups arrive)",
         f"squads     {squads}/{teams} teams of the current season",

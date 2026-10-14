@@ -148,6 +148,23 @@ def test_record_gives_up_after_three_failures(seeded):
         assert count(s, Match, Match.status == "FT", Match.details_final.is_(False)) == 1
 
 
+def test_history_limit_bounds_crawl_and_status(seeded, monkeypatch):
+    monkeypatch.setattr(collector, "HISTORY_SEASONS", 2)
+
+    def league(league_id, season):
+        if league_id != 47:
+            return {}
+        raw = load("league_pl.json")
+        if season:
+            raw["details"]["selectedSeason"] = season
+        return raw
+
+    fake = FakeFotMob(league)
+    collector.tick(fake, {}, now=NOW, budget=10_000)
+    assert [c[2] for c in fake.calls if c[0] == "league" and c[2]] == load("league_pl.json")["allAvailableSeasons"][1:2]
+    assert "seasons    2/2" in collector.status()
+
+
 def test_status_reports_progress(seeded):
     collector.tick(FakeFotMob(), {}, now=NOW, budget=10_000)
     lines = "\n".join(collector.status())
