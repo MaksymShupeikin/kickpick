@@ -187,4 +187,39 @@ final class DecodingTests: XCTestCase {
         let midfield = PitchLayout.point(x: 0.5, y: 0.482, home: true, in: phone)
         XCTAssertGreaterThanOrEqual(midfield.y - defence.y, 56)
     }
+
+    func testCareerYears() throws {
+        func entry(_ start: String?, _ end: String?) throws -> CareerEntry {
+            let json = """
+            {"id": 1, "kind": "senior", "team": {"id": null, "name": "X", "logo_url": null},
+             "start_date": \(start.map { "\"\($0)\"" } ?? "null"), "end_date": \(end.map { "\"\($0)\"" } ?? "null"),
+             "appearances": null, "goals": null, "assists": null}
+            """
+            return try decode(CareerEntry.self, json)
+        }
+        XCTAssertEqual(try entry("2022-07-01", nil).years, "2022 – now")
+        XCTAssertEqual(try entry("2016-07-01", "2022-06-30").years, "2016 – 2022")
+    }
+
+    func testAgeLineKeepsTheBirthDayInAnyTimeZone() {
+        let saved = NSTimeZone.default
+        defer { NSTimeZone.default = saved }
+        NSTimeZone.default = TimeZone(identifier: "Pacific/Auckland")!
+        let now = ISO8601DateFormatter().date(from: "2026-10-15T12:00:00Z")!
+        XCTAssertEqual(PlayerPage.ageLine(birthDate: "2000-07-21", now: now), "26 · 21 Jul 2000")
+        XCTAssertNil(PlayerPage.ageLine(birthDate: "not a date", now: now))
+    }
+
+    func testTransferFeeLabels() {
+        func move(_ fee: Int?, _ text: String?, loan: Bool = false) -> Transfer {
+            Transfer(player: PlayerRef(id: 1, name: "A", photoUrl: nil), team: nil, date: .now, feeEur: fee,
+                     feeText: text, onLoan: loan)
+        }
+        XCTAssertEqual(move(45_000_000, "fee").feeLabel, "€45M")
+        XCTAssertEqual(move(1_500_000, "fee").feeLabel, "€1.5M")
+        XCTAssertEqual(move(nil, "on loan", loan: true).feeLabel, "Loan")
+        XCTAssertEqual(move(nil, "free transfer").feeLabel, "Free")
+        XCTAssertEqual(move(nil, "undisclosed").feeLabel, "Undisclosed")
+        XCTAssertEqual(move(nil, nil).feeLabel, "—")
+    }
 }
