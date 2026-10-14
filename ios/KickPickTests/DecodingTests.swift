@@ -203,4 +203,17 @@ final class DecodingTests: XCTestCase {
         XCTAssertEqual(PlayerPage.ageLine(birthDate: "2000-07-21", now: now), "26 · 21 Jul 2000")
         XCTAssertNil(PlayerPage.ageLine(birthDate: "not a date", now: now))
     }
+
+    func testTransferFeeLabels() {
+        func move(_ fee: Int?, _ text: String?, loan: Bool = false) -> Transfer {
+            Transfer(player: PlayerRef(id: 1, name: "A", photoUrl: nil), team: nil, date: .now, feeEur: fee,
+                     feeText: text, onLoan: loan)
+        }
+        XCTAssertEqual(move(45_000_000, "fee").feeLabel, "€45M")
+        XCTAssertEqual(move(1_500_000, "fee").feeLabel, "€1.5M")
+        XCTAssertEqual(move(nil, "on loan", loan: true).feeLabel, "Loan")
+        XCTAssertEqual(move(nil, "free transfer").feeLabel, "Free")
+        XCTAssertEqual(move(nil, "undisclosed").feeLabel, "Undisclosed")
+        XCTAssertEqual(move(nil, nil).feeLabel, "—")
+    }
 }
