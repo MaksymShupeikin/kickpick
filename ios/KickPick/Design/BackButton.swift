@@ -8,7 +8,7 @@ struct BackButton: View {
     var body: some View {
         Button { dismiss() } label: { Image(systemName: "chevron.left") }
             .buttonStyle(.glassIcon)
-            .accessibilityLabel("Назад")
+            .accessibilityLabel("Back")
     }
 }
 

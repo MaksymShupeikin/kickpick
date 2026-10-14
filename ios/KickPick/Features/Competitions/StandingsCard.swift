@@ -6,19 +6,19 @@ struct StandingsCard: View {
     private var title: String? {
         let g = group.group
         if g.isEmpty { return nil }
-        if g.count == 1 { return "Группа \(g)" }
-        return g.hasPrefix("Best 3rd") ? "Лучшие третьи места" : g
+        if g.count == 1 { return "Group \(g)" }
+        return g.hasPrefix("Best 3rd") ? "Best third-placed teams" : g
     }
 
     var body: some View {
         CardSection(title: title) {
             HStack(spacing: 8) {
                 Text("#").frame(width: 24, alignment: .leading)
-                Text("Команда")
+                Text("Team")
                 Spacer()
-                Text("И").frame(width: 28)
-                Text("Р").frame(width: 36)
-                Text("О").frame(width: 32)
+                Text("P").frame(width: 28)
+                Text("GD").frame(width: 36)
+                Text("Pts").frame(width: 32)
             }
             .font(.footnote.weight(.medium))
             .foregroundStyle(Color.textTertiary)
@@ -56,6 +56,6 @@ private struct StandingLine: View {
         .padding(.horizontal, 16)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(row.position) место, \(row.team.name), \(row.played) игр, \(row.points) очков")
+        .accessibilityLabel("\(row.position) place, \(row.team.name), \(row.played) played, \(row.points) points")
     }
 }

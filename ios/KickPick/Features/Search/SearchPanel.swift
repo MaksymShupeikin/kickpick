@@ -1,9 +1,8 @@
 import SwiftUI
 
-/// Root screen chrome: the expanding search pinned to the top, a large title and the page under it.
+/// Root screen chrome: the expanding search pinned to the top and the page under it.
 /// Content scrolls beneath the glass bar; while searching the page is dimmed.
 struct SearchableScreen<Content: View>: View {
-    let title: String
     @ViewBuilder let content: Content
     @State private var searching = false
 
@@ -12,10 +11,6 @@ struct SearchableScreen<Content: View>: View {
             ZStack(alignment: .top) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
-                        Text(title)
-                            .font(.system(.largeTitle, weight: .bold).width(.condensed))
-                            .foregroundStyle(Color.textPrimary)
-                            .accessibilityAddTraits(.isHeader)
                         content
                     }
                     .padding(16)
@@ -42,7 +37,6 @@ struct SearchableScreen<Content: View>: View {
             }
         }
         .screen()
-        .navigationTitle(title)  // hidden here, but names the back button of pushed screens
         .toolbar(.hidden, for: .navigationBar)
         .onDisappear { searching = false }  // a result was opened or the tab changed
     }
@@ -83,7 +77,7 @@ struct SearchPanel: View {
             .clipShape(shape)
             .background(GlassBackground(shape: shape))
             if expanded {
-                Button("Отмена") { expanded = false }
+                Button("Cancel") { expanded = false }
                     .font(.body)
                     .foregroundStyle(Color.textPrimary)
                     .frame(minHeight: Self.collapsedHeight)
@@ -99,8 +93,7 @@ struct SearchPanel: View {
                 results = nil
             }
         }
-        // shortcut: FotMob names are Latin, so "Барселона" finds nothing; add Russian aliases if that matters
-        .task(id: query) {
+                .task(id: query) {
             let text = query.trimmingCharacters(in: .whitespaces)
             guard text.count >= 2 else { results = nil; return }
             try? await Task.sleep(for: .milliseconds(300))
@@ -113,17 +106,17 @@ struct SearchPanel: View {
     private var field: some View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass").foregroundStyle(Color.textSecondary).accessibilityHidden(true)
-            TextField("", text: $query, prompt: Text("Команда, игрок или матч").foregroundStyle(Color.textTertiary))
+            TextField("", text: $query, prompt: Text("Team, player or match").foregroundStyle(Color.textTertiary))
                 .focused($focused)
                 .submitLabel(.search)
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
                 .foregroundStyle(Color.textPrimary)
-                .accessibilityLabel("Поиск")
+                .accessibilityLabel("Search")
             if !query.isEmpty {
                 Button { query = "" } label: { Image(systemName: "xmark.circle.fill") }
                     .foregroundStyle(Color.textTertiary)
-                    .accessibilityLabel("Очистить")
+                    .accessibilityLabel("Clear")
             }
         }
         .padding(.horizontal, 16)
@@ -133,7 +126,7 @@ struct SearchPanel: View {
     @ViewBuilder private var suggestions: some View {
         VStack(alignment: .leading, spacing: 0) {
             if query.trimmingCharacters(in: .whitespaces).count < 2 {
-                sectionTitle("Например")
+                sectionTitle("Try")
                 ForEach(Array(Self.examples.enumerated()), id: \.offset) { index, example in
                     if index > 0 { Hairline() }
                     Button { query = example } label: {
@@ -151,20 +144,20 @@ struct SearchPanel: View {
             } else if let results {
                 Group {
                     if results.isEmpty {
-                        Text("Ничего не найдено")
+                        Text("Nothing found")
                             .font(.subheadline)
                             .foregroundStyle(Color.textTertiary)
                             .frame(maxWidth: .infinity, minHeight: 88)
                     }
                     if !results.competitions.isEmpty {
-                        sectionTitle("Турниры")
+                        sectionTitle("Competitions")
                         Rows(items: results.competitions) { competition in
                             NavigationLink(value: Route.competition(competition)) { CompetitionRow(competition: competition) }
                                 .buttonStyle(.plain)
                         }
                     }
                     if !results.teams.isEmpty {
-                        sectionTitle("Команды")
+                        sectionTitle("Teams")
                         Rows(items: results.teams) { team in
                             NavigationLink(value: Route.team(team.id)) {
                                 hit(Logo(url: team.logoUrl, size: 40, label: team.name), team.name, nil)
@@ -173,14 +166,14 @@ struct SearchPanel: View {
                         }
                     }
                     if !results.matches.isEmpty {
-                        sectionTitle("Матчи")
+                        sectionTitle("Matches")
                         Rows(items: results.matches) { match in
                             NavigationLink(value: Route.match(match.id)) { MatchRow(match: match, showDate: true) }
                                 .buttonStyle(.plain)
                         }
                     }
                     if !results.players.isEmpty {
-                        sectionTitle("Игроки")
+                        sectionTitle("Players")
                         Rows(items: results.players) { player in
                             NavigationLink(value: Route.player(player.id)) {
                                 hit(Logo(url: player.photoUrl, size: 40, label: player.name, round: true), player.name, player.teamName)

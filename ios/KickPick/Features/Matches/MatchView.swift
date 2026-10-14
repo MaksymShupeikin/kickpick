@@ -122,8 +122,8 @@ private extension MatchEvent {
     var detail: String? {
         switch type {
         case "sub": return note
-        case "own_goal": return "Автогол"
-        case "goal": return assist ?? (note == "Penalty" ? "Пенальти" : nil)
+        case "own_goal": return "Own goal"
+        case "goal": return assist ?? (note == "Penalty" ? "Penalty" : nil)
         default: return nil
         }
     }
@@ -135,17 +135,17 @@ private struct EventIcon: View {
     var body: some View {
         switch type {
         case "goal":
-            Image(systemName: "soccerball").foregroundStyle(Color.textPrimary).accessibilityLabel("Гол")
+            Image(systemName: "soccerball").foregroundStyle(Color.textPrimary).accessibilityLabel("Goal")
         case "own_goal":
-            Image(systemName: "soccerball").foregroundStyle(Color.textPrimary).accessibilityLabel("Автогол")
+            Image(systemName: "soccerball").foregroundStyle(Color.textPrimary).accessibilityLabel("Own goal")
         case "yellow":
-            card(Color.cardYellow).accessibilityLabel("Жёлтая карточка")
+            card(Color.cardYellow).accessibilityLabel("Yellow card")
         case "red":
-            card(Color.cardRed).accessibilityLabel("Красная карточка")
+            card(Color.cardRed).accessibilityLabel("Red card")
         case "second_yellow":
-            card(Color.cardRed).accessibilityLabel("Вторая жёлтая")
+            card(Color.cardRed).accessibilityLabel("Second yellow")
         case "sub":
-            Image(systemName: "arrow.left.arrow.right").foregroundStyle(Color.textPrimary).accessibilityLabel("Замена")
+            Image(systemName: "arrow.left.arrow.right").foregroundStyle(Color.textPrimary).accessibilityLabel("Substitution")
         default:
             EmptyView()
         }
@@ -166,7 +166,7 @@ private struct StatsCard: View {
                     HStack {
                         Text(stat.home).font(.digits(17, relativeTo: .body, bold: false)).foregroundStyle(Color.textPrimary)
                         Spacer()
-                        Text(Self.titles[stat.name] ?? stat.name)
+                        Text(stat.name)
                             .font(.footnote.weight(.medium)).foregroundStyle(Color.textSecondary)
                         Spacer()
                         Text(stat.away).font(.digits(17, relativeTo: .body, bold: false)).foregroundStyle(Color.textPrimary)
@@ -179,13 +179,6 @@ private struct StatsCard: View {
         .padding(16)
         .glassCard()
     }
-
-    static let titles = [
-        "Ball possession": "Владение", "Expected goals (xG)": "Ожидаемые голы (xG)", "Total shots": "Удары",
-        "Shots on target": "В створ", "Big chances": "Голевые моменты", "Big chances missed": "Упущенные моменты",
-        "Accurate passes": "Точные передачи", "Fouls committed": "Фолы", "Corners": "Угловые",
-        "Yellow cards": "Жёлтые карточки", "Touches in opposition box": "Касания в штрафной",
-    ]
 }
 
 private struct ShareBar: View {

@@ -39,14 +39,14 @@ struct PlayerView: View {
 
 private extension PlayerPage {
     var facts: [(label: String, value: String)] {
-        let positions = ["Coach": "Тренер", "GK": "Вратарь", "DF": "Защитник", "MF": "Полузащитник", "FW": "Нападающий"]
+        let positions = ["Coach": "Coach", "GK": "Goalkeeper", "DF": "Defender", "MF": "Midfielder", "FW": "Forward"]
         var out: [(label: String, value: String)] = []
-        if let position { out.append((label: "Позиция", value: positions[position] ?? position)) }
+        if let position { out.append((label: "Position", value: positions[position] ?? position)) }
         if let birthDate, let born = try? Date(birthDate + "T00:00:00Z", strategy: .iso8601),
            let age = Calendar.current.dateComponents([.year], from: born, to: .now).year {
-            out.append((label: "Возраст", value: "\(age)"))
+            out.append((label: "Age", value: "\(age)"))
         }
-        if let countryCode { out.append((label: "Страна", value: countryCode)) }
+        if let countryCode { out.append((label: "Country", value: countryCode)) }
         return out
     }
 }
@@ -63,17 +63,17 @@ private struct MembershipCard: View {
                     Spacer()
                     if let number = membership.shirtNumber {
                         Text("\(number)").font(.digits(22, relativeTo: .title3)).foregroundStyle(Color.textPrimary)
-                            .accessibilityLabel("Номер \(number)")
+                            .accessibilityLabel("Number \(number)")
                     }
                 }
             }
             .buttonStyle(.plain)
             HStack {
-                stat("Голы", membership.stats.goals.map(String.init))
-                stat("Ассисты", membership.stats.assists.map(String.init))
-                stat("ЖК", membership.stats.yellowCards.map(String.init))
-                stat("КК", membership.stats.redCards.map(String.init))
-                stat("Рейтинг", membership.stats.rating.map { String(format: "%.1f", $0) })
+                stat("Goals", membership.stats.goals.map(String.init))
+                stat("Assists", membership.stats.assists.map(String.init))
+                stat("YC", membership.stats.yellowCards.map(String.init))
+                stat("RC", membership.stats.redCards.map(String.init))
+                stat("Rating", membership.stats.rating.map { String(format: "%.1f", $0) })
             }
         }
         .padding(16)

@@ -2,11 +2,11 @@ import SwiftUI
 
 struct CompetitionsView: View {
     private struct Kind: Hashable { let kind: String; let title: String }
-    private static let kinds = [Kind(kind: "league", title: "Лиги"), Kind(kind: "cup", title: "Еврокубки"),
-                                Kind(kind: "international", title: "Сборные")]
+    private static let kinds = [Kind(kind: "league", title: "Leagues"), Kind(kind: "cup", title: "European Cups"),
+                                Kind(kind: "international", title: "International")]
 
     var body: some View {
-        SearchableScreen(title: "Турниры") {
+        SearchableScreen {
             Loader { try await APIClient.shared.competitions() } content: { competitions in
                 VStack(alignment: .leading, spacing: 24) {
                     ForEach(Self.kinds, id: \.kind) { kind in

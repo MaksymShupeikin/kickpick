@@ -20,9 +20,9 @@ extension Match {
             date += "\n" + kickoff.formatted(.dateTime.year().locale(.app))  // history search reaches back years
         }
         switch status {
-        case .live: return minute ?? "Идёт"
-        case .finished: return showDate ? date : "Конец"
-        case .cancelled: return "Отменён"
+        case .live: return minute ?? "Live"
+        case .finished: return showDate ? date : "FT"
+        case .cancelled: return "Cancelled"
         case .notStarted: return showDate ? date : kickoff.formatted(.dateTime.hour().minute().locale(.app))
         }
     }
@@ -31,10 +31,10 @@ extension Match {
         let teams = homeScore.map { "\(home.name) \($0), \(away.name) \(awayScore ?? 0)" } ?? "\(home.name) — \(away.name)"
         let state: String
         switch status {
-        case .finished: state = "завершён"
-        case .live: state = minute.map { "идёт, \($0)" } ?? "идёт"
-        case .notStarted: state = "начало " + kickoff.formatted(.dateTime.day().month().hour().minute().locale(.app))
-        case .cancelled: state = "отменён"
+        case .finished: state = "full time"
+        case .live: state = minute.map { "live, \($0)" } ?? "live"
+        case .notStarted: state = "kick-off " + kickoff.formatted(.dateTime.day().month().hour().minute().locale(.app))
+        case .cancelled: state = "cancelled"
         }
         return "\(teams), \(state)"
     }
@@ -58,7 +58,7 @@ struct MatchStatusText: View {
                 Circle().fill(Color.cardRed).frame(width: 6, height: 6)
             }
             VStack(alignment: .leading, spacing: 2) {
-                // one Text per line ("18 дек." / "2022"), so a long month shrinks instead of wrapping
+                // one Text per line ("18 Dec" / "2022"), so a long month shrinks instead of wrapping
                 ForEach(match.statusText(showDate: showDate).components(separatedBy: "\n"), id: \.self) { line in
                     Text(line).lineLimit(1).minimumScaleFactor(0.7)
                 }

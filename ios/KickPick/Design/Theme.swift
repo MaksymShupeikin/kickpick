@@ -28,5 +28,5 @@ extension Font {
 }
 
 extension Locale {
-    static let app = Locale(identifier: "ru_RU")
+    static let app = Locale(identifier: "en_GB")  // "13 Oct", 24-hour time
 }

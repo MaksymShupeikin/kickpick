@@ -64,7 +64,7 @@ private struct MatchupCard: View {
                 Logo(url: team.logoUrl, size: 20, label: team.name)
                 Text(team.name).font(.subheadline.weight(lost ? .regular : .semibold)).foregroundStyle(color).lineLimit(1)
             } else {
-                Text("—").font(.subheadline).foregroundStyle(Color.textTertiary).accessibilityLabel("Ещё не определён")
+                Text("—").font(.subheadline).foregroundStyle(Color.textTertiary).accessibilityLabel("To be decided")
             }
             Spacer(minLength: 4)
             if let score {

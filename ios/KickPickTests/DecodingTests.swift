@@ -27,9 +27,9 @@ final class DecodingTests: XCTestCase {
 
     func testSpokenSummary() throws {
         let live = try decode(Match.self, matchJSON.replacingOccurrences(of: "45+2'", with: "67'") + "}")
-        XCTAssertTrue(live.spokenSummary.contains("идёт, 67'"))
+        XCTAssertTrue(live.spokenSummary.contains("live, 67'"))
         let done = try decode(Match.self, matchJSON.replacingOccurrences(of: "LIVE", with: "FT") + "}")
-        XCTAssertTrue(done.spokenSummary.hasSuffix("завершён"))
+        XCTAssertTrue(done.spokenSummary.hasSuffix("full time"))
     }
 
     func testMatchPageWithDetailsDecodes() throws {
@@ -90,10 +90,11 @@ final class DecodingTests: XCTestCase {
     }
 
     func testRoundTitles() {
-        XCTAssertEqual(roundTitle("7"), "Тур 7")
-        XCTAssertEqual(roundTitle("1/8"), "1/8 финала")
-        XCTAssertEqual(roundTitle("bronze"), "Матч за 3-е место")
-        XCTAssertEqual(roundTitle("final"), "Финал")
+        XCTAssertEqual(roundTitle("7"), "Matchday 7")
+        XCTAssertEqual(roundTitle("1/8"), "Round of 16")
+        XCTAssertEqual(roundTitle("1/4"), "Quarter-finals")
+        XCTAssertEqual(roundTitle("bronze"), "Third-place play-off")
+        XCTAssertEqual(roundTitle("final"), "Final")
     }
 
     func testStatNumbers() {

@@ -32,7 +32,7 @@ targets:
         APIBaseURL: $(API_BASE_URL)
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true
-        NSLocalNetworkUsageDescription: Приложение подключается к серверу KickPick в вашей локальной сети.
+        NSLocalNetworkUsageDescription: KickPick connects to the KickPick server on your local network.
   KickPickTests:
     type: bundle.unit-test
     platform: iOS

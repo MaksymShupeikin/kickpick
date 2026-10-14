@@ -16,7 +16,7 @@ struct CompetitionView: View {
                 case .table:
                     Loader(id: season) { try await APIClient.shared.standings(competition.slug, season: season) } content: { groups in
                         if groups.isEmpty {
-                            EmptyState(text: "Таблицы нет")
+                            EmptyState(text: "No table")
                         } else {
                             ForEach(groups, id: \.group) { StandingsCard(group: $0) }
                         }
@@ -39,7 +39,7 @@ struct CompetitionView: View {
                     }
                 case .bracket:
                     Loader(id: season) { try await APIClient.shared.bracket(competition.slug, season: season) } content: { bracket in
-                        if let bracket { BracketView(bracket: bracket) } else { EmptyState(text: "Сетки пока нет") }
+                        if let bracket { BracketView(bracket: bracket) } else { EmptyState(text: "No bracket yet") }
                     }
                 }
             }
@@ -52,15 +52,15 @@ struct CompetitionView: View {
             if !seasons.isEmpty {
                 GlassToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        Picker("Сезон", selection: $season) {
+                        Picker("Season", selection: $season) {
                             ForEach(seasons, id: \.self) { Text($0).tag(Optional($0)) }
                         }
                     } label: {
-                        Text(season ?? competition.currentSeason ?? "Сезон").font(.subheadline.weight(.semibold))
+                        Text(season ?? competition.currentSeason ?? "Season").font(.subheadline.weight(.semibold))
                     }
                     .menuStyle(.button)
                     .buttonStyle(.glass)
-                    .accessibilityLabel("Сезон")
+                    .accessibilityLabel("Season")
                 }
             }
         }
@@ -69,7 +69,7 @@ struct CompetitionView: View {
 
     private var tabs: [(value: Tab, title: String)] {
         competition.kind == "league"
-            ? [(.table, "Таблица"), (.matches, "Матчи")]
-            : [(.table, "Таблица"), (.matches, "Матчи"), (.bracket, "Сетка")]
+            ? [(.table, "Table"), (.matches, "Matches")]
+            : [(.table, "Table"), (.matches, "Matches"), (.bracket, "Bracket")]
     }
 }

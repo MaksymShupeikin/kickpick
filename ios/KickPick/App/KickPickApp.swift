@@ -22,8 +22,8 @@ struct KickPickApp: App {
             }
             // our glass bar instead of the system one; pages scroll beneath it
             .safeAreaInset(edge: .bottom) {
-                SegmentedPicker(options: [(.matches, "Матчи"), (.competitions, "Турниры")], selection: $tab,
-                                icons: ["sportscourt", "trophy"], draggable: true)
+                SegmentedPicker(options: [(.matches, "Matches"), (.competitions, "Competitions")], selection: $tab,
+                                icons: ["sportscourt", "trophy"])
                     .frame(width: 240)  // no .isTabBar trait: it makes VoiceOver list every tab twice
             }
             .tint(.white)

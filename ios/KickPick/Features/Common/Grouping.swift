@@ -22,12 +22,13 @@ extension Array {
 
 func roundTitle(_ round: String) -> String {
     switch round {
-    case "playoff": return "Раунд плей-офф"
-    case "1/2": return "Полуфинал"
-    case "bronze": return "Матч за 3-е место"
-    case "final": return "Финал"
+    case "playoff": return "Play-off round"
+    case "1/4": return "Quarter-finals"
+    case "1/2": return "Semi-finals"
+    case "bronze": return "Third-place play-off"
+    case "final": return "Final"
     default:
-        if round.hasPrefix("1/") { return "\(round) финала" }
-        return Int(round) != nil ? "Тур \(round)" : round
+        if round.hasPrefix("1/"), let n = Int(round.dropFirst(2)) { return "Round of \(2 * n)" }  // 1/8 → Round of 16
+        return Int(round) != nil ? "Matchday \(round)" : round
     }
 }

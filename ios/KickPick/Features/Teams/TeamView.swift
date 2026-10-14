@@ -2,8 +2,8 @@ import SwiftUI
 
 struct TeamView: View {
     let id: Int
-    private static let positions = ["Coach": "Тренер", "GK": "Вратари", "DF": "Защитники",
-                                    "MF": "Полузащитники", "FW": "Нападающие"]
+    private static let positions = ["Coach": "Coach", "GK": "Goalkeepers", "DF": "Defenders",
+                                    "MF": "Midfielders", "FW": "Forwards"]
 
     var body: some View {
         ScrollView {
@@ -14,10 +14,10 @@ struct TeamView: View {
                         Text(team.name).font(.title2.weight(.bold).width(.condensed)).foregroundStyle(Color.textPrimary)
                     }
                     .frame(maxWidth: .infinity)
-                    if !team.last.isEmpty { matches("Последние матчи", team.last) }
-                    if !team.next.isEmpty { matches("Ближайшие", team.next) }
+                    if !team.last.isEmpty { matches("Recent matches", team.last) }
+                    if !team.next.isEmpty { matches("Upcoming", team.next) }
                     ForEach(team.squad.grouped(by: \.position)) { group in
-                        CardSection(title: group.key.flatMap { Self.positions[$0] ?? $0 } ?? "Другие") {
+                        CardSection(title: group.key.flatMap { Self.positions[$0] ?? $0 } ?? "Other") {
                             Rows(items: group.items) { entry in
                                 NavigationLink(value: Route.player(entry.player.id)) { SquadRow(entry: entry) }
                                     .buttonStyle(.plain)

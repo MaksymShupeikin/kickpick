@@ -23,8 +23,8 @@ struct ErrorState: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Не удалось загрузить").font(.subheadline).foregroundStyle(Color.textSecondary)
-            Button("Повторить", action: retry).buttonStyle(.glass)
+            Text("Couldn’t load").font(.subheadline).foregroundStyle(Color.textSecondary)
+            Button("Retry", action: retry).buttonStyle(.glass)
         }
         .frame(maxWidth: .infinity)
         .padding(24)

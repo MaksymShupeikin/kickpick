@@ -28,7 +28,7 @@
 		<true/>
 	</dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Приложение подключается к серверу KickPick в вашей локальной сети.</string>
+	<string>KickPick connects to the KickPick server on your local network.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>BarlowCondensed-SemiBold.ttf</string>
