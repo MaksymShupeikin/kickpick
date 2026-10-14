@@ -2,7 +2,7 @@
 x-backend-env: &backend-env
   DATABASE_URL: postgresql+psycopg://kickpick:kickpick@db:5432/kickpick
   HISTORY_SEASONS: "11"     # newest 11 seasons per competition (2016/17 →); 0 = all FotMob has (since 2010)
-  REQUEST_INTERVAL: "0.25"  # seconds between FotMob requests (+0–0.5 s jitter); one request at a time
+  REQUEST_INTERVAL: "0"     # seconds between FotMob requests (+0–0.5 s jitter); one request at a time
 
 services:
   db:
