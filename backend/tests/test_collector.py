@@ -100,3 +100,13 @@ def test_broken_payload_keeps_previous_data(seeded):
     with seeded() as s:
         assert count(s, Match) == 380
         assert count(s, Standing) == 20
+
+
+def test_failed_full_sync_is_retried_next_tick(seeded):
+    fake = FakeFotMob(lambda league_id, season: {})
+    state = {}
+    collector.tick(fake, state, now=NOW)
+    assert "full_sync_at" not in state
+    fake.calls.clear()
+    collector.tick(fake, state, now=NOW + timedelta(minutes=1))
+    assert sum(c[0] == "league" for c in fake.calls) == len(COMPETITIONS)

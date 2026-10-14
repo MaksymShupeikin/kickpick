@@ -71,21 +71,25 @@ def teams_needing_squads(s, now: datetime, limit: int) -> list[int]:
     return list(s.scalars(q))
 
 
-def _try(what: str, fn, *args) -> None:
+def _try(what: str, fn, *args) -> bool:
     try:
         fn(*args)
+        return True
     except Exception:
         log.exception("%s failed", what)
+        return False
 
 
 def tick(client, state: dict, now: datetime | None = None) -> None:
     now = now or datetime.now(timezone.utc)
     synced = set()
+    ok = False
     if state.get("full_sync_at") is None or now - state["full_sync_at"] >= FULL_SYNC_EVERY:
         for competition_id, slug, *_ in COMPETITIONS:
-            _try(f"league {slug}", sync_competition, client, competition_id)
+            ok |= _try(f"league {slug}", sync_competition, client, competition_id)
             synced.add(competition_id)
-        state["full_sync_at"] = now
+        if ok:  # all failed (e.g. DB down): retry full sync next tick
+            state["full_sync_at"] = now
     with SessionLocal() as s:
         live = live_competitions(s, now) - synced
     for competition_id in live:
