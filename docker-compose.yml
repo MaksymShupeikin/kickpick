@@ -1,3 +1,9 @@
+# Shared by api (/status dashboard) and collector, so both count progress the same way.
+x-backend-env: &backend-env
+  DATABASE_URL: postgresql+psycopg://kickpick:kickpick@db:5432/kickpick
+  HISTORY_SEASONS: "11"     # newest 11 seasons per competition (2016/17 →); 0 = all FotMob has (since 2010)
+  REQUEST_INTERVAL: "0.25"  # seconds between FotMob requests (+0–0.5 s jitter); one request at a time
+
 services:
   db:
     image: postgres:17
@@ -18,8 +24,7 @@ services:
   api:
     build: ./backend
     command: sh -c "alembic upgrade head && uvicorn kickpick.api:app --host 0.0.0.0 --port 8000"
-    environment:
-      DATABASE_URL: postgresql+psycopg://kickpick:kickpick@db:5432/kickpick
+    environment: *backend-env
     ports:
       - "8000:8000"
     depends_on:
@@ -34,10 +39,7 @@ services:
   collector:
     build: ./backend
     command: python -m kickpick.collector
-    environment:
-      DATABASE_URL: postgresql+psycopg://kickpick:kickpick@db:5432/kickpick
-      HISTORY_SEASONS: "11"     # newest 11 seasons per competition (2016/17 →); 0 = all FotMob has (since 2010)
-      REQUEST_INTERVAL: "0.25"  # seconds between FotMob requests (+0–0.5 s jitter); one request at a time
+    environment: *backend-env
     depends_on:
       api:
         condition: service_healthy

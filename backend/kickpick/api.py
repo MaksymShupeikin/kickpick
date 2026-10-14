@@ -1,10 +1,13 @@
-"""Read-only HTTP API for the iOS app."""
+"""Read-only HTTP API for the iOS app, plus a crawl-progress dashboard."""
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi.responses import HTMLResponse
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session, aliased
 
+from kickpick import collector
 from kickpick.config import COMPETITIONS
 from kickpick.db import SessionLocal
 from kickpick.fotmob import league_logo, player_photo, search_name, team_logo
@@ -85,6 +88,16 @@ def all_competitions(s: Session) -> list[dict]:
 @app.get("/health")
 def health():
     return {"ok": True}
+
+
+@app.get("/status")
+def crawl_status():
+    return collector.progress()
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard():
+    return Path(__file__).with_name("dashboard.html").read_text()
 
 
 @app.get("/competitions")

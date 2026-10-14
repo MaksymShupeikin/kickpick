@@ -246,7 +246,8 @@ def tick(client, state: dict, now: datetime | None = None, budget: float = TICK_
              "yes" if throttled else "no", "on" if paused_until and now < paused_until else "off")
 
 
-def status() -> list[str]:
+def progress() -> dict:
+    """What is collected and what is left — shared by `status` and the API's /status dashboard."""
     with SessionLocal() as s:
         def count(model, *where):
             return s.scalar(select(func.count()).select_from(model).where(*where))
@@ -276,14 +277,26 @@ def status() -> list[str]:
                                 ~_gave_up("player", cast(Player.id, String)))
     remaining = round(unsynced * matches / seasons) if seasons else 0
     remaining += pending_matches + pending_players
-    hours = remaining * (REQUEST_INTERVAL + 0.7) / 3600  # interval + 0.25 jitter avg + ~0.45 latency/idle
+    return {
+        "seasons": {"done": available - unsynced, "total": available},
+        "matches": {"done": detailed, "total": finished},
+        "players": {"done": profiled, "total": players},
+        "squads": {"done": squads, "total": teams},
+        "given_up": given_up,
+        "remaining": remaining,
+        "eta_hours": round(remaining * (REQUEST_INTERVAL + 0.7) / 3600, 1),  # interval + 0.25 jitter + ~0.45 latency
+    }
+
+
+def status() -> list[str]:
+    p = progress()
     return [
-        f"seasons    {available - unsynced}/{available}",
-        f"matches    {detailed}/{finished} finished matches with details and lineups",
-        f"players    {profiled}/{players} with a profile (the total grows as lineups arrive)",
-        f"squads     {squads}/{teams} teams of the current season",
-        f"given up   {given_up} records after {MAX_ATTEMPTS} failed attempts",
-        f"remaining  ~{remaining} requests, ~{hours:.1f} h",
+        f"seasons    {p['seasons']['done']}/{p['seasons']['total']}",
+        f"matches    {p['matches']['done']}/{p['matches']['total']} finished matches with details and lineups",
+        f"players    {p['players']['done']}/{p['players']['total']} with a profile (the total grows as lineups arrive)",
+        f"squads     {p['squads']['done']}/{p['squads']['total']} teams of the current season",
+        f"given up   {p['given_up']} records after {MAX_ATTEMPTS} failed attempts",
+        f"remaining  ~{p['remaining']} requests, ~{p['eta_hours']:.1f} h",
     ]
 
 

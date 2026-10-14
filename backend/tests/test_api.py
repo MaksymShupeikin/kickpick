@@ -30,6 +30,14 @@ def test_health():
     assert client.get("/health").json() == {"ok": True}
 
 
+def test_crawl_status_and_dashboard():
+    status = client.get("/status").json()
+    assert {"seasons", "matches", "players", "squads", "given_up", "remaining", "eta_hours"} <= set(status)
+    assert status["matches"]["total"] > 0 and status["matches"]["done"] >= 1
+    page = client.get("/dashboard")
+    assert page.status_code == 200 and "text/html" in page.headers["content-type"] and 'fetch("/status"' in page.text
+
+
 def test_competitions_in_config_order_with_logos():
     body = client.get("/competitions").json()
     assert [c["slug"] for c in body] == [slug for _, slug, *_ in COMPETITIONS]
