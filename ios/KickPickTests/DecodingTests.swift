@@ -169,4 +169,16 @@ final class DecodingTests: XCTestCase {
         XCTAssertEqual(team.transfers.arrivals.first?.feeEur, 45_000_000)
         XCTAssertNil(team.transfers.departures.first?.team)
     }
+
+    func testPitchLayout() {
+        let size = CGSize(width: 300, height: 450)  // half depth: 450 / 2 − 40 − 40 = 145
+        let keeper = PitchLayout.point(x: 0.5, y: 0.1, home: true, in: size)
+        XCTAssertEqual(keeper.x, 150, accuracy: 0.001)
+        XCTAssertEqual(keeper.y, 40 + 0.1 * 145, accuracy: 0.001)
+        XCTAssertEqual(PitchLayout.point(x: 0.5, y: 0.1, home: false, in: size).y, 450 - 40 - 0.1 * 145, accuracy: 0.001)
+        XCTAssertEqual(PitchLayout.point(x: 0.2, y: 0.5, home: false, in: size).x, 240, accuracy: 0.001)  // mirrored
+        let homeFront = PitchLayout.point(x: 0.5, y: 1, home: true, in: size)
+        let awayFront = PitchLayout.point(x: 0.5, y: 1, home: false, in: size)
+        XCTAssertGreaterThanOrEqual(awayFront.y - homeFront.y, 2 * PitchLayout.midGap)
+    }
 }
