@@ -194,4 +194,13 @@ final class DecodingTests: XCTestCase {
         XCTAssertEqual(try entry("2022-07-01", nil).years, "2022 – now")
         XCTAssertEqual(try entry("2016-07-01", "2022-06-30").years, "2016 – 2022")
     }
+
+    func testAgeLineKeepsTheBirthDayInAnyTimeZone() {
+        let saved = NSTimeZone.default
+        defer { NSTimeZone.default = saved }
+        NSTimeZone.default = TimeZone(identifier: "Pacific/Auckland")!
+        let now = ISO8601DateFormatter().date(from: "2026-10-15T12:00:00Z")!
+        XCTAssertEqual(PlayerPage.ageLine(birthDate: "2000-07-21", now: now), "26 · 21 Jul 2000")
+        XCTAssertNil(PlayerPage.ageLine(birthDate: "not a date", now: now))
+    }
 }

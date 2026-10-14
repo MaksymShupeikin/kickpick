@@ -66,12 +66,7 @@ private extension PlayerPage {
         let positions = ["Coach": "Coach", "GK": "Goalkeeper", "DF": "Defender", "MF": "Midfielder", "FW": "Forward"]
         var out: [Fact] = []
         if let position { out.append((label: "Position", value: positions[position] ?? position, flag: nil)) }
-        // noon UTC: the same calendar day in every time zone
-        if let birthDate, let born = try? Date(birthDate + "T12:00:00Z", strategy: .iso8601),
-           let age = Calendar.current.dateComponents([.year], from: born, to: .now).year {
-            let date = born.formatted(.dateTime.day().month(.abbreviated).year().locale(.app))
-            out.append((label: "Age", value: "\(age) · \(date)", flag: nil))
-        }
+        if let birthDate, let line = Self.ageLine(birthDate: birthDate) { out.append((label: "Age", value: line, flag: nil)) }
         if let country = countryName ?? countryCode { out.append((label: "Country", value: country, flag: flagUrl)) }
         return out
     }
@@ -236,5 +231,18 @@ extension CareerEntry {
     var years: String {
         let start = startDate.map { String($0.prefix(4)) } ?? "?"
         return "\(start) – " + (endDate.map { String($0.prefix(4)) } ?? "now")
+    }
+}
+
+extension PlayerPage {
+    /// "26 · 21 Jul 2000" — computed and formatted in GMT, so the day never shifts with the device's time zone.
+    static func ageLine(birthDate: String, now: Date = .now) -> String? {
+        guard let born = try? Date(birthDate + "T00:00:00Z", strategy: .iso8601) else { return nil }
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .gmt
+        guard let age = calendar.dateComponents([.year], from: born, to: now).year else { return nil }
+        var style = Date.FormatStyle.dateTime.day().month(.abbreviated).year().locale(.app)
+        style.timeZone = .gmt
+        return "\(age) · \(born.formatted(style))"
     }
 }
