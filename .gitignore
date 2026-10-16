@@ -12,3 +12,4 @@ docs/
 backend/.venv-ml/
 backend/artifacts/
 .env
+kickpick-deploy.tar
