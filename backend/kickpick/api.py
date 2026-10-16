@@ -1,11 +1,14 @@
 """Read-only HTTP API for the iOS app, plus a crawl-progress dashboard."""
+import hashlib
 import re
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import HTMLResponse
-from sqlalchemy import and_, func, or_, select
+from sqlalchemy import and_, func, or_, select, text
 from sqlalchemy.orm import Session, aliased
 
 from kickpick import collector
@@ -16,6 +19,24 @@ from kickpick.models import (Bracket, Competition, Match, MatchLineup, Player, P
                              SquadMember, Standing, Team, TeamTransfer)
 
 app = FastAPI(title="KickPick")
+
+
+@app.middleware("http")
+async def versions(request: Request, call_next):
+    """Every JSON answer carries a version (ETag) and must be revalidated: an app asking again for something that
+    hasn't changed gets an empty 304, and URLSession hands it the copy it kept."""
+    response = await call_next(request)
+    if request.method != "GET" or response.status_code != 200 or "json" not in response.headers.get("content-type", ""):
+        return response
+    body = b"".join([chunk async for chunk in response.body_iterator])
+    tag = '"' + hashlib.md5(body).hexdigest() + '"'
+    if request.headers.get("if-none-match") == tag:
+        return Response(status_code=304, headers={"ETag": tag, "Cache-Control": "no-cache"})
+    headers = {k: v for k, v in response.headers.items() if k.lower() != "content-length"}
+    return Response(body, headers=headers | {"ETag": tag, "Cache-Control": "no-cache"}, media_type=response.media_type)
+
+
+app.add_middleware(GZipMiddleware, minimum_size=1000)  # added last, so it compresses what the version was taken of
 ORDER = {competition_id: i for i, (competition_id, *_) in enumerate(COMPETITIONS)}
 POSITIONS = ["Coach", "GK", "DF", "MF", "FW"]
 APPEARED = or_(MatchLineup.role == "starter", and_(MatchLineup.role == "sub", MatchLineup.sub_in.is_not(None)))
@@ -45,7 +66,8 @@ def match_json(row) -> dict:
     m, season, competition, home, away = row
     return {
         "id": m.id,
-        "competition": {"slug": competition.slug, "name": competition.name, "logo_url": league_logo(competition.id)},
+        "competition": {"slug": competition.slug, "name": competition.name, "kind": competition.kind,
+                        "logo_url": league_logo(competition.id)},
         "season": season.name,
         "round": m.round,
         "kickoff": m.kickoff,
@@ -56,11 +78,6 @@ def match_json(row) -> dict:
         "home_score": m.home_score,
         "away_score": m.away_score,
     }
-
-
-def stats_json(m: SquadMember) -> dict:
-    return {"goals": m.goals, "assists": m.assists, "yellow_cards": m.yellow_cards,
-            "red_cards": m.red_cards, "rating": m.rating}
 
 
 def minutes(lineup: MatchLineup) -> int:
@@ -94,11 +111,20 @@ def bracket_json(data: dict) -> dict:
             "third_place": pair(data["third_place"])}
 
 
+def contributions(m: Match) -> tuple[Counter, Counter]:
+    """Goals and assists per player name (accents ignored), from the match's events: own goals aren't the scorer's."""
+    events = (m.details or {}).get("events") or []
+    goals = Counter(search_name(e["player"]) for e in events if e.get("type") == "goal" and e.get("player"))
+    assists = Counter(search_name(e["assist"]) for e in events if e.get("type") == "goal" and e.get("assist"))
+    return goals, assists
+
+
 def lineups_json(s: Session, m: Match) -> dict | None:
     rows = s.execute(select(MatchLineup, Player).join(Player, MatchLineup.player_id == Player.id)
                      .where(MatchLineup.match_id == m.id)).all()
     if not rows:
         return None
+    goals, assists = contributions(m)
 
     def ref(p: Player) -> dict:
         return {"id": p.id, "name": p.name, "photo_url": player_photo(p.id)}
@@ -106,7 +132,8 @@ def lineups_json(s: Session, m: Match) -> dict | None:
     def entry(lineup: MatchLineup, p: Player) -> dict:
         return {"player": ref(p), "shirt_number": lineup.shirt_number, "position": lineup.position, "x": lineup.x,
                 "y": lineup.y, "rating": lineup.rating, "captain": lineup.is_captain, "sub_in": lineup.sub_in,
-                "sub_out": lineup.sub_out}
+                "sub_out": lineup.sub_out, "goals": goals[p.search_name], "assists": assists[p.search_name],
+                "flag_url": country_flag(p.country_code) if p.country_code else None}
 
     def side(name: str, formation: str | None) -> dict | None:
         mine = [r for r in rows if r[0].side == name]
@@ -126,7 +153,65 @@ def lineups_json(s: Session, m: Match) -> dict | None:
                 "unavailable": [{"player": ref(p), "reason": u.unavailable_type, "expected_return": u.expected_return}
                                 for u, p in role("unavailable")]}
 
-    return {"home": side("home", m.home_formation), "away": side("away", m.away_formation)}
+    return {"home": side("home", m.home_formation), "away": side("away", m.away_formation),
+            "type": m.lineup_type}  # "standard" (confirmed), "predicted", "lastStarting11", "unavailable"
+
+
+FINISHED = (Match.status == "FT", Match.home_score.is_not(None), Match.away_score.is_not(None))
+
+
+def outcome(m: Match, team_id: int) -> str:
+    mine, theirs = (m.home_score, m.away_score) if m.home_team_id == team_id else (m.away_score, m.home_score)
+    return "W" if mine > theirs else "L" if mine < theirs else "D"
+
+
+def form(s: Session, team_id: int, before: datetime) -> list[str]:
+    """The team's last 5 finished matches before `before`, any competition, oldest first: "W" / "D" / "L"."""
+    played = s.scalars(select(Match).where(or_(Match.home_team_id == team_id, Match.away_team_id == team_id),
+                                           Match.kickoff < before, *FINISHED)
+                       .order_by(Match.kickoff.desc()).limit(5)).all()
+    return [outcome(x, team_id) for x in reversed(played)]
+
+
+def head_to_head(s: Session, m: Match) -> dict:
+    """The last 5 finished meetings before this match, counted for this match's home and away team."""
+    h, a = m.home_team_id, m.away_team_id
+    met = s.scalars(select(Match).where(or_(and_(Match.home_team_id == h, Match.away_team_id == a),
+                                            and_(Match.home_team_id == a, Match.away_team_id == h)),
+                                        Match.kickoff < m.kickoff, *FINISHED)
+                    .order_by(Match.kickoff.desc()).limit(5)).all()
+    results = [outcome(x, h) for x in met]
+    return {"matches": len(met), "home_wins": results.count("W"), "draws": results.count("D"),
+            "away_wins": results.count("L")}
+
+
+def linked_events(s: Session, m: Match) -> dict | None:
+    """Events keep only names: link each to the one player of that name in this match's lineup (accents ignored)."""
+    if not m.details or not m.details.get("events"):
+        return m.details
+    ids: dict[str, set[int]] = {}
+    for player_id, name in s.execute(select(Player.id, Player.search_name)
+                                     .join(MatchLineup, MatchLineup.player_id == Player.id)
+                                     .where(MatchLineup.match_id == m.id)):
+        ids.setdefault(name, set()).add(player_id)
+
+    def player_id(name: str | None) -> int | None:
+        found = ids.get(search_name(name)) if name else None
+        return next(iter(found)) if found and len(found) == 1 else None  # two namesakes: leave it unlinked
+
+    return m.details | {"events": [e | {"player_id": player_id(e.get("player"))} for e in m.details["events"]]}
+
+
+def player_club(s: Session, p: Player, squads: list, career: list) -> dict | None:
+    """The squad he is in; else FotMob's primary team, linked only when we have that team's page."""
+    club = next((t for _, t in squads if t.id != p.national_team_id), None)
+    if club:
+        return {"id": club.id, "name": club.name, "logo_url": team_logo(club.id)}
+    if not p.primary_team_id:
+        return None
+    team = s.get(Team, p.primary_team_id)
+    name = team.name if team else next((c.team_name for c in career if c.team_id == p.primary_team_id), None)
+    return {"id": team.id if team else None, "name": name, "logo_url": team_logo(p.primary_team_id)} if name else None
 
 
 def find_season(s: Session, slug: str, season: str | None) -> Season:
@@ -156,7 +241,7 @@ def crawl_status():
 
 @app.get("/dashboard", response_class=HTMLResponse)
 def dashboard():
-    return Path(__file__).with_name("dashboard.html").read_text()
+    return (Path(__file__).parent / "static" / "dashboard.html").read_text()
 
 
 @app.get("/competitions")
@@ -176,24 +261,43 @@ def seasons(slug: str, s: Session = Depends(db)):
 @app.get("/competitions/{slug}/standings")
 def standings(slug: str, season: str | None = None, s: Session = Depends(db)):
     found = find_season(s, slug, season)
+    return standing_groups(s, found.id)
+
+
+def standing_groups(s: Session, season_id: int) -> list[dict]:
     rows = s.execute(select(Standing, Team).join(Team, Standing.team_id == Team.id)
-                     .where(Standing.season_id == found.id).order_by(Standing.group_name, Standing.position))
+                     .where(Standing.season_id == season_id).order_by(Standing.group_name, Standing.position))
     groups: dict[str, list] = {}
     for st, team in rows:
         groups.setdefault(st.group_name, []).append({
             "position": st.position, "team": team_json(team), "played": st.played, "won": st.won,
             "drawn": st.drawn, "lost": st.lost, "goals_for": st.goals_for, "goals_against": st.goals_against,
-            "points": st.points,
+            "points": st.points, "zone_color": st.zone_color,
         })
+    legend = s.scalar(select(Season.table_legend).where(Season.id == season_id)) or []
+
+    def zones(rows: list) -> list:  # only the zones this table's rows are in
+        used = {r["zone_color"] for r in rows}
+        return [z for z in legend if z["color"] in used]
+
     # single-letter/number groups first; named tables ("Best 3rd placed teams") after
-    return [{"group": g, "rows": groups[g]} for g in sorted(groups, key=lambda g: (len(g) > 1, g))]
+    return [{"group": g, "rows": groups[g], "legend": zones(groups[g])} for g in sorted(groups, key=lambda g: (len(g) > 1, g))]
+
+
+def team_standings(s: Session, team_id: int) -> list[dict]:
+    """The team's tables in current seasons, leagues first: only the groups it is in."""
+    seasons = s.execute(select(Season, Competition).join(Competition, Season.competition_id == Competition.id)
+                        .where(Season.is_current, Season.id.in_(select(Standing.season_id)
+                                                                 .where(Standing.team_id == team_id)))).all()
+    seasons.sort(key=lambda r: (r[1].kind != "league", r[1].kind != "cup", r[1].name))
+    return [{"competition": {"slug": c.slug, "name": c.name, "logo_url": league_logo(c.id)}, "season": season.name,
+             "groups": [g for g in standing_groups(s, season.id) if any(r["team"]["id"] == team_id for r in g["rows"])]}
+            for season, c in seasons]
 
 
 @app.get("/competitions/{slug}/matches")
-def competition_matches(slug: str, season: str | None = None, round: str | None = None, s: Session = Depends(db)):
+def competition_matches(slug: str, season: str | None = None, s: Session = Depends(db)):
     q = MATCHES.where(Match.season_id == find_season(s, slug, season).id).order_by(Match.kickoff)
-    if round:
-        q = q.where(Match.round == round)
     return [match_json(r) for r in s.execute(q)]
 
 
@@ -211,13 +315,11 @@ def matches(start: datetime = Query(alias="from"), end: datetime = Query(alias="
         raise HTTPException(422, "from/to need a timezone, e.g. 2026-10-14T00:00:00Z")
     if not timedelta(0) < end - start <= timedelta(days=7):
         raise HTTPException(422, "to must be after from, at most 7 days later")
-    q = MATCHES.where(Match.kickoff >= start, Match.kickoff < end).order_by(Match.kickoff)
-    return [match_json(r) for r in s.execute(q)]
-
-
-@app.get("/matches/live")
-def live_matches(s: Session = Depends(db)):
-    return [match_json(r) for r in s.execute(MATCHES.where(Match.status == "LIVE").order_by(Match.kickoff))]
+    rows = s.execute(MATCHES.where(Match.kickoff >= start, Match.kickoff < end).order_by(Match.kickoff)).all()
+    # cups and international tournaments first, then leagues, each by rank (the app groups by competition in this
+    # order); the sort is stable, so a competition's own matches keep kick-off order
+    rows.sort(key=lambda r: (r[2].kind == "league", ORDER.get(r[2].id, len(ORDER))))
+    return [match_json(r) for r in rows]
 
 
 @app.get("/matches/{match_id}")
@@ -225,7 +327,46 @@ def match(match_id: int, s: Session = Depends(db)):
     row = s.execute(MATCHES.where(Match.id == match_id)).first()
     if not row:
         raise HTTPException(404, "match not found")
-    return match_json(row) | {"details": row[0].details, "lineups": lineups_json(s, row[0])}
+    m = row[0]
+    prediction = saved_match_prediction(s, match_id) if m.status in ("NS", "LIVE") else None
+    return match_json(row) | {
+        "details": linked_events(s, m), "lineups": lineups_json(s, m),
+        "form": {"home": form(s, m.home_team_id, m.kickoff), "away": form(s, m.away_team_id, m.kickoff)},
+        "h2h": head_to_head(s, m),
+        "prediction": prediction,
+    }
+
+
+@app.get("/matches/{match_id}/prediction")
+def match_prediction(match_id: int, s: Session = Depends(db)):
+    """Return a saved forecast; no inference or feature extraction on this path."""
+    if s.get(Match, match_id) is None:
+        raise HTTPException(404, "match not found")
+    return saved_match_prediction(s, match_id) or {"available": False}
+
+
+def saved_match_prediction(s: Session, match_id: int) -> dict | None:
+    """Only active matches: shared by the page response and prediction endpoint."""
+    row = s.execute(text("""
+        SELECT p.model_version,p.generated_at,p.feature_cutoff,p.scheduled_kickoff,p.horizon_hours,
+               p.p_home,p.p_draw,p.p_away
+        FROM match_predictions p JOIN matches m ON m.id=p.match_id
+        LEFT JOIN prediction_results r ON r.prediction_id=p.id
+        WHERE p.match_id=:match_id AND p.scheduled_kickoff=m.kickoff
+          AND p.home_team_id=m.home_team_id AND p.away_team_id=m.away_team_id
+          AND m.status IN ('NS', 'LIVE') AND (r.kind IS NULL OR r.kind <> 'void')
+        ORDER BY p.generated_at DESC,p.id DESC LIMIT 1
+    """), {"match_id": match_id}).mappings().first()
+    if not row:
+        return None
+    lead_hours = (row["scheduled_kickoff"] - row["generated_at"]).total_seconds() / 3600
+    return {
+        "available": True, "experimental": True,
+        "probabilities": {"home": row["p_home"], "draw": row["p_draw"], "away": row["p_away"]},
+        "generated_at": row["generated_at"], "feature_cutoff": row["feature_cutoff"],
+        "model_version": row["model_version"], "nominal_horizon_hours": row["horizon_hours"],
+        "actual_lead_hours": round(lead_hours, 3), "on_time_24h": 23.5 <= lead_hours <= 24.5,
+    }
 
 
 @app.get("/teams/{team_id}")
@@ -237,6 +378,14 @@ def team(team_id: int, s: Session = Depends(db)):
                       .where(SquadMember.team_id == team_id)).all()
     squad.sort(key=lambda r: (POSITIONS.index(r[1].position) if r[1].position in POSITIONS else len(POSITIONS),
                               r[0].shirt_number or 999))
+    # a national side's squad shows each player's club on the right (its flag would only repeat the side); a club's, his country
+    national_side = any(p.national_team_id == team_id for _, p in squad)
+    clubs = squad_clubs(s, team_id, [p for _, p in squad]) if national_side else {}
+    codes = {p.country_code for _, p in squad if p.country_code}
+    # one name per country code, through any player of that country whose national team we know
+    countries = dict(s.execute(select(Player.country_code, func.min(Team.name))
+                               .join(Team, Team.id == Player.national_team_id)
+                               .where(Player.country_code.in_(codes)).group_by(Player.country_code)).all())
     plays = MATCHES.where(or_(Match.home_team_id == team_id, Match.away_team_id == team_id))
     last = s.execute(plays.where(Match.status == "FT").order_by(Match.kickoff.desc()).limit(20))
     upcoming = s.execute(plays.where(Match.status.in_(("NS", "LIVE")),
@@ -246,16 +395,56 @@ def team(team_id: int, s: Session = Depends(db)):
                       .where(or_(TeamTransfer.to_team_id == team_id, TeamTransfer.from_team_id == team_id),
                              TeamTransfer.contract_extension.is_(False))
                       .order_by(TeamTransfer.transfer_date.desc())).all()
+    national = national_team(s, found.country_code)
     return team_json(found) | {
         "squad": [{"player": {"id": p.id, "name": p.name, "photo_url": player_photo(p.id)},
-                   "shirt_number": m.shirt_number, "position": p.position, "stats": stats_json(m)} for m, p in squad],
+                   "shirt_number": m.shirt_number, "position": p.position,
+                   "flag_url": country_flag(p.country_code) if p.country_code and not national_side else None,
+                   "country_name": countries.get(p.country_code),
+                   "club": clubs.get(p.id)} for m, p in squad],
         "last": [match_json(r) for r in last],
         "next": [match_json(r) for r in upcoming],
         "transfers": {
             "arrivals": [transfer_json(t, t.from_team_id, t.from_team_name) for t in moves if t.to_team_id == team_id][:20],
             "departures": [transfer_json(t, t.to_team_id, t.to_team_name) for t in moves if t.from_team_id == team_id][:20],
         },
+        "standings": team_standings(s, team_id),
+        "country": country_json(found.country_code, national),
+        "venue": found.venue_name and {"name": found.venue_name, "city": found.venue_city,
+                                       "capacity": found.venue_capacity, "opened": found.venue_opened},
+        "trophies": [{"competition": {"id": t["league_id"], "name": t["name"],
+                                      "logo_url": league_logo(t["league_id"]) if t["league_id"] else None},
+                      "won": t["won"], "runner_up": t["runner_up"], "seasons_won": t["seasons_won"],
+                      "seasons_runner_up": t["seasons_runner_up"]}
+                     for t in sorted(found.trophies or [], key=lambda t: (-t["won"], -t["runner_up"]))],
     }
+
+
+def squad_clubs(s: Session, team_id: int, players: list[Player]) -> dict[int, dict]:
+    """A national side's players → their clubs: the club in the player's profile, else a club squad we have him in."""
+    in_squads = dict(s.execute(select(SquadMember.player_id, Team).join(Team, SquadMember.team_id == Team.id)
+                               .where(SquadMember.player_id.in_([p.id for p in players]),
+                                      SquadMember.team_id != team_id)).all())
+    wanted = {p.primary_team_id for p in players if p.primary_team_id and p.primary_team_id != team_id}
+    profiled = {t.id: t for t in s.scalars(select(Team).where(Team.id.in_(wanted)))}
+    clubs = {p.id: profiled.get(p.primary_team_id) or in_squads.get(p.id) for p in players}
+    return {player_id: club_json(club.id, club.name) for player_id, club in clubs.items() if club}
+
+
+def national_team(s: Session, code: str | None) -> Team | None:
+    """FotMob's FIFA code ("ESP") to its national team, through a player of that country whose national team we have."""
+    if not code:
+        return None
+    return s.scalar(select(Team).join(Player, Player.national_team_id == Team.id)
+                    .where(Player.country_code == code).limit(1))
+
+
+def country_json(code: str | None, national: Team | None) -> dict | None:
+    """The country line under a player's or club's name: flag and name, linked to the national team when we have it."""
+    if not code and not national:
+        return None
+    return {"id": national.id if national else None, "name": national.name if national else code,
+            "logo_url": country_flag(code) if code else team_logo(national.id)}
 
 
 @app.get("/players/{player_id}")
@@ -265,7 +454,6 @@ def player(player_id: int, s: Session = Depends(db)):
         raise HTTPException(404, "player not found")
     rows = s.execute(select(SquadMember, Team).join(Team, SquadMember.team_id == Team.id)
                      .where(SquadMember.player_id == player_id)).all()
-    rows.sort(key=lambda r: r[1].id == found.national_team_id)  # club first, national team last
     national = s.get(Team, found.national_team_id) if found.national_team_id else None
     played = s.execute(MATCHES.add_columns(MatchLineup).join(MatchLineup, MatchLineup.match_id == Match.id)
                        .where(MatchLineup.player_id == player_id, APPEARED, Match.status.in_(("FT", "LIVE")))
@@ -278,12 +466,15 @@ def player(player_id: int, s: Session = Depends(db)):
                        .order_by(PlayerCareer.start_date.desc().nulls_last())).all()
     career = sorted(career, key=lambda c: CAREER_ORDER.index(c.kind) if c.kind in CAREER_ORDER else len(CAREER_ORDER))
     return {
-        "id": found.id, "name": found.name, "photo_url": player_photo(found.id), "country_code": found.country_code,
-        "country_name": national.name if national else None,
-        "flag_url": country_flag(found.country_code) if found.country_code else None,
+        "id": found.id, "name": found.name, "photo_url": player_photo(found.id),
+        "country": country_json(found.country_code, national),
         "position": found.position, "birth_date": found.birth_date,
-        "teams": [{"team": team_json(t), "shirt_number": m.shirt_number, "stats": stats_json(m)} for m, t in rows],
-        "matches": [match_json(r[:5]) | {"rating": r[5].rating, "minutes": minutes(r[5]), "role": r[5].role}
+        "height_cm": found.height_cm, "foot": found.foot, "market_value_eur": found.market_value_eur,
+        "contract_end": found.contract_end,
+        "club": player_club(s, found, rows, career),
+        "matches": [match_json(r[:5]) | {"rating": r[5].rating, "minutes": minutes(r[5]), "role": r[5].role,
+                                         **dict(zip(("goals", "assists"),
+                                                    (c[found.search_name] for c in contributions(r[0]))))}
                     for r in played],
         "seasons": [{"season": x.season,
                      "competition": {"id": x.competition_id, "name": x.competition_name,
@@ -296,6 +487,32 @@ def player(player_id: int, s: Session = Depends(db)):
                     "start_date": c.start_date, "end_date": c.end_date,
                     "appearances": c.appearances, "goals": c.goals, "assists": c.assists} for c in career],
     }
+
+
+def fresh(s: Session, now: datetime) -> dict:
+    """What the search shows before anything is typed: the top match of the moment, the side that leads or won it
+    and its best-rated player. Live first, then the last two days, then the rest of the week; within each, cups and
+    international tournaments above leagues by rank (as in the feed), then the latest kick-off."""
+    rows = s.execute(MATCHES.where(Match.status.in_(("LIVE", "FT")), Match.kickoff <= now,
+                                   Match.kickoff > now - timedelta(days=7))).all()
+    if not rows:
+        return {"match": None, "team": None, "player": None}
+    recent = now - timedelta(days=2)
+    row = min(rows, key=lambda r: (r[0].status != "LIVE", r[0].kickoff < recent, r[2].kind == "league",
+                                   ORDER.get(r[2].id, len(ORDER)), -r[0].kickoff.timestamp()))
+    m, home, away = row[0], row[3], row[4]
+    leader = away if (m.away_score or 0) > (m.home_score or 0) else home
+    best = s.execute(select(Player, MatchLineup.team_id).join(MatchLineup, MatchLineup.player_id == Player.id)
+                     .where(MatchLineup.match_id == m.id, MatchLineup.rating.is_not(None))
+                     .order_by(MatchLineup.rating.desc()).limit(1)).first()
+    player = best and {"id": best[0].id, "name": best[0].name, "photo_url": player_photo(best[0].id),
+                       "team_name": home.name if best[1] == home.id else away.name}
+    return {"match": match_json(row), "team": team_json(leader), "player": player}
+
+
+@app.get("/search/suggestions")
+def search_suggestions(s: Session = Depends(db)):
+    return fresh(s, datetime.now(timezone.utc))
 
 
 def like(term: str) -> str:

@@ -1,6 +1,33 @@
 import os
+from pathlib import Path
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql+psycopg://kickpick:kickpick@localhost:5432/kickpick")
+from sqlalchemy import URL
+
+
+def read_secret(path: str | Path) -> str:
+    value = Path(path).read_text().strip()
+    if not value:
+        raise ValueError(f"Empty secret file: {path}")
+    return value
+
+
+def database_url() -> str | URL:
+    if value := os.environ.get("DATABASE_URL"):
+        return value  # explicit override for tests and development outside Compose
+    secret = os.environ.get("DATABASE_PASSWORD_FILE")
+    if not secret:
+        raise RuntimeError("Set DATABASE_PASSWORD_FILE or an explicit DATABASE_URL")
+    return URL.create(
+        "postgresql+psycopg",
+        username=os.environ.get("DATABASE_USER", "kickpick_api"),
+        password=read_secret(secret),
+        host=os.environ.get("DATABASE_HOST", "db"),
+        port=int(os.environ.get("DATABASE_PORT", "5432")),
+        database=os.environ.get("DATABASE_NAME", "kickpick"),
+    )
+
+
+DATABASE_URL = database_url()
 HISTORY_SEASONS = int(os.environ.get("HISTORY_SEASONS", "0"))  # 0 = every season FotMob lists (since 2010)
 REQUEST_INTERVAL = float(os.environ.get("REQUEST_INTERVAL", "1.0"))  # seconds between FotMob requests, +0–0.5 s jitter
 

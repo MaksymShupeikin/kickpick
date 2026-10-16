@@ -11,6 +11,16 @@ dependencies = [
     "uvicorn[standard]>=0.30",
 ]
 
+[project.optional-dependencies]
+ml = [
+    "catboost>=1.2.8",
+    "numpy>=2.1",
+    "pandas>=2.2",
+    "pyarrow>=18",
+    "scikit-learn>=1.6",
+    "scipy>=1.14",
+]
+
 [dependency-groups]
 dev = ["pytest>=8"]
 

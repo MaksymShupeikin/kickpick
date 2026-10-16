@@ -2,13 +2,26 @@ import SwiftUI
 import UIKit
 
 /// Round raised glass back button, the same as the other icon buttons (design.md §6.2).
+/// Tap: one screen back. Hold: back to the tab's first screen.
 struct BackButton: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.popToRoot) private var popToRoot
+    @State private var held = false  // the hold already went home: the release mustn't also go back a screen
+    @State private var wentHome = 0
 
     var body: some View {
-        Button { dismiss() } label: { Image(systemName: "chevron.left") }
+        Button {
+            if held { held = false } else { dismiss() }
+        } label: { Image(systemName: "chevron.left") }
             .buttonStyle(.glassIcon)
+            .simultaneousGesture(LongPressGesture(minimumDuration: 0.5).onEnded { _ in
+                held = true
+                wentHome += 1
+                popToRoot()
+            })
+            .sensoryFeedback(.impact(weight: .medium), trigger: wentHome)
             .accessibilityLabel("Back")
+            .accessibilityAction(named: "Back to start") { popToRoot() }
     }
 }
 

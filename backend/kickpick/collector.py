@@ -1,8 +1,12 @@
 """Keeps the DB in sync with FotMob, politely.
 
-    python -m kickpick.collector            # loop: one tick every 60 s (mandatory steps, then the backlog)
+    python -m kickpick.collector            # loop: one tick every 15 s (mandatory steps, then the backlog)
     python -m kickpick.collector status     # what is collected and what is left
-    python -m kickpick.collector backfill   # one-off: past seasons (the loop does this by itself)
+
+Live: while a match is on (or due), each tick asks FotMob's day page (all of a day's matches, one small request,
+sent with its ETag so an unchanged page is an empty 304) and writes only changed scores; it alone owns a live
+match's score. Its details follow on the next tick after the score or status moves, else every 2.5 min; its
+competition's table when it ends.
 """
 import logging
 import sys
@@ -17,10 +21,16 @@ from kickpick.db import SessionLocal
 from kickpick.models import Competition, FetchFailure, Match, Player, Season, SquadMember, Team
 
 log = logging.getLogger("kickpick.collector")
-TICK_SECONDS = 60
+TICK_SECONDS = 15  # how often live scores are checked; the backlog fills the rest of each tick
+SCOREBOARD_EVERY = timedelta(seconds=15)  # FotMob caches its day page for 10 s: asking faster gains nothing
+LIVE_DETAILS_EVERY = timedelta(seconds=150)  # a live match's events and stats without a goal to prompt them
+DETAILS_LAG = timedelta(seconds=15)  # FotMob's copy of the details trails its day page (~13 s): ask a tick later
 FULL_SYNC_EVERY = timedelta(hours=1)
 SQUAD_EVERY = timedelta(hours=24)
 PROFILE_REFRESH = timedelta(days=7)
+UPCOMING = timedelta(days=3)  # how far ahead predicted lineups are fetched
+LINEUP_REFRESH = timedelta(hours=6)  # predicted lineups change as the match nears
+LINEUP_REFRESH_CLOSE = timedelta(minutes=20)  # within 3 h of kick-off the confirmed lineup is out
 MAX_ATTEMPTS = 3
 LIVE_MAX_AGE = timedelta(days=1)  # a match FotMob leaves "started" forever stops costing requests
 RETRY_AFTER = timedelta(hours=1)  # a failed record waits this long before its next attempt
@@ -46,7 +56,12 @@ def sync_match(client, match_id: int) -> None:
 
 def sync_team(client, team_id: int) -> None:
     try:
-        parsed = fotmob.parse_team(client.team(team_id))
+        raw = client.team(team_id)
+        if raw is None:  # FotMob answers `null` for play-off placeholders ("Hellas Verona/Spezia"): nothing to read
+            with SessionLocal.begin() as s:
+                store.touch_team(s, team_id)
+            return
+        parsed = fotmob.parse_team(raw)
         with SessionLocal.begin() as s:
             store.save_squad(s, team_id, parsed)
     except fotmob.Throttled as e:
@@ -61,7 +76,12 @@ def sync_team(client, team_id: int) -> None:
 
 
 def sync_player(client, player_id: int) -> None:
-    parsed = fotmob.parse_player(client.player(player_id))
+    raw = client.player(player_id)
+    if raw is None:  # FotMob answers `null` for a removed profile: nothing to fetch until the next refresh
+        with SessionLocal.begin() as s:
+            store.touch_player(s, player_id)
+        return
+    parsed = fotmob.parse_player(raw)
     with SessionLocal.begin() as s:
         store.save_player(s, player_id, parsed)
 
@@ -73,27 +93,30 @@ def sync_season(client, key: str) -> None:
 
 JOBS = {
     "match": lambda client, key: sync_match(client, int(key)),
+    "lineup": lambda client, key: sync_match(client, int(key)),  # an upcoming match: its own failure record
     "team": lambda client, key: sync_team(client, int(key)),
     "season": sync_season,
     "player": lambda client, key: sync_player(client, int(key)),
 }
 
 
-def live_competitions(s, now: datetime) -> set[int]:
+def scoreboard_days(s, now: datetime) -> list:
+    """UTC days with a match live or about to start (or due to have started): the day pages worth asking."""
     soon = and_(Match.status == "NS", Match.kickoff.between(now - timedelta(hours=3), now + timedelta(minutes=15)))
-    q = select(Season.competition_id).join(Match, Match.season_id == Season.id).where(or_(and_(Match.status == "LIVE", Match.kickoff > now - LIVE_MAX_AGE), soon))
-    return set(s.scalars(q.distinct()))
+    live = and_(Match.status == "LIVE", Match.kickoff > now - LIVE_MAX_AGE)
+    return sorted({kickoff.astimezone(timezone.utc).date() for kickoff in s.scalars(select(Match.kickoff).where(or_(live, soon)))})
 
 
-def teams_needing_squads(s, now: datetime, limit: int) -> list[int]:
-    current = (select(Match.home_team_id, Match.away_team_id)
-               .join(Season, Match.season_id == Season.id).where(Season.is_current).subquery())
-    q = (select(Team.id)
-         .where(or_(Team.id.in_(select(current.c.home_team_id)), Team.id.in_(select(current.c.away_team_id))))
-         .where(or_(Team.squad_updated_at.is_(None), Team.squad_updated_at < now - SQUAD_EVERY))
-         .order_by(Team.squad_updated_at.asc().nulls_first())
-         .limit(limit))
-    return list(s.scalars(q))
+def sync_scoreboard(client, days: list) -> set[int]:
+    """Live scores from the day pages; the matches whose status or score changed."""
+    changed: set[int] = set()
+    for day in days:
+        raw = client.day(day)
+        if raw is None:  # not modified
+            continue
+        with SessionLocal.begin() as s:
+            changed |= store.save_scoreboard(s, fotmob.parse_day(raw))
+    return changed
 
 
 def _gave_up(kind: str, key):
@@ -116,8 +139,31 @@ def _pending_match(s, current: bool, now: datetime):
 
 
 def _pending_team(s, now):
-    team_ids = teams_needing_squads(s, now, 1)
-    return ("team", str(team_ids[0])) if team_ids else None
+    """A team of a current season whose squad is a day old or was never read."""
+    current = (select(Match.home_team_id, Match.away_team_id)
+               .join(Season, Match.season_id == Season.id).where(Season.is_current).subquery())
+    team_id = s.scalar(select(Team.id)
+                       .where(or_(Team.id.in_(select(current.c.home_team_id)), Team.id.in_(select(current.c.away_team_id))))
+                       .where(or_(Team.squad_updated_at.is_(None), Team.squad_updated_at < now - SQUAD_EVERY))
+                       .order_by(Team.squad_updated_at.asc().nulls_first()).limit(1))
+    return ("team", str(team_id)) if team_id else None
+
+
+def _pending_lineup(s, now):
+    """An upcoming match (next 3 days) whose lineup wasn't checked lately: predicted lineups, then the confirmed one."""
+    stale = or_(Match.lineup_checked_at.is_(None), Match.lineup_checked_at < now - LINEUP_REFRESH,
+                and_(Match.kickoff < now + timedelta(hours=3), Match.lineup_checked_at < now - LINEUP_REFRESH_CLOSE))
+    match_id = s.scalar(select(Match.id).where(Match.status == "NS", Match.kickoff.between(now, now + UPCOMING), stale,
+                                               _not_given_up("lineup", cast(Match.id, String), now))
+                        .order_by(Match.kickoff).limit(1))
+    return ("lineup", str(match_id)) if match_id else None
+
+
+def _pending_team_facts(s, now):
+    """Any team, current season or not, whose page hasn't been read for club facts (country, stadium, trophies)."""
+    team_id = s.scalar(select(Team.id).where(Team.trophies.is_(None), _not_given_up("team", cast(Team.id, String), now))
+                       .order_by(Team.id).limit(1))
+    return ("team", str(team_id)) if team_id else None
 
 
 def _wanted_seasons(s) -> list[tuple[int, int, str]]:
@@ -157,6 +203,8 @@ def next_job(s, now: datetime) -> tuple[str, str] | None:
     finders = (
         lambda: _pending_match(s, True, now),
         lambda: _pending_team(s, now),
+        lambda: _pending_lineup(s, now),
+        lambda: _pending_team_facts(s, now),
         lambda: _pending_season(s, now),
         lambda: _pending_player(s, now, in_squad=True),
         lambda: _pending_match(s, False, now),
@@ -213,14 +261,28 @@ def tick(client, state: dict, now: datetime | None = None, budget: float = TICK_
             synced.add(competition_id)
         if ok:  # all failed (e.g. DB down): retry full sync next tick
             state["full_sync_at"] = now
+    changed: set[int] = set()
     with SessionLocal() as s:
-        live = live_competitions(s, now) - synced
-    for competition_id in live:
-        _try(f"live league {competition_id}", sync_competition, client, competition_id)
+        days = scoreboard_days(s, now)
+    if days and (state.get("scoreboard_at") is None or now - state["scoreboard_at"] >= SCOREBOARD_EVERY):
+        state["scoreboard_at"] = now
+        try:
+            changed = sync_scoreboard(client, days)
+        except Exception:
+            log.exception("live scores failed")
     with SessionLocal() as s:
         live_ids = list(s.scalars(select(Match.id).where(Match.status == "LIVE", Match.kickoff > now - LIVE_MAX_AGE)))
-    for match_id in live_ids:
-        _try(f"live match {match_id}", sync_match, client, match_id)
+        finished = set(s.scalars(select(Season.competition_id).join(Match, Match.season_id == Season.id)
+                                 .where(Match.id.in_(changed), Match.status == "FT")))
+    due = state.get("details_due", {})  # match id → when its details are next wanted
+    for match_id in changed:  # the score moved: the details catch up a tick later
+        due[match_id] = min(due.get(match_id, now + DETAILS_LAG), now + DETAILS_LAG)
+    for match_id in live_ids:  # a match seen live for the first time: at once
+        if now >= due.get(match_id, now) and _try(f"live match {match_id}", sync_match, client, match_id):
+            due[match_id] = now + LIVE_DETAILS_EVERY
+    state["details_due"] = {i: due[i] for i in live_ids if i in due}  # only live matches: it mustn't grow
+    for competition_id in finished - synced:  # a match ended: its table moved
+        _try(f"league {competition_id} after full time", sync_competition, client, competition_id)
     ran: dict[str, int] = {}
     failed = streak = 0
     throttled = False
@@ -241,6 +303,8 @@ def tick(client, state: dict, now: datetime | None = None, budget: float = TICK_
         if streak >= BREAKER_FAILURES:
             log.error("backlog breaker: %d failures in a row, pausing backlog for 15 min", streak)
             state["backlog_paused_until"] = paused_until = now + BREAKER_PAUSE
+    if not (ran or changed or throttled):
+        return  # a quiet tick every 15 s needn't fill the log
     kinds = ", ".join(f"{k} {n}" for k, n in ran.items())
     log.info("tick: backlog %d jobs (%s), %d failed, throttled=%s, breaker=%s", sum(ran.values()), kinds, failed,
              "yes" if throttled else "no", "on" if paused_until and now < paused_until else "off")
@@ -275,13 +339,17 @@ def progress() -> dict:
                                 ~_gave_up("match", cast(Match.id, String)))
         pending_players = count(Player, Player.profile_updated_at.is_(None),
                                 ~_gave_up("player", cast(Player.id, String)))
+        all_teams = count(Team)
+        clubs = count(Team, Team.trophies.is_not(None))
+        pending_clubs = count(Team, Team.trophies.is_(None), ~_gave_up("team", cast(Team.id, String)))
     remaining = round(unsynced * matches / seasons) if seasons else 0
-    remaining += pending_matches + pending_players
+    remaining += pending_matches + pending_players + pending_clubs
     return {
         "seasons": {"done": available - unsynced, "total": available},
         "matches": {"done": detailed, "total": finished},
         "players": {"done": profiled, "total": players},
         "squads": {"done": squads, "total": teams},
+        "clubs": {"done": clubs, "total": all_teams},
         "given_up": given_up,
         "remaining": remaining,
         "eta_hours": round(remaining * (REQUEST_INTERVAL + 0.7) / 3600, 1),  # interval + 0.25 jitter + ~0.45 latency
@@ -295,20 +363,10 @@ def status() -> list[str]:
         f"matches    {p['matches']['done']}/{p['matches']['total']} finished matches with details and lineups",
         f"players    {p['players']['done']}/{p['players']['total']} with a profile (the total grows as lineups arrive)",
         f"squads     {p['squads']['done']}/{p['squads']['total']} teams of the current season",
+        f"clubs      {p['clubs']['done']}/{p['clubs']['total']} teams with country, stadium and trophies",
         f"given up   {p['given_up']} records after {MAX_ATTEMPTS} failed attempts",
         f"remaining  ~{p['remaining']} requests, ~{p['eta_hours']:.1f} h",
     ]
-
-
-def backfill(client, seasons: int = HISTORY_SEASONS) -> None:
-    for competition_id, slug, *_ in COMPETITIONS:
-        try:
-            available = sync_competition(client, competition_id)["seasons"]
-        except Exception:
-            log.exception("league %s failed", slug)
-            continue
-        for season in available[1:seasons or None]:
-            _try(f"{slug} {season}", sync_competition, client, competition_id, season)
 
 
 def main(argv: list[str]) -> None:
@@ -320,9 +378,6 @@ def main(argv: list[str]) -> None:
     client = fotmob.Client(min_interval=REQUEST_INTERVAL)
     with SessionLocal.begin() as s:
         store.save_competitions(s, COMPETITIONS)
-    if argv == ["backfill"]:
-        backfill(client)
-        return
     state: dict = {}
     while True:
         started = time.monotonic()

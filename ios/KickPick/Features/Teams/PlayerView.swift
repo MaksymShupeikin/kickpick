@@ -8,17 +8,24 @@ struct PlayerView: View {
 
     var body: some View {
         ScrollView {
-            Loader { try await APIClient.shared.player(id) } content: { player in
-                VStack(spacing: 24) {
+            Loader(skeleton: AnyView(ProfileSkeleton(image: 96, facts: 6))) { try await APIClient.shared.player(id) } content: { player in
+                VStack(spacing: 24) {  // headers stay out of the lazy stack: their bar items must not unload
                     PlayerHeader(player: player)
                     if !player.facts.isEmpty { FactsCard(facts: player.facts) }
-                    SegmentedPicker(options: [(.matches, "Matches"), (.stats, "Stats"), (.career, "Career")],
-                                    selection: $tab)
-                    switch tab {
-                    case .matches: MatchesTab(matches: player.matches)
-                    case .stats: StatsTab(seasons: player.seasons)
-                    case .career: CareerTab(career: player.career)
+                    LazyVStack(spacing: 24, pinnedViews: .sectionHeaders) {  // the tabs stick under the bar
+                        Section {
+                            switch tab {
+                            case .matches: MatchesTab(matches: player.matches)
+                            case .stats: StatsTab(seasons: player.seasons)
+                            case .career: CareerTab(career: player.career)
+                            }
+                        } header: {
+                            SegmentedPicker(options: [(.matches, "Matches"), (.stats, "Stats"), (.career, "Career")],
+                                            selection: $tab)
+                                .joinsBarWhenPinned()
+                        }
                     }
+                    .scrollsToTabs(on: tab)
                 }
             }
             .padding(16)
@@ -35,32 +42,84 @@ private struct PlayerHeader: View {
     var body: some View {
         VStack(spacing: 12) {
             Logo(url: player.photoUrl, size: 96, label: player.name, round: true)
+                // on the photo's lower corners: the national side on the left, the club on the right
+                .overlay(alignment: .bottomLeading) { TeamBadge(team: player.country, role: "National team").offset(x: -14, y: 10) }
+                .overlay(alignment: .bottomTrailing) { TeamBadge(team: player.club, role: "Club").offset(x: 14, y: 10) }
+                .padding(.bottom, 4)
             VStack(spacing: 0) {
                 Text(player.name)
                     .font(.title2.weight(.bold).width(.condensed))
                     .foregroundStyle(Color.textPrimary)
                     .multilineTextAlignment(.center)
                     .accessibilityAddTraits(.isHeader)
-                    .revealsInBar {
-                        Text(player.name).font(.headline.width(.condensed)).foregroundStyle(Color.textPrimary)
+                    .revealsInBar {  // photo and name, like the club's crest and name
+                        HStack(spacing: 8) {
+                            Logo(url: player.photoUrl, size: 24, label: player.name, round: true)
+                            Text(player.name).font(.headline.width(.condensed)).foregroundStyle(Color.textPrimary)
+                        }
                     }
-                if let club = player.teams.first {
-                    NavigationLink(value: Route.team(club.team.id)) {
-                        Text(club.shirtNumber.map { "\(club.team.name) · No. \($0)" } ?? club.team.name)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Color.textSecondary)
-                            .frame(minHeight: 44)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
             }
         }
         .frame(maxWidth: .infinity)
     }
 }
 
-private typealias Fact = (label: String, value: String, flag: URL?)
+/// Crest and club name under the player's name; a chevron when it opens the club.
+/// A flag or crest in a small glass circle on a player's photo; opens that team's page when we have it.
+private struct TeamBadge: View {
+    let team: NamedRef?
+    let role: String  // "National team", "Club": what VoiceOver says before the name
+
+    var body: some View {
+        if let team, let name = team.name {
+            let badge = Logo(url: team.logoUrl, size: 22, label: name)
+                .padding(5)
+                .background(GlassBackground(shape: Circle()))
+                .frame(width: 44, height: 44)  // the tap area, around the 32-pt circle
+                .contentShape(Circle())
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(role): \(name)")
+            if let id = team.id {
+                NavigationLink(value: Route.team(id)) { badge }.buttonStyle(.plain)
+            } else {
+                badge
+            }
+        }
+    }
+}
+
+/// Crest or flag and a name under a page's title, with a chevron when it opens that team's page (a club, a national
+/// side); plain when we have no page for it.
+struct TeamLink: View {
+    let team: NamedRef
+
+    var body: some View {
+        if let name = team.name {
+            if let id = team.id {
+                NavigationLink(value: Route.team(id)) { line(name, linked: true) }.buttonStyle(.plain)
+            } else {
+                line(name, linked: false)
+            }
+        }
+    }
+
+    private func line(_ name: String, linked: Bool) -> some View {
+        HStack(spacing: 8) {
+            Logo(url: team.logoUrl, size: 20, label: name).accessibilityHidden(true)
+            Text(name).font(.subheadline.weight(.semibold)).foregroundStyle(Color.textSecondary)
+            if linked {
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Color.textTertiary)
+                    .accessibilityHidden(true)
+            }
+        }
+        .frame(minHeight: 44)
+        .contentShape(Rectangle())
+    }
+}
+
+typealias Fact = (label: String, value: String, flag: URL?)
 
 private extension PlayerPage {
     var facts: [Fact] {
@@ -68,12 +127,18 @@ private extension PlayerPage {
         var out: [Fact] = []
         if let position { out.append((label: "Position", value: positions[position] ?? position, flag: nil)) }
         if let birthDate, let line = Self.ageLine(birthDate: birthDate) { out.append((label: "Age", value: line, flag: nil)) }
-        if let country = countryName ?? countryCode { out.append((label: "Country", value: country, flag: flagUrl)) }
+        if let heightCm { out.append((label: "Height", value: "\(heightCm) cm", flag: nil)) }
+        if let foot { out.append((label: "Foot", value: foot.capitalized, flag: nil)) }
+        if let marketValueEur, marketValueEur > 0 { out.append((label: "Market value", value: marketValueEur.euros, flag: nil)) }
+        if let contractEnd, let day = Self.gmtDay(contractEnd) {
+            out.append((label: "Contract until", value: day.text, flag: nil))
+        }
         return out
     }
 }
 
-private struct FactsCard: View {
+/// Label on the left, value on the right (a flag before it, if any): the player's and the club's facts.
+struct FactsCard: View {
     let facts: [Fact]
 
     var body: some View {
@@ -107,14 +172,15 @@ private struct MatchesTab: View {
                 Rows(items: matches) { item in
                     NavigationLink(value: Route.match(item.match.id)) {
                         HStack(spacing: 0) {
-                            MatchRow(match: item.match, showDate: true)
+                            MatchRow(match: item.match)
                             VStack(alignment: .trailing, spacing: 2) {
                                 Text(item.rating.map { String(format: "%.1f", $0) } ?? "–")
                                     .font(.digits(20, relativeTo: .title3))
-                                    .foregroundStyle(Color.textPrimary)
+                                    .foregroundStyle(item.rating.map(Color.rating) ?? Color.textSecondary)
                                 Text("\(item.minutes)'").font(.footnote.weight(.medium)).foregroundStyle(Color.textSecondary)
+                                Contributions(goals: item.goals, assists: item.assists, size: 11)
                             }
-                            .frame(width: 40, alignment: .trailing)
+                            .frame(width: 52, alignment: .trailing)  // room for a ball and a boot under the minutes
                             .padding(.trailing, 16)
                         }
                         .accessibilityElement(children: .combine)
@@ -129,7 +195,7 @@ private struct MatchesTab: View {
 private let statWidths: [CGFloat] = [36, 28, 28, 40]
 
 /// Column titles above the first row, like the standings table.
-private struct ColumnsHeader: View {
+struct ColumnsHeader: View {
     let first: String
     let columns: [String]
 
@@ -151,7 +217,7 @@ private struct ColumnsHeader: View {
 }
 
 /// A competition or club with digit columns on the right.
-private struct StatLine: View {
+struct StatLine: View {
     let logo: URL?
     let title: String
     let subtitle: String?
@@ -236,14 +302,20 @@ extension CareerEntry {
 }
 
 extension PlayerPage {
-    /// "26 · 21 Jul 2000" — computed and formatted in GMT, so the day never shifts with the device's time zone.
+    /// "26 (21 Jul 2000)" — computed and formatted in GMT, so the day never shifts with the device's time zone.
     static func ageLine(birthDate: String, now: Date = .now) -> String? {
-        guard let born = try? Date(birthDate + "T00:00:00Z", strategy: .iso8601) else { return nil }
+        guard let born = gmtDay(birthDate) else { return nil }
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .gmt
-        guard let age = calendar.dateComponents([.year], from: born, to: now).year else { return nil }
+        guard let age = calendar.dateComponents([.year], from: born.date, to: now).year else { return nil }
+        return "\(age) (\(born.text))"
+    }
+
+    /// "2000-07-21" as a date and "21 Jul 2000", both in GMT.
+    static func gmtDay(_ day: String) -> (date: Date, text: String)? {
+        guard let date = try? Date(day + "T00:00:00Z", strategy: .iso8601) else { return nil }
         var style = Date.FormatStyle.dateTime.day().month(.abbreviated).year().locale(.app)
         style.timeZone = .gmt
-        return "\(age) · \(born.formatted(style))"
+        return (date, date.formatted(style))
     }
 }

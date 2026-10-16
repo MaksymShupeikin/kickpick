@@ -6,6 +6,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "5.0"
+    DEVELOPMENT_TEAM: 368P9H47N6  # signing for a real phone; the .xcodeproj is generated from this file, so it lives here
 targets:
   KickPick:
     type: application
@@ -17,12 +18,16 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: app.kickpick.KickPick
         TARGETED_DEVICE_FAMILY: "1"
         API_BASE_URL: http://localhost:8000
+        API_BASE_URL[sdk=iphoneos*]: https://duncishly-blowsiest-donte.ngrok-free.dev  # a real phone reaches the Mac's API through the ngrok tunnel
     info:
       path: KickPick/Info.plist
       properties:
         CFBundleDisplayName: KickPick
         CFBundleDevelopmentRegion: ru
-        UILaunchScreen: {}
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+          UIImageName: LaunchLogo
+          UIImageRespectsSafeArea: false
         UIUserInterfaceStyle: Dark
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait

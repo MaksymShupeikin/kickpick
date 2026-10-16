@@ -4,20 +4,29 @@ import SwiftUI
 struct LineupsView: View {
     let match: Match
     let lineups: Lineups
+    @State private var bench: Int?  // team id; nil: the first side with substitutes
 
     var body: some View {
         VStack(spacing: 24) {
-            VStack(spacing: 0) {
-                TeamHeader(team: match.home, formation: lineups.home?.formation)
-                Pitch(home: lineups.home?.starters ?? [], away: lineups.away?.starters ?? [])
-                TeamHeader(team: match.away, formation: lineups.away?.formation)
+            if lineups.hasStarters {
+                CardSection(title: lineups.title) {
+                    TeamHeader(team: match.home, formation: lineups.home?.formation)
+                    Pitch(home: lineups.home?.starters ?? [], away: lineups.away?.starters ?? [])
+                    TeamHeader(team: match.away, formation: lineups.away?.formation)
+                }
+            } else {
+                EmptyState(text: "No lineups yet")  // FotMob may list who's out before any lineup
             }
-            .glassCard()
-            ForEach(sides) { side in
-                if !side.lineup.subs.isEmpty {
-                    CardSection(title: "Substitutes · \(side.team.name)") {
-                        Rows(items: side.lineup.subs) { SubRow(player: $0) }
+            let benches = sides.filter { !$0.lineup.subs.isEmpty }
+            if let first = benches.first {
+                let shown = benches.first { $0.team.id == bench } ?? first
+                VStack(alignment: .leading, spacing: 12) {
+                    SectionTitle(benches.count > 1 ? "Substitutes" : "Substitutes · \(first.team.name)")
+                    if benches.count > 1 {  // one side at a time, picked like any other tab
+                        SegmentedPicker(options: benches.map { ($0.team.id, $0.team.name) },
+                                        selection: Binding(get: { shown.team.id }, set: { bench = $0 }), scrolls: true)
                     }
+                    VStack(spacing: 0) { Rows(items: shown.lineup.subs) { SubRow(player: $0) } }.glassCard()
                 }
             }
             if !coaches.isEmpty {
@@ -124,29 +133,6 @@ private struct Pitch: View {
     }
 }
 
-/// Thin white field lines at 15 %: drawn, never a photo of grass (design.md §7).
-private struct PitchMarkings: View {
-    var body: some View {
-        Canvas { context, size in
-            let w = size.width, h = size.height
-            var lines = Path()
-            lines.addRect(CGRect(x: 0.5, y: 0.5, width: w - 1, height: h - 1))
-            lines.move(to: CGPoint(x: 0, y: h / 2))
-            lines.addLine(to: CGPoint(x: w, y: h / 2))
-            let r = w * 0.14
-            lines.addEllipse(in: CGRect(x: w / 2 - r, y: h / 2 - r, width: 2 * r, height: 2 * r))
-            for top in [true, false] {
-                for box in [CGSize(width: w * 0.56, height: h * 0.14), CGSize(width: w * 0.26, height: h * 0.05)] {
-                    lines.addRect(CGRect(x: (w - box.width) / 2, y: top ? 0.5 : h - box.height - 0.5,
-                                         width: box.width, height: box.height))
-                }
-            }
-            context.stroke(lines, with: .color(.white.opacity(0.15)), lineWidth: 1)
-        }
-        .accessibilityHidden(true)
-    }
-}
-
 private struct PitchPlayer: View {
     let player: LineupPlayer
 
@@ -159,14 +145,20 @@ private struct PitchPlayer: View {
                     .foregroundStyle(Color.textPrimary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
-                Text(player.rating.map { String(format: "%.1f", $0) } ?? " ")  // " " keeps every cell the same height
-                    .font(.digits(11, relativeTo: .caption2, bold: false))
-                    .foregroundStyle(Color.textSecondary)
+                HStack(spacing: 3) {
+                    Text(player.rating.map { String(format: "%.1f", $0) } ?? " ")  // " " keeps every cell the same height
+                        .font(.digits(11, relativeTo: .caption2))
+                        .foregroundStyle(player.rating.map(Color.rating) ?? Color.textSecondary)
+                    Contributions(goals: player.goals ?? 0, assists: player.assists ?? 0, size: 9)
+                }
             }
             .frame(width: 64)
             .contentShape(Rectangle())
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(player.player.name + (player.rating.map { String(format: ", rating %.1f", $0) } ?? ""))
+            .accessibilityLabel(
+                ([player.player.name, player.rating.map { String(format: "rating %.1f", $0) },
+                  Contributions.spoken(goals: player.goals ?? 0, assists: player.assists ?? 0)] as [String?])
+                    .compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: ", "))
         }
         .buttonStyle(.plain)
     }
@@ -181,22 +173,23 @@ private struct SubRow: View {
                 Logo(url: player.player.photoUrl, size: 32, label: player.player.name, round: true)
                 Text(player.player.name).font(.body).foregroundStyle(Color.textPrimary).lineLimit(1)
                 Spacer()
+                Contributions(goals: player.goals ?? 0, assists: player.assists ?? 0)
                 if let minute = player.subIn {
                     Image(systemName: "arrow.up").font(.footnote.weight(.semibold)).foregroundStyle(Color.textSecondary)
                     Text("\(minute)'").font(.digits(17, relativeTo: .body, bold: false)).foregroundStyle(Color.textSecondary)
                 }
-                if let number = player.shirtNumber {
-                    Text("\(number)")
-                        .font(.digits(17, relativeTo: .body, bold: false))
-                        .foregroundStyle(Color.textTertiary)
-                        .frame(width: 28, alignment: .trailing)
+                if let flag = player.flagUrl {  // where he's from, rather than the shirt number
+                    Logo(url: flag, size: 24, label: "Country").accessibilityHidden(true)
                 }
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 48)
             .contentShape(Rectangle())
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(player.subIn.map { "\(player.player.name), came on at \($0) minutes" } ?? player.player.name)
+            .accessibilityLabel(
+                ([player.player.name, player.subIn.map { "came on at \($0) minutes" },
+                  Contributions.spoken(goals: player.goals ?? 0, assists: player.assists ?? 0)] as [String?])
+                    .compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: ", "))
         }
         .buttonStyle(.plain)
     }

@@ -13,18 +13,31 @@ extension Match {
         return (h > a) == home ? .winner : .loser
     }
 
-    /// Plain text, never a chip (design.md §8).
-    func statusText(showDate: Bool) -> String {
-        var date = kickoff.formatted(.dateTime.day().month(.abbreviated).locale(.app))
-        if !Calendar.current.isDate(kickoff, equalTo: .now, toGranularity: .year) {
-            date += "\n" + kickoff.formatted(.dateTime.year().locale(.app))  // history search reaches back years
-        }
+    /// The row's left column, plain text, never a chip (design.md §8). With the date: kick-off time (live: the
+    /// minute) over "Today" / "14 Oct"; a match from another year has no use for its time, so "18 Dec" over "2022".
+    /// Without (the day's feed, where the date strip names the day): the time alone.
+    func statusLines(showDate: Bool) -> [String] {
+        let time: String
         switch status {
-        case .live: return minute ?? "Live"
-        case .finished: return showDate ? date : "FT"
-        case .cancelled: return "Cancelled"
-        case .notStarted: return showDate ? date : kickoff.formatted(.dateTime.hour().minute().locale(.app))
+        case .live: time = minute ?? "Live"
+        case .cancelled: time = "Cancelled"
+        case .finished, .notStarted: time = kickoff.formatted(.dateTime.hour().minute().locale(.app))
         }
+        guard showDate else { return [time] }
+        if status != .live && !Calendar.current.isDate(kickoff, equalTo: .now, toGranularity: .year) {
+            return [kickoff.formatted(.dateTime.day().month(.abbreviated).locale(.app)),
+                    kickoff.formatted(.dateTime.year().locale(.app))]
+        }
+        return [time, dayName]
+    }
+
+    /// "Today", "Tomorrow", "Yesterday", else "14 Oct".
+    var dayName: String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(kickoff) { return "Today" }
+        if calendar.isDateInTomorrow(kickoff) { return "Tomorrow" }
+        if calendar.isDateInYesterday(kickoff) { return "Yesterday" }
+        return kickoff.formatted(.dateTime.day().month(.abbreviated).locale(.app))
     }
 
     var spokenSummary: String {
@@ -39,7 +52,7 @@ extension Match {
         return "\(teams), \(state)"
     }
 
-    static let placeholders: [Match] = (1...5).map { i in
+    static let placeholders: [Match] = (1...25).map { i in
         Match(id: -i, competition: CompetitionRef(slug: "placeholder", name: "Premier League", logoUrl: nil),
               season: "", round: "", kickoff: .now, status: .notStarted, minute: nil,
               home: TeamRef(id: -i, name: "Home team", shortName: nil, logoUrl: nil),
@@ -48,35 +61,48 @@ extension Match {
     }
 }
 
+extension [Match] {
+    /// The round of the earliest match still to finish, live or upcoming (kick-off order); nil once the season is over.
+    /// A match postponed without a new date keeps its old kick-off and doesn't count.
+    var currentRound: String? {
+        let recent = Date.now.addingTimeInterval(-3 * 3600)
+        return first { $0.status == .live || ($0.status == .notStarted && $0.kickoff > recent) }?.round
+    }
+}
+
 struct MatchStatusText: View {
     let match: Match
-    var showDate = false
+    var showDate = true
 
     var body: some View {
-        HStack(spacing: 4) {
-            if match.status == .live {
-                Circle().fill(Color.cardRed).frame(width: 6, height: 6)
-            }
-            VStack(alignment: .leading, spacing: 2) {
-                // one Text per line ("18 Dec" / "2022"), so a long month shrinks instead of wrapping
-                ForEach(match.statusText(showDate: showDate).components(separatedBy: "\n"), id: \.self) { line in
-                    Text(line).lineLimit(1).minimumScaleFactor(0.7)
+        let live = match.status == .live
+        VStack(alignment: .leading, spacing: 3) {
+            // one Text per line ("21:00" / "Today"), so a long month shrinks instead of wrapping; the second line is
+            // lighter and dimmer, so the two don't run together
+            ForEach(Array(match.statusLines(showDate: showDate).enumerated()), id: \.offset) { index, line in
+                HStack(spacing: 4) {
+                    if live && index == 0 { Circle().fill(Color.cardRed).frame(width: 6, height: 6) }
+                    Text(line)
+                        .font(live && index == 0 ? .digits(22, relativeTo: .title3)
+                              : index == 0 ? .footnote.weight(.semibold) : .footnote)
+                        .foregroundStyle(live && index == 0 ? Color.textPrimary
+                                         : index == 0 ? Color.textSecondary : Color.textTertiary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                 }
             }
-            .font(match.status == .live ? .digits(22, relativeTo: .title3) : .footnote.weight(.medium))
-            .foregroundStyle(match.status == .live ? Color.textPrimary : Color.textSecondary)
-            .monospacedDigit()
         }
+        .monospacedDigit()
     }
 }
 
 struct MatchRow: View {
     let match: Match
-    var showDate = false
+    var showDate = true  // false in the day's feed, where the date strip already says which day
 
     var body: some View {
-        HStack(spacing: 12) {
-            MatchStatusText(match: match, showDate: showDate).frame(width: 52, alignment: .leading)
+        HStack(spacing: 8) {
+            MatchStatusText(match: match, showDate: showDate).frame(width: 46, alignment: .leading)
             VStack(spacing: 8) {
                 TeamLine(team: match.home, score: match.homeScore, weight: match.weight(home: true))
                 TeamLine(team: match.away, score: match.awayScore, weight: match.weight(home: false))

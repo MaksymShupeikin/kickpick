@@ -10,6 +10,7 @@ struct TeamRef: Codable, Hashable, Identifiable {
 struct CompetitionRef: Codable, Hashable {
     let slug: String
     let name: String
+    var kind: String? = nil  // "league", "cup", "international"
     let logoUrl: URL?
 }
 
@@ -24,6 +25,8 @@ struct Competition: Codable, Hashable, Identifiable {
 
 enum MatchStatus: String, Codable {
     case notStarted = "NS", live = "LIVE", finished = "FT", cancelled = "CANC"
+
+    var allowsPrediction: Bool { self == .notStarted || self == .live }
 }
 
 struct Match: Codable, Hashable, Identifiable {
@@ -49,6 +52,7 @@ struct MatchEvent: Codable, Hashable {
     let assist: String?
     let note: String?
     let score: String?
+    let playerId: Int?  // nil when the name has no unique match in the lineup
 
     var minuteText: String { added.map { "\(minute)+\($0)'" } ?? "\(minute)'" }
 }
@@ -72,25 +76,96 @@ struct MatchDetails: Codable, Hashable {
     let stats: [MatchStat]
 }
 
-/// `/matches/{id}`: the match fields plus `details` and `lineups`.
+struct MatchPrediction: Decodable, Hashable {
+    struct Probabilities: Decodable, Hashable {
+        let home: Double
+        let draw: Double
+        let away: Double
+
+        var highest: Double { max(home, draw, away) }
+        var isValid: Bool {
+            [home, draw, away].allSatisfy { $0.isFinite && (0...1).contains($0) }
+                && abs(home + draw + away - 1) < 0.000001
+        }
+    }
+
+    let probabilities: Probabilities
+    let generatedAt: Date
+
+    private enum CodingKeys: String, CodingKey { case probabilities, generatedAt }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        probabilities = try container.decode(Probabilities.self, forKey: .probabilities)
+        generatedAt = try container.decode(Date.self, forKey: .generatedAt)
+        guard probabilities.isValid else {
+            throw DecodingError.dataCorruptedError(forKey: .probabilities, in: container,
+                                                   debugDescription: "Invalid outcome probabilities")
+        }
+    }
+}
+
+/// `/matches/{id}`: match details and an optional saved pre-match prediction.
 struct MatchPage: Decodable {
     let match: Match
     let details: MatchDetails?
     let lineups: Lineups?
+    let form: Form?
+    let h2h: HeadToHead?
+    let prediction: MatchPrediction?
 
-    private enum Keys: String, CodingKey { case details, lineups }
+    /// Waiting for a forecast: the worker publishes every 10 min. Near kickoff
+    /// and while live, keep the normal 15 s score updates; stop after completion.
+    var refreshInterval: Duration? {
+        guard match.status.allowsPrediction else { return nil }
+        return match.needsPolling ? .seconds(15) : .seconds(600)
+    }
+
+    private enum Keys: String, CodingKey { case details, lineups, form, h2h, prediction }
 
     init(from decoder: Decoder) throws {
         match = try Match(from: decoder)
         let container = try decoder.container(keyedBy: Keys.self)
         details = try container.decodeIfPresent(MatchDetails.self, forKey: .details)
         lineups = try container.decodeIfPresent(Lineups.self, forKey: .lineups)
+        form = try container.decodeIfPresent(Form.self, forKey: .form)
+        h2h = try container.decodeIfPresent(HeadToHead.self, forKey: .h2h)
+        // An optional forecast must never prevent scores/lineups loading. Also
+        // reject finished/cancelled matches and forecasts generated after kickoff.
+        let saved = try? container.decodeIfPresent(MatchPrediction.self, forKey: .prediction)
+        prediction = match.status.allowsPrediction && (saved?.generatedAt ?? .distantFuture) < match.kickoff ? saved : nil
     }
+}
+
+/// Each side's last 5 finished matches before this one, oldest first: "W" / "D" / "L".
+struct Form: Codable, Hashable {
+    let home: [String]
+    let away: [String]
+}
+
+/// The last 5 finished meetings, counted for this match's home and away team.
+struct HeadToHead: Codable, Hashable {
+    let matches: Int
+    let homeWins: Int
+    let draws: Int
+    let awayWins: Int
 }
 
 struct Lineups: Codable, Hashable {
     let home: TeamLineup?
     let away: TeamLineup?
+    let type: String?  // "standard" (confirmed), "predicted", "lastStarting11" (the previous XI), "unavailable"
+
+    /// Over the pitch when it isn't the confirmed lineup.
+    var title: String? {
+        switch type {
+        case "predicted": "Predicted lineups"
+        case "lastStarting11": "Last starting lineups"
+        default: nil
+        }
+    }
+
+    var hasStarters: Bool { !(home?.starters.isEmpty ?? true) || !(away?.starters.isEmpty ?? true) }
 }
 
 struct TeamLineup: Codable, Hashable {
@@ -113,6 +188,9 @@ struct LineupPlayer: Codable, Hashable, Identifiable {
     let captain: Bool
     let subIn: Int?
     let subOut: Int?
+    let goals: Int?
+    let assists: Int?
+    let flagUrl: URL?  // where he's from
 }
 
 struct Absence: Codable, Hashable, Identifiable {
@@ -140,11 +218,25 @@ struct StandingRow: Codable, Hashable, Identifiable {
     let goalsFor: Int
     let goalsAgainst: Int
     let points: Int
+    let zoneColor: String?  // "#2AD572": the zone the row is in (Champions League, relegation…), as FotMob colours it
 }
 
 struct StandingGroup: Codable, Hashable {
     let group: String
     let rows: [StandingRow]
+    let legend: [Zone]?  // the zones this table's rows are in
+}
+
+/// What a standings colour means: "Champions League", "Relegation", "Qualification to 1/8 finals"…
+struct Zone: Codable, Hashable {
+    let title: String
+    let color: String
+
+    /// Every zone of the tables shown, once, in order: the legend under them.
+    static func legend(of groups: [StandingGroup]) -> [Zone] {
+        var seen = Set<String>()
+        return groups.flatMap { $0.legend ?? [] }.filter { seen.insert($0.color).inserted }
+    }
 }
 
 struct Matchup: Codable, Hashable {
@@ -172,20 +264,14 @@ struct PlayerRef: Codable, Hashable {
     let photoUrl: URL?
 }
 
-struct PlayerStats: Codable, Hashable {
-    let goals: Int?
-    let assists: Int?
-    let yellowCards: Int?
-    let redCards: Int?
-    let rating: Double?
-}
-
 struct SquadEntry: Codable, Hashable, Identifiable {
     var id: Int { player.id }
     let player: PlayerRef
     let shirtNumber: Int?
     let position: String?
-    let stats: PlayerStats
+    let flagUrl: URL?
+    let countryName: String?
+    let club: NamedRef?  // in a national side's squad: the player's club, shown instead of a flag
 }
 
 struct TeamPage: Codable, Hashable {
@@ -197,6 +283,34 @@ struct TeamPage: Codable, Hashable {
     let last: [Match]
     let next: [Match]
     let transfers: Transfers
+    let standings: [TeamStandings]
+    let venue: Venue?
+    let trophies: [Trophy]
+    let country: NamedRef?  // the flag, linked to the national team when we have its page
+}
+
+struct Venue: Codable, Hashable {
+    let name: String
+    let city: String?
+    let capacity: Int?
+    let opened: Int?
+}
+
+/// One competition the club has won or finished second in, with the seasons (newest first).
+struct Trophy: Codable, Hashable, Identifiable {
+    let competition: NamedRef
+    let won: Int
+    let runnerUp: Int
+    let seasonsWon: [String]
+    let seasonsRunnerUp: [String]
+    var id: String { "\(competition.id ?? 0)-\(competition.name ?? "")" }
+}
+
+/// One of the team's current tables: only the groups it is in.
+struct TeamStandings: Codable, Hashable {
+    let competition: CompetitionRef
+    let season: String
+    let groups: [StandingGroup]
 }
 
 struct Transfers: Codable, Hashable {
@@ -215,23 +329,18 @@ struct Transfer: Codable, Hashable, Identifiable {
     let onLoan: Bool
 }
 
-struct Membership: Codable, Hashable, Identifiable {
-    var id: Int { team.id }
-    let team: TeamRef
-    let shirtNumber: Int?
-    let stats: PlayerStats
-}
-
 struct PlayerPage: Decodable, Hashable {
     let id: Int
     let name: String
     let photoUrl: URL?
-    let countryCode: String?
-    let countryName: String?
-    let flagUrl: URL?
     let position: String?
     let birthDate: String?
-    let teams: [Membership]
+    let heightCm: Int?
+    let foot: String?
+    let marketValueEur: Int?
+    let contractEnd: String?
+    let club: NamedRef?  // id nil: a club we have no page for
+    let country: NamedRef?  // the flag, linked to the national team when we have its page
     let matches: [PlayerMatch]
     let seasons: [SeasonStats]
     let career: [CareerEntry]
@@ -242,15 +351,19 @@ struct PlayerMatch: Decodable, Hashable, Identifiable {
     let match: Match
     let rating: Double?
     let minutes: Int
+    let goals: Int
+    let assists: Int
     var id: Int { match.id }
 
-    private enum Keys: String, CodingKey { case rating, minutes }
+    private enum Keys: String, CodingKey { case rating, minutes, goals, assists }
 
     init(from decoder: Decoder) throws {
         match = try Match(from: decoder)
         let container = try decoder.container(keyedBy: Keys.self)
         rating = try container.decodeIfPresent(Double.self, forKey: .rating)
         minutes = try container.decode(Int.self, forKey: .minutes)
+        goals = try container.decodeIfPresent(Int.self, forKey: .goals) ?? 0
+        assists = try container.decodeIfPresent(Int.self, forKey: .assists) ?? 0
     }
 }
 
@@ -274,6 +387,13 @@ struct CareerEntry: Codable, Hashable, Identifiable {
     let appearances: Int?
     let goals: Int?
     let assists: Int?
+}
+
+/// Shown before anything is typed: the top match of the moment, the side that leads or won it, its best player.
+struct SearchSuggestions: Codable, Hashable {
+    let match: Match?
+    let team: TeamRef?
+    let player: PlayerHit?
 }
 
 struct PlayerHit: Codable, Hashable, Identifiable {

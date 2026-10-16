@@ -10,6 +10,16 @@ from kickpick.models import (Bracket, Competition, FetchFailure, Match, MatchLin
                              PlayerMarketValue, PlayerSeason, Season, SquadMember, Standing, Team, TeamTransfer)
 
 
+LIVE_STATE = ("status", "live_minute", "home_score", "away_score")
+
+
+def _live_owned(s: Session, ids, incoming: dict) -> set[int]:
+    """Matches live in the DB that a source also says are live: their state is the day page's (save_scoreboard)
+    alone, because FotMob's copies of the details and the league lag it (10–50 s) and would roll a goal back."""
+    return {i for i in s.scalars(select(Match.id).where(Match.id.in_(ids), Match.status == "LIVE"))
+            if incoming[i] == "LIVE"}
+
+
 def _upsert(s: Session, model, rows: list[dict], keys: list[str], keep_existing: bool = False) -> None:
     """keep_existing: a NULL in the new row keeps the stored value instead of erasing it."""
     if not rows:
@@ -38,8 +48,14 @@ def save_league(s: Session, competition_id: int, parsed: dict, is_current: bool)
         .returning(Season.id)
     ).scalar_one()
     _upsert(s, Team, [t | {"search_name": search_name(t["name"])} for t in parsed["teams"]], ["id"])
-    _upsert(s, Match, [m | {"season_id": season_id} for m in parsed["matches"]], ["id"])
+    matches = [m | {"season_id": season_id} for m in parsed["matches"]]
+    owned = _live_owned(s, [m["id"] for m in matches], {m["id"]: m["status"] for m in matches})
+    _upsert(s, Match, [m for m in matches if m["id"] not in owned], ["id"])
+    for m in matches:  # already stored (they're live): everything but their live state, a handful of rows
+        if m["id"] in owned:
+            s.execute(update(Match).where(Match.id == m["id"]).values(**{k: v for k, v in m.items() if k not in LIVE_STATE}))
     if parsed["standings"]:
+        s.execute(update(Season).where(Season.id == season_id).values(table_legend=parsed["legend"]))
         s.execute(delete(Standing).where(Standing.season_id == season_id))
         _upsert(s, Standing, [r | {"season_id": season_id} for r in parsed["standings"]],
                 ["season_id", "group_name", "team_id"])
@@ -49,21 +65,26 @@ def save_league(s: Session, competition_id: int, parsed: dict, is_current: bool)
 
 
 def save_match(s: Session, match_id: int, parsed: dict) -> None:
-    s.execute(update(Match).where(Match.id == match_id).values(
-        status=parsed["status"],
-        live_minute=parsed["live_minute"],
-        home_score=parsed["home_score"],
-        away_score=parsed["away_score"],
-        details=parsed["details"],
-        details_final=parsed["status"] in ("FT", "CANC"),
-        home_formation=parsed["formations"].get("home"),
-        away_formation=parsed["formations"].get("away"),
-    ))
+    values = {
+        "details": parsed["details"],
+        "details_final": parsed["status"] in ("FT", "CANC"),
+        "home_formation": parsed["formations"].get("home"),
+        "away_formation": parsed["formations"].get("away"),
+        "lineup_type": parsed["lineup_type"],
+        "lineup_checked_at": datetime.now(timezone.utc),
+    }
+    if not _live_owned(s, [match_id], {match_id: parsed["status"]}):
+        values |= {k: parsed[k] for k in LIVE_STATE}
+    s.execute(update(Match).where(Match.id == match_id).values(**values))
     _upsert(s, Player, [p | {"search_name": search_name(p["name"])} for p in parsed["players"]], ["id"],
             keep_existing=True)
     s.execute(delete(MatchLineup).where(MatchLineup.match_id == match_id))
-    _upsert(s, MatchLineup, [r | {"match_id": match_id} for r in parsed["lineups"]], ["match_id", "player_id"])
-    if parsed["lineups"]:
+    # the side's team comes from the match: matchDetails can name a club by a newer id than the fixtures did
+    home, away = s.execute(select(Match.home_team_id, Match.away_team_id).where(Match.id == match_id)).one()
+    teams = {"home": home, "away": away}
+    _upsert(s, MatchLineup, [r | {"match_id": match_id, "team_id": teams[r["side"]]} for r in parsed["lineups"]],
+            ["match_id", "player_id"])
+    if parsed["lineups"] and parsed["status"] in ("FT", "LIVE"):  # an upcoming match's lineup isn't a match played
         kickoff = select(Match.kickoff).where(Match.id == match_id).scalar_subquery()
         s.execute(update(Player).where(Player.id.in_([r["player_id"] for r in parsed["lineups"]]))
                   .values(last_match_at=func.greatest(func.coalesce(Player.last_match_at, kickoff), kickoff)))
@@ -88,6 +109,32 @@ def save_squad(s: Session, team_id: int, parsed: dict) -> None:
     s.execute(delete(SquadMember).where(SquadMember.team_id == team_id))
     _upsert(s, SquadMember, [m | {"team_id": team_id} for m in parsed["squad"]], ["team_id", "player_id"])
     _upsert(s, TeamTransfer, parsed["transfers"], ["player_id", "transfer_date", "to_team_id"])
+    s.execute(update(Team).where(Team.id == team_id).values(**parsed["team"]))
+    touch_squad(s, team_id)
+
+
+def save_scoreboard(s: Session, rows: list[dict]) -> set[int]:
+    """Status, score and minute from FotMob's day page, written only where they changed (pages list every competition:
+    only our matches are touched). Returns the matches whose status or score changed."""
+    by_id = {r["id"]: r for r in rows}
+    changed = set()
+    for m in s.scalars(select(Match).where(Match.id.in_(by_id))):
+        r = by_id[m.id]
+        if (m.status, m.home_score, m.away_score) != (r["status"], r["home_score"], r["away_score"]):
+            changed.add(m.id)
+        elif m.live_minute == r["live_minute"]:
+            continue
+        m.status, m.home_score, m.away_score, m.live_minute = r["status"], r["home_score"], r["away_score"], r["live_minute"]
+    return changed
+
+
+def touch_player(s: Session, player_id: int) -> None:
+    s.execute(update(Player).where(Player.id == player_id).values(profile_updated_at=datetime.now(timezone.utc)))
+
+
+def touch_team(s: Session, team_id: int) -> None:
+    """A team page with nothing on it: checked, so neither the squad nor the club facts are asked for again soon."""
+    s.execute(update(Team).where(Team.id == team_id, Team.trophies.is_(None)).values(trophies=[]))
     touch_squad(s, team_id)
 
 

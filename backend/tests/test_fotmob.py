@@ -106,7 +106,9 @@ def test_parse_national_team_squad_ignores_club_fields():
 
 def test_placeholder_team_has_empty_squad():
     raw = {"details": {"id": 1983, "name": "Winner SF 1", "shortName": "Winner SF 1"}, "squad": {"squad": None}}
-    assert fotmob.parse_team(raw) == {"players": [], "squad": [], "transfers": []}
+    assert fotmob.parse_team(raw) == {"players": [], "squad": [], "transfers": [], "team": {
+        "country_code": None, "venue_name": None, "venue_city": None, "venue_capacity": None, "venue_opened": None,
+        "trophies": []}}
 
 
 def test_search_name_drops_accents_and_case():
@@ -292,3 +294,62 @@ def test_retry_after_zero_still_respects_min_interval():
     with pytest.raises(fotmob.Throttled):
         client.team(1)
     assert client.wait_time() == 1.0
+
+
+def test_parse_team_club_facts():
+    team = fotmob.parse_team(load("team.json"))["team"]
+    assert team | {"trophies": None} == {"country_code": "ESP", "venue_name": "Spotify Camp Nou", "venue_city": "Barcelona",
+                                         "venue_capacity": 99787, "venue_opened": 1957, "trophies": None}
+    liga = team["trophies"][0]
+    assert liga["league_id"] == 87 and liga["name"] == "LaLiga" and liga["won"] == 29 and liga["runner_up"] == 28
+    assert len(liga["seasons_won"]) == 29 and liga["seasons_won"][0] == "2025/2026"
+    assert fotmob.parse_team(load("team_national.json"))["team"]["country_code"] is None  # FotMob says "INT"
+
+
+def test_parse_predicted_lineup():
+    p = fotmob.parse_match(load("match_predicted.json"))
+    assert p["status"] == "NS" and p["lineup_type"] == "predicted"
+    starters = [r for r in p["lineups"] if r["role"] == "starter"]
+    assert len(starters) == 22 and all(r["x"] is not None and r["y"] is not None for r in starters)
+    assert not [r for r in p["lineups"] if r["role"] == "sub"] and p["formations"]["home"] == "4-2-3-1"
+    assert fotmob.parse_match(load("match.json"))["lineup_type"] == "standard"
+
+
+def test_last_starting_eleven_drops_the_old_matchs_ratings_and_subs():
+    raw = load("match.json")
+    raw["content"]["lineup"]["lineupType"] = "lastStarting11"  # FotMob's stand-in when it has no prediction
+    p = fotmob.parse_match(raw)
+    assert p["lineup_type"] == "lastStarting11" and p["lineups"]
+    assert all(r["rating"] is None and r["sub_in"] is None and r["sub_out"] is None for r in p["lineups"])
+
+
+def test_parse_day_page():
+    rows = {r["id"]: r for r in fotmob.parse_day(load("day.json"))}
+    assert len(rows) == sum(len(l["matches"]) for l in load("day.json")["leagues"])
+    assert rows[6112265] == {"id": 6112265, "status": "FT", "home_score": 2, "away_score": 1, "live_minute": None}
+    assert any(r["status"] == "NS" and r["home_score"] is None for r in rows.values())
+
+
+def test_day_page_is_asked_only_if_changed():
+    seen = []
+
+    def handler(request):
+        seen.append(request.headers.get("if-none-match"))
+        if request.headers.get("if-none-match") == 'W/"v1"':
+            return httpx.Response(304)
+        return httpx.Response(200, json={"leagues": []}, headers={"ETag": 'W/"v1"'})
+
+    client = fotmob.Client(min_interval=0, transport=httpx.MockTransport(handler))
+    assert client.day(date(2026, 10, 15)) == {"leagues": []}
+    assert client.day(date(2026, 10, 15)) is None  # 304: nothing changed
+    assert seen == [None, 'W/"v1"']
+
+
+def test_parse_league_zones_and_legend():
+    p = fotmob.parse_league(load("league_pl.json"))
+    colors = [r["zone_color"] for r in sorted(p["standings"], key=lambda r: r["position"])]
+    assert colors[:5] == ["#2AD572"] * 4 + ["#0046A7"] and colors[5] is None and colors[-3:] == ["#FF4646"] * 3
+    assert p["legend"] == [{"title": "Champions League", "color": "#2AD572"},
+                           {"title": "Europa League", "color": "#0046A7"},
+                           {"title": "Relegation", "color": "#FF4646"}]
+    assert fotmob.parse_league(load("league_euro_2028.json"))["legend"][1]["title"] == "Possible qualification next stage"

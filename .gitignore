@@ -5,3 +5,9 @@ __pycache__/
 ios/KickPick.xcodeproj/
 ios/build/
 DerivedData/
+.claude/
+.superpowers/
+docs/
+.secrets/
+backend/.venv-ml/
+backend/artifacts/

@@ -26,6 +26,7 @@ class Season(Base):
     competition_id: Mapped[int] = mapped_column(ForeignKey("competitions.id"))
     name: Mapped[str]
     is_current: Mapped[bool] = mapped_column(server_default=false())
+    table_legend: Mapped[list | None] = mapped_column(JSONB)  # what the standings' zone colours mean
 
 
 class Team(Base):
@@ -35,6 +36,12 @@ class Team(Base):
     short_name: Mapped[str]
     search_name: Mapped[str]
     squad_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    country_code: Mapped[str | None]
+    venue_name: Mapped[str | None]
+    venue_city: Mapped[str | None]
+    venue_capacity: Mapped[int | None]
+    venue_opened: Mapped[int | None]
+    trophies: Mapped[list | None] = mapped_column(JSONB)  # NULL: club facts not fetched yet
 
 
 class Match(Base):
@@ -53,6 +60,8 @@ class Match(Base):
     details_final: Mapped[bool] = mapped_column(server_default=false())
     home_formation: Mapped[str | None]
     away_formation: Mapped[str | None]
+    lineup_type: Mapped[str | None]  # FotMob's "predicted" (before the start) or "standard"
+    lineup_checked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class Standing(Base):
@@ -68,6 +77,7 @@ class Standing(Base):
     goals_for: Mapped[int]
     goals_against: Mapped[int]
     points: Mapped[int]
+    zone_color: Mapped[str | None]  # FotMob's colour for the row's zone (Champions League, relegation…)
 
 
 class Bracket(Base):

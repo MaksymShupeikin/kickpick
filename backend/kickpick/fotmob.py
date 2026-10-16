@@ -59,22 +59,30 @@ class Client:
         self.sleep, self.clock, self.rand = sleep, clock, rand
         self._next = 0.0  # earliest moment the next request may start
         self.failures = 0  # consecutive throttling failures
+        self._etags: dict[str, str] = {}  # last version of each conditionally fetched page
 
     def wait_time(self) -> float:
         return max(0.0, self._next - self.clock())
 
-    def _get(self, path: str, **params) -> dict:
+    def _get(self, path: str, conditional: bool = False, **params) -> dict | None:
+        """With `conditional`, sends the page's last ETag and returns None when FotMob answers 304 (not modified)."""
         if (wait := self.wait_time()) > 0:
             self.sleep(wait)
+        key = path + "?" + "&".join(f"{k}={v}" for k, v in sorted(params.items()))
+        headers = {"If-None-Match": self._etags[key]} if conditional and key in self._etags else {}
         try:
-            r = self.http.get(path, params=params)
+            r = self.http.get(path, params=params, headers=headers)
         except httpx.TransportError as e:
             raise self._pause(f"{type(e).__name__}: {e}", None, None) from e
         if r.status_code in (403, 429) or r.status_code >= 500:
             raise self._pause(f"HTTP {r.status_code}", r.headers.get("Retry-After"), r.status_code)
         self.failures = 0
         self._next = self.clock() + self.min_interval + self.rand() * self.jitter
+        if r.status_code == 304:
+            return None
         r.raise_for_status()  # any other 4xx (e.g. 404) is this record's problem, not throttling
+        if conditional and (etag := r.headers.get("ETag")):
+            self._etags[key] = etag
         return r.json()
 
     def _pause(self, reason: str, retry_after: str | None, status: int | None = None) -> Throttled:
@@ -88,6 +96,11 @@ class Client:
 
     def league(self, league_id: int, season: str | None = None) -> dict:
         return self._get("/leagues", id=league_id, **({"season": season} if season else {}))
+
+    def day(self, day: date) -> dict | None:
+        """Every match of a UTC day, all competitions, in one small page FotMob itself caches for 10 s; None when it
+        hasn't changed since the last call for that day."""
+        return self._get("/matches", conditional=True, date=f"{day:%Y%m%d}", timezone="UTC")
 
     def match(self, match_id: int) -> dict:
         return self._get("/matchDetails", matchId=match_id)
@@ -117,6 +130,18 @@ def _live_minute(s: dict) -> str | None:
 def _score(s: dict) -> tuple[int | None, int | None]:
     m = re.fullmatch(r"\s*(\d+)\s*-\s*(\d+)\s*", s.get("scoreStr") or "")
     return (int(m[1]), int(m[2])) if m else (None, None)
+
+
+def parse_day(raw: dict) -> list[dict]:
+    """Status, score and minute of every match on a day page."""
+    rows = []
+    for league in raw.get("leagues") or []:
+        for m in league.get("matches") or []:
+            s = m.get("status") or {}
+            home_score, away_score = _score(s)
+            rows.append({"id": int(m["id"]), "status": _status(s), "home_score": home_score, "away_score": away_score,
+                         "live_minute": _live_minute(s)})
+    return rows
 
 
 def _team(t: dict) -> dict:
@@ -197,6 +222,19 @@ def _tables(raw: dict) -> list[tuple[str, list[dict]]]:
     return [("", data["table"]["all"])]
 
 
+def _legend(raw: dict) -> list[dict]:
+    """What the table's zone colours mean, once each: the table's own legend and its groups'."""
+    data = (raw.get("table") or [{}])[0].get("data") or {}
+    items = [*(data.get("legend") or []), *(i for t in data.get("tables") or [] for i in t.get("legend") or [])]
+    seen, legend = set(), []
+    for item in items:
+        key = (item.get("title"), item.get("color"))
+        if all(key) and key not in seen:
+            seen.add(key)
+            legend.append({"title": key[0], "color": key[1]})
+    return legend
+
+
 def _matchup(m: dict) -> dict:
     def side(team_id, name, tbd):
         return None if tbd or team_id is None else {"id": int(team_id), "name": name}
@@ -256,6 +294,7 @@ def parse_league(raw: dict) -> dict:
                 "goals_for": goals_for,
                 "goals_against": goals_against,
                 "points": r["pts"],
+                "zone_color": r.get("qualColor"),
             })
     return {
         "season": raw["details"]["selectedSeason"],
@@ -263,6 +302,7 @@ def parse_league(raw: dict) -> dict:
         "teams": list(teams.values()),
         "matches": matches,
         "standings": standings,
+        "legend": _legend(raw),
         "bracket": _bracket(raw.get("playoff")),
     }
 
@@ -295,6 +335,9 @@ def parse_match(raw: dict) -> dict:
             # swap[0] came on, swap[1] went off (checked against the lineup)
             events.append(event | {"type": "sub", "player": e["swap"][0]["name"], "note": e["swap"][1]["name"]})
     players, lineups, formations = _lineups(content.get("lineup") or {})
+    lineup_type = (content.get("lineup") or {}).get("lineupType") if lineups else None
+    if lineup_type != "standard":  # a guess or a previous match's XI: its ratings and sub minutes aren't this match's
+        lineups = [r | {"rating": None, "sub_in": None, "sub_out": None} for r in lineups]
     return {
         "status": _status(s),
         "live_minute": _live_minute(s),
@@ -303,6 +346,7 @@ def parse_match(raw: dict) -> dict:
         "details": {"events": events, "stats": _top_stats(content.get("stats"))},
         "players": players,
         "lineups": lineups,
+        "lineup_type": lineup_type,
         "formations": formations,
     }
 
@@ -356,7 +400,32 @@ def parse_team(raw: dict) -> dict:
             "contract_extension": bool(t.get("contractExtension")),
         }
         transfers[(row["player_id"], row["transfer_date"], row["to_team_id"])] = row
-    return {"players": list(players.values()), "squad": list(squad.values()), "transfers": list(transfers.values())}
+    return {"players": list(players.values()), "squad": list(squad.values()), "transfers": list(transfers.values()),
+            "team": _team_facts(raw)}
+
+
+def _seasons(value) -> list[str]:
+    parts = value.split(",") if isinstance(value, str) else value or []
+    return [p.strip() for p in parts if p and p.strip()]
+
+
+def _team_facts(raw: dict) -> dict:
+    """Country, stadium and trophies from the team page (national teams have country "INT": none stored)."""
+    country = (raw.get("details") or {}).get("country")
+    venue = (raw.get("overview") or {}).get("venue") or {}
+    widget = venue.get("widget") or {}
+    facts = {pair[0]: pair[1] for pair in venue.get("statPairs") or [] if len(pair) == 2}  # [["Capacity", 99787], …]
+    return {
+        "country_code": None if country in (None, "", "INT") else country,
+        "venue_name": widget.get("name"),
+        "venue_city": widget.get("city"),
+        "venue_capacity": _int(facts.get("Capacity")),
+        "venue_opened": _int(facts.get("Opened")),
+        "trophies": [{"league_id": _int(t.get("leagueId")), "name": t["name"], "won": _int(t.get("won")) or 0,
+                      "runner_up": _int(t.get("runnerup")) or 0, "seasons_won": _seasons(t.get("seasonsWon")),
+                      "seasons_runner_up": _seasons(t.get("seasonsRunnerup"))}
+                     for t in (raw.get("history") or {}).get("trophyList") or [] if t.get("name")],
+    }
 
 
 def parse_player(raw: dict) -> dict:

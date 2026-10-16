@@ -7,7 +7,9 @@ struct CompetitionsView: View {
 
     var body: some View {
         SearchableScreen {
-            Loader { try await APIClient.shared.competitions() } content: { competitions in
+            Loader(skeleton: AnyView(VStack(spacing: 24) {
+                ForEach(0..<2, id: \.self) { _ in SkeletonCard(rows: 4) { SkeletonRow(image: 40, lines: 2, trailing: false) } }
+            }.shimmer())) { try await APIClient.shared.competitions() } content: { competitions in
                 VStack(alignment: .leading, spacing: 24) {
                     ForEach(Self.kinds, id: \.kind) { kind in
                         let items = competitions.filter { $0.kind == kind.kind }

@@ -21,10 +21,19 @@ struct APIClient {
         if !query.isEmpty {
             components.queryItems = query.sorted { $0.key < $1.key }.map { URLQueryItem(name: $0.key, value: $0.value) }
         }
-        let (data, response) = try await URLSession.shared.data(from: components.url!)
-        let code = (response as? HTTPURLResponse)?.statusCode ?? 0
-        guard code == 200 else { throw APIError.status(code) }
-        return try JSONDecoder.api.decode(T.self, from: data)
+        for attempt in 0...1 {
+            let (data, response) = try await URLSession.shared.data(from: components.url!)
+            let http = response as? HTTPURLResponse
+            let code = http?.statusCode ?? 0
+            if code == 429, attempt == 0 {
+                let seconds = Double(http?.value(forHTTPHeaderField: "Retry-After") ?? "") ?? 1
+                try await Task.sleep(for: .seconds(min(max(seconds, 1), 30) + Double.random(in: 0.1...0.5)))
+                continue  // honor the gateway's cooldown; retry at most once
+            }
+            guard code == 200 else { throw APIError.status(code) }
+            return try JSONDecoder.api.decode(T.self, from: data)
+        }
+        throw APIError.status(429)
     }
 
     func competitions() async throws -> [Competition] { try await get("competitions") }
@@ -54,6 +63,7 @@ struct APIClient {
     func team(_ id: Int) async throws -> TeamPage { try await get("teams/\(id)") }
     func player(_ id: Int) async throws -> PlayerPage { try await get("players/\(id)") }
     func search(_ text: String) async throws -> SearchResults { try await get("search", query: ["q": text]) }
+    func searchSuggestions() async throws -> SearchSuggestions { try await get("search/suggestions") }
 
     private func seasonQuery(_ season: String?) -> [String: String] {
         season.map { ["season": $0] } ?? [:]

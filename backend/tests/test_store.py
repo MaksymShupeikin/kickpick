@@ -1,4 +1,4 @@
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 
 from fx import load
 from kickpick import fotmob, store
@@ -161,3 +161,55 @@ def test_record_and_clear_failure(db):
         store.clear_failure(s, "match", "1")
     with db() as s:
         assert s.get(FetchFailure, ("match", "1")) is None
+
+
+def test_lineup_team_is_the_match_side_even_when_fotmob_renumbers_the_club(db):
+    # matchDetails can name a club by a newer id than the fixtures (Reggiana: 6500 there, 959006 in the lineup)
+    seed_pl(db)
+    parsed = fotmob.parse_match(load("match.json"))
+    renumbered = [r | {"team_id": 959006} if r["side"] == "away" else r for r in parsed["lineups"]]
+    with db.begin() as s:
+        store.save_match(s, 5795369, parsed | {"lineups": renumbered})
+    with db() as s:
+        away_id = s.get(Match, 5795369).away_team_id
+        assert set(s.scalars(select(MatchLineup.team_id).where(MatchLineup.side == "away"))) == {away_id}
+
+
+def test_predicted_lineup_does_not_count_as_a_match_played(db):
+    seed_pl(db)
+    parsed = fotmob.parse_match(load("match.json"))
+    future_id = 5795468  # an upcoming fixture of the league
+    with db.begin() as s:
+        store.save_match(s, future_id, parsed | {"status": "NS", "home_score": None, "away_score": None,
+                                                 "lineup_type": "standard"})  # even a confirmed one, before the start
+    with db() as s:
+        match = s.get(Match, future_id)
+        assert match.lineup_type == "standard" and match.lineup_checked_at and not match.details_final
+        assert count(s, MatchLineup, MatchLineup.match_id == future_id) == len(parsed["lineups"])
+        assert s.get(Player, parsed["lineups"][0]["player_id"]).last_match_at is None  # not "played" in the future
+
+
+def test_live_score_is_the_day_pages_alone(db):
+    """FotMob's copies of the details and the league lag its day page: while a match is live, they mustn't roll its
+    score back. A final whistle from them still counts."""
+    seed_pl(db)
+    match_id = 5795369
+    with db.begin() as s:
+        s.execute(update(Match).where(Match.id == match_id).values(status="LIVE", home_score=2, away_score=1,
+                                                                   live_minute="70'"))
+    lagging = fotmob.parse_match(load("match.json")) | {"status": "LIVE", "home_score": 1, "away_score": 1,
+                                                        "live_minute": "68'"}
+    league = fotmob.parse_league(load("league_pl.json"))
+    stale = league | {"matches": [m | {"status": "LIVE", "home_score": 0, "away_score": 0, "live_minute": "60'"}
+                                  if m["id"] == match_id else m for m in league["matches"]]}
+    with db.begin() as s:
+        store.save_match(s, match_id, lagging)
+        store.save_league(s, 47, stale, is_current=True)
+    with db() as s:
+        m = s.get(Match, match_id)
+        assert (m.status, m.home_score, m.away_score, m.live_minute) == ("LIVE", 2, 1, "70'")
+        assert m.details["events"] and count(s, MatchLineup, MatchLineup.match_id == match_id)  # the rest is written
+    with db.begin() as s:
+        store.save_match(s, match_id, fotmob.parse_match(load("match.json")))  # full time
+    with db() as s:
+        assert s.get(Match, match_id).status == "FT"

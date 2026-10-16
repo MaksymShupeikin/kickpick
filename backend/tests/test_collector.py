@@ -6,7 +6,7 @@ from sqlalchemy import func, select, update
 from fx import load
 from kickpick import collector, fotmob, store
 from kickpick.config import COMPETITIONS
-from kickpick.models import FetchFailure, Match, Player, Season, SquadMember, Standing
+from kickpick.models import FetchFailure, Match, Player, Season, SquadMember, Standing, Team
 
 NOW = datetime(2026, 10, 14, 12, tzinfo=timezone.utc)
 
@@ -14,10 +14,11 @@ NOW = datetime(2026, 10, 14, 12, tzinfo=timezone.utc)
 class FakeFotMob:
     """Only Premier League (47) answers; every other competition returns an unparseable payload."""
 
-    def __init__(self, league=None, match=None):
+    def __init__(self, league=None, match=None, day=None):
         self.calls = []
         self._league = league or (lambda league_id, season: load("league_pl.json") if league_id == 47 else {})
         self._match = match or (lambda match_id: load("match.json"))
+        self._day = day or (lambda date: None)  # None: FotMob's "not modified"
 
     def wait_time(self):
         return 0.0
@@ -29,6 +30,10 @@ class FakeFotMob:
     def match(self, match_id):
         self.calls.append(("match", match_id))
         return self._match(match_id)
+
+    def day(self, date):
+        self.calls.append(("day", date))
+        return self._day(date)
 
     def team(self, team_id):
         self.calls.append(("team", team_id))
@@ -102,18 +107,76 @@ def test_zero_budget_runs_only_mandatory_steps(seeded):
     assert {c[0] for c in fake.calls} == {"league"}
 
 
-def test_live_match_details_every_tick(seeded):
-    answers = {"pl": True}  # after the first tick the league stops answering, so the re-sync can't reset LIVE to NS
-    fake = FakeFotMob(lambda league_id, season: load("league_pl.json") if league_id == 47 and answers["pl"] else {})
-    state = {}
+def live_payload(score: str = "1 - 0", minute: str = "30'") -> dict:
+    """match.json as a match still being played."""
+    raw = load("match.json")
+    raw["header"]["status"] |= {"started": True, "finished": False, "scoreStr": score, "liveTime": {"short": minute}}
+    return raw
+
+
+def day_page(match_id: int, score: str | None, minute: str | None = None, finished: bool = False) -> dict:
+    status = {"started": score is not None, "finished": finished, "cancelled": False}
+    if score:
+        status |= {"scoreStr": score, **({"liveTime": {"short": minute}} if minute else {})}
+    return {"leagues": [{"matches": [{"id": match_id, "status": status}]}]}
+
+
+def test_live_scores_come_from_the_day_page(seeded):
+    collector.tick(FakeFotMob(), {}, now=NOW, budget=0)
+    with seeded.begin() as s:  # a fixture kicking off half an hour ago
+        match_id = s.scalar(select(Match.id).where(Match.status == "NS").order_by(Match.kickoff).limit(1))
+        s.execute(update(Match).where(Match.id == match_id).values(kickoff=NOW - timedelta(minutes=30)))
+    page = {"now": day_page(match_id, "1 - 0", "30'")}
+    # the league stops answering, so its fixture list (where this match hasn't started) can't overwrite the live state
+    fake = FakeFotMob(league=lambda league_id, season: {}, match=lambda _: live_payload(), day=lambda _: page["now"])
+    state = {"full_sync_at": NOW}
+
     collector.tick(fake, state, now=NOW, budget=0)
+    with seeded() as s:
+        m = s.get(Match, match_id)
+        assert (m.status, m.home_score, m.away_score, m.live_minute) == ("LIVE", 1, 0, "30'")
+    assert ("day", NOW.date()) in fake.calls and ("match", match_id) not in fake.calls  # its details: a tick later
+    assert not [c for c in fake.calls if c[0] == "league"]  # no season re-sync for a live match any more
+
+    fake.calls.clear()  # 15 s on, nothing new: the page is asked again, and the details are due
+    collector.tick(fake, state, now=NOW + timedelta(seconds=15), budget=0)
+    assert ("day", NOW.date()) in fake.calls and ("match", match_id) in fake.calls
+
+    fake.calls.clear()  # 5 s on: too soon even for the page
+    collector.tick(fake, state, now=NOW + timedelta(seconds=20), budget=0)
+    assert not fake.calls
+
+    fake.calls.clear()  # another goal: the score at once, the details a tick later (FotMob's copy of them lags)
+    page["now"] = day_page(match_id, "2 - 0", "41'")
+    collector.tick(fake, state, now=NOW + timedelta(seconds=35), budget=0)
+    with seeded() as s:
+        assert s.get(Match, match_id).home_score == 2
+    assert ("match", match_id) not in fake.calls
+    collector.tick(fake, state, now=NOW + timedelta(seconds=50), budget=0)
+    assert ("match", match_id) in fake.calls
+    with seeded() as s:  # the lagging details (1 - 0) didn't roll the goal back
+        assert s.get(Match, match_id).home_score == 2
+
+    fake.calls.clear()  # no goal for 2.5 min: the details (stats) refresh anyway
+    collector.tick(fake, state, now=NOW + timedelta(seconds=50 + 150), budget=0)
+    assert ("match", match_id) in fake.calls
+    assert set(state["details_due"]) == {match_id}  # only live matches are kept
+
+    fake.calls.clear()  # full time: the table is fetched again
+    page["now"] = day_page(match_id, "2 - 0", finished=True)
+    collector.tick(fake, state, now=NOW + timedelta(seconds=50 + 150 + 15), budget=0)
+    with seeded() as s:
+        assert s.get(Match, match_id).status == "FT"
+    assert ("league", 47, None) in fake.calls and state["details_due"] == {}
+
+
+def test_day_page_is_not_asked_without_live_or_imminent_matches(seeded):
+    collector.tick(FakeFotMob(), {}, now=NOW, budget=0)
     with seeded.begin() as s:
-        live_id = s.scalar(select(Match.id).where(Match.status == "NS").limit(1))
-        s.execute(update(Match).where(Match.id == live_id).values(status="LIVE"))
-    answers["pl"] = False
-    fake.calls.clear()
-    collector.tick(fake, state, now=NOW + timedelta(minutes=1), budget=0)
-    assert ("league", 47, None) in fake.calls and ("match", live_id) in fake.calls
+        s.execute(update(Match).where(Match.status.in_(("NS", "LIVE"))).values(kickoff=NOW + timedelta(days=5)))
+    fake = FakeFotMob()
+    collector.tick(fake, {"full_sync_at": NOW}, now=NOW, budget=0)
+    assert not [c for c in fake.calls if c[0] == "day"]
 
 
 def test_throttling_stops_backlog_without_failures(seeded):
@@ -172,21 +235,16 @@ def test_status_reports_progress(seeded):
     assert any(l.startswith("squads") and "/" in l for l in collector.status())
 
 
-def test_backfill_rejects_wrong_season(seeded):
+def test_season_job_rejects_a_season_fotmob_swapped(seeded):
     def league(league_id, season):
-        if league_id != 47:
-            return {}
         raw = load("league_pl.json")
-        if season == "2024/2025":
-            raw["details"]["selectedSeason"] = "2026/2027"  # FotMob ignored the season param
-        elif season:
-            raw["details"]["selectedSeason"] = season
+        raw["details"]["selectedSeason"] = "2026/2027"  # FotMob ignored the season param
         return raw
 
-    collector.backfill(FakeFotMob(league), seasons=3)
+    assert not collector.run_job(FakeFotMob(league), "season", "47|2024/2025")
     with seeded() as s:
-        assert s.scalars(select(Season.name).where(Season.is_current)).all() == ["2026/2027"]
-        assert sorted(s.scalars(select(Season.name))) == ["2025/2026", "2026/2027"]
+        assert not s.scalars(select(Season.name)).all()
+        assert s.get(FetchFailure, ("season", "47|2024/2025")).attempts == 1
 
 
 def test_broken_payload_keeps_previous_data(seeded):
@@ -287,3 +345,53 @@ def test_live_match_stuck_for_two_days_is_not_fetched(seeded):
     fake = FakeFotMob(lambda league_id, season: {})
     collector.tick(fake, {"full_sync_at": NOW}, now=NOW, budget=0)
     assert ("match", stuck) not in fake.calls
+
+
+def test_player_without_a_fotmob_profile_is_checked_not_failed(seeded):
+    with seeded.begin() as s:
+        s.add(Player(id=405397, name="Gone", search_name="gone"))
+    fake = FakeFotMob()
+    fake.player = lambda player_id: None  # FotMob answers `null` for a removed profile
+    assert collector.run_job(fake, "player", "405397")
+    with seeded() as s:
+        assert s.get(Player, 405397).profile_updated_at and not s.get(FetchFailure, ("player", "405397"))
+
+
+def test_club_facts_reach_teams_outside_the_current_season(seeded):
+    with seeded.begin() as s:
+        s.add(Team(id=777_001, name="Old Rival", short_name="Old Rival", search_name="old rival"))  # in no current season
+    fake = FakeFotMob()
+    collector.tick(fake, {"full_sync_at": NOW}, now=NOW, budget=10_000)
+    assert ("team", 777_001) in fake.calls
+    with seeded() as s:
+        assert s.get(Team, 777_001).venue_name == "Spotify Camp Nou"  # FakeFotMob answers Barcelona for every team
+        assert count(s, Team, Team.trophies.is_(None)) == 0
+
+
+def test_placeholder_side_fotmob_answers_null_for_is_checked_not_failed(seeded):
+    with seeded.begin() as s:
+        s.add(Team(id=1_050_424, name="Hellas Verona/Spezia", short_name="Verona/Spezia", search_name="hellas verona/spezia"))
+    fake = FakeFotMob()
+    fake.team = lambda team_id: None  # a play-off placeholder: FotMob answers `null`
+    assert collector.run_job(fake, "team", "1050424")
+    with seeded() as s:
+        team = s.get(Team, 1_050_424)
+        assert team.trophies == [] and team.squad_updated_at and not s.get(FetchFailure, ("team", "1050424"))
+
+
+def test_upcoming_matches_get_their_predicted_lineups(seeded):
+    collector.tick(FakeFotMob(), {}, now=NOW, budget=0)
+    with seeded.begin() as s:  # one fixture a day ahead, the rest out of the 3-day window
+        upcoming = s.scalars(select(Match).where(Match.status == "NS").order_by(Match.kickoff)).all()
+        for m in upcoming:
+            m.kickoff = NOW + timedelta(days=10)
+        soon = upcoming[0].id
+        upcoming[0].kickoff = NOW + timedelta(days=1)
+    fake = FakeFotMob(match=lambda match_id: load("match_predicted.json"))
+    collector.tick(fake, {"full_sync_at": NOW}, now=NOW, budget=10_000)
+    assert ("match", soon) in fake.calls
+    with seeded() as s:
+        assert s.get(Match, soon).lineup_type == "predicted"
+    fake.calls.clear()  # checked a moment ago: not fetched again on the next tick
+    collector.tick(fake, {"full_sync_at": NOW}, now=NOW + timedelta(minutes=1), budget=10_000)
+    assert ("match", soon) not in fake.calls

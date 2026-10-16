@@ -1,3 +1,4 @@
+import SwiftUI
 import XCTest
 @testable import KickPick
 
@@ -47,6 +48,55 @@ final class DecodingTests: XCTestCase {
         XCTAssertEqual(match.kickoff, ISO8601DateFormatter().date(from: "2026-10-12T19:00:00Z"))
     }
 
+    private let predictionJSON = """
+    {"available": true, "experimental": true, "probabilities": {"home": 0.5, "draw": 0.3, "away": 0.2},
+     "generated_at": "2026-10-11T19:00:00.123456+00:00", "model_version": "online-v1"}
+    """
+
+    func testPredictionDecodesOnlyForActiveMatches() throws {
+        for status in ["NS", "LIVE", "FT", "CANC"] {
+            let json = matchJSON.replacingOccurrences(of: "\"LIVE\"", with: "\"\(status)\"")
+                + ", \"prediction\": \(predictionJSON)}"
+            let page = try decode(MatchPage.self, json)
+            if status == "NS" || status == "LIVE" {
+                XCTAssertEqual(page.prediction?.probabilities.home, 0.5)
+                XCTAssertEqual(page.prediction?.probabilities.draw, 0.3)
+                XCTAssertEqual(page.prediction?.probabilities.away, 0.2)
+                XCTAssertEqual(page.prediction?.probabilities.highest, 0.5)
+            } else {
+                XCTAssertNil(page.prediction)
+            }
+        }
+    }
+
+    func testMissingOrInvalidPredictionDoesNotBreakMatch() throws {
+        XCTAssertNil(try decode(MatchPage.self, matchJSON + "}").prediction)
+        for payload in ["null", #"{"available": false}"#,
+                        predictionJSON.replacingOccurrences(of: "0.5", with: "-0.5"),
+                        predictionJSON.replacingOccurrences(of: "0.5", with: "1.5"),
+                        predictionJSON.replacingOccurrences(of: "0.5", with: "0.1"),
+                        predictionJSON.replacingOccurrences(of: "0.5", with: "\"bad\""),
+                        predictionJSON.replacingOccurrences(of: "2026-10-11T19:00:00.123456+00:00",
+                                                           with: "2026-10-12T19:00:01Z")] {
+            let page = try decode(MatchPage.self, matchJSON + ", \"prediction\": \(payload)}")
+            XCTAssertEqual(page.match.id, 1)
+            XCTAssertNil(page.prediction)
+        }
+    }
+
+    func testMatchRefreshIntervalFollowsPredictionAndScoreLifecycle() throws {
+        let cases: [(String, TimeInterval, Duration?)] = [
+            ("NS", 86400, .seconds(600)), ("NS", 300, .seconds(15)),
+            ("LIVE", -3600, .seconds(15)), ("FT", -3600, nil), ("CANC", 86400, nil)
+        ]
+        for (status, offset, interval) in cases {
+            let kickoff = APIClient.isoUTC(.now.addingTimeInterval(offset))
+            let json = matchJSON.replacingOccurrences(of: "2026-10-12T19:00:00Z", with: kickoff)
+                .replacingOccurrences(of: "\"LIVE\"", with: "\"\(status)\"") + "}"
+            XCTAssertEqual(try decode(MatchPage.self, json).refreshInterval, interval)
+        }
+    }
+
     func testBracketWithUnknownSide() throws {
         let bracket = try decode(Bracket.self, """
         {"rounds": [{"stage": "1/8", "matchups": [{"home": null,
@@ -78,10 +128,12 @@ final class DecodingTests: XCTestCase {
     func testOldMatchDatesShowTheYear() throws {
         let old = try decode(Match.self, matchJSON.replacingOccurrences(of: "2026-10-12", with: "2022-12-18")
             .replacingOccurrences(of: "LIVE", with: "FT") + "}")
-        XCTAssertTrue(old.statusText(showDate: true).hasSuffix("\n2022"))
+        XCTAssertEqual(old.statusLines(showDate: true), ["18 Dec", "2022"])  // two lines: no time for an old match
+        XCTAssertEqual(old.statusLines(showDate: false).count, 1)  // the feed: the time alone
         let recent = try decode(Match.self, matchJSON.replacingOccurrences(of: "2026-10-12T19", with: ISO8601DateFormatter().string(from: .now).prefix(13))
             .replacingOccurrences(of: "LIVE", with: "FT") + "}")
-        XCTAssertFalse(recent.statusText(showDate: true).contains("\n"))
+        XCTAssertEqual(recent.statusLines(showDate: true).last, "Today")
+        XCTAssertEqual(recent.statusLines(showDate: true).first?.count, 5)  // kick-off time, "21:00"
     }
 
     func testQueryDatesAreUTC() {
@@ -116,10 +168,69 @@ final class DecodingTests: XCTestCase {
         XCTAssertFalse(try match("FT", offset: -3600).needsPolling)
     }
 
+    func testZoneLegend() throws {
+        let groups = try decode([StandingGroup].self, """
+        [{"group": "A", "rows": [], "legend": [{"title": "Qualification next stage", "color": "#2AD572"}]},
+         {"group": "B", "rows": [], "legend": [{"title": "Qualification next stage", "color": "#2AD572"},
+                                              {"title": "Possible qualification next stage", "color": "#FFD908"}]},
+         {"group": "C", "rows": []}]
+        """)
+        XCTAssertEqual(Zone.legend(of: groups).map(\.color), ["#2AD572", "#FFD908"])  // once each, in order
+        XCTAssertNotNil(Color(hex: "#2AD572"))
+        XCTAssertNil(Color(hex: "green"))
+    }
+
+    func testScorerLines() throws {
+        let events = try decode([MatchEvent].self, """
+        [{"minute": 23, "added": null, "type": "goal", "side": "home", "player": "Jack Hinshelwood", "assist": null,
+          "note": null, "score": "1-0", "player_id": 1},
+         {"minute": 45, "added": 2, "type": "goal", "side": "away", "player": "Mohamed Salah", "assist": null,
+          "note": "Penalty", "score": "1-1", "player_id": 2},
+         {"minute": 60, "added": null, "type": "yellow", "side": "home", "player": "A B", "assist": null,
+          "note": null, "score": null, "player_id": null},
+         {"minute": 67, "added": null, "type": "goal", "side": "home", "player": "Jack Hinshelwood", "assist": null,
+          "note": null, "score": "2-1", "player_id": 1},
+         {"minute": 82, "added": null, "type": "own_goal", "side": "home", "player": "Robert Sánchez", "assist": null,
+          "note": null, "score": "3-1", "player_id": 3}]
+        """)
+        XCTAssertEqual(events.scorerLines(side: "home"), ["Hinshelwood 23', 67'", "Sánchez 82' (OG)"])
+        XCTAssertEqual(events.scorerLines(side: "away"), ["Salah 45+2' (P)"])
+    }
+
+    func testRatingColours() {
+        XCTAssertEqual(Color.rating(5.9), .loss)
+        XCTAssertEqual(Color.rating(6.0), .cardYellow)
+        XCTAssertEqual(Color.rating(6.99), .cardYellow)
+        XCTAssertEqual(Color.rating(7.0), .win)
+        XCTAssertEqual(Color.rating(8.0), .standout)
+        XCTAssertEqual(Color.rating(9.6), .standout)
+    }
+
+    func testShortSeason() {
+        XCTAssertEqual(CompetitionView.shortSeason("2026/2027"), "26/27")
+        XCTAssertEqual(CompetitionView.shortSeason("2026/2027 - Apertura"), "26/27 Apertura")
+        XCTAssertEqual(CompetitionView.shortSeason("2026"), "2026")
+    }
+
+    func testCurrentRound() throws {
+        func match(_ round: String, _ status: String, days: Double) throws -> Match {
+            let kickoff = ISO8601DateFormatter().string(from: Date.now.addingTimeInterval(days * 86400))
+            let json = matchJSON.replacingOccurrences(of: "2026-10-12T19:00:00Z", with: kickoff)
+                .replacingOccurrences(of: "\"LIVE\"", with: "\"\(status)\"")
+                .replacingOccurrences(of: "\"round\": \"6\"", with: "\"round\": \"\(round)\"")
+            return try decode(Match.self, json + "}")
+        }
+        let season = [try match("3", "NS", days: -40),  // postponed, never replayed: not the current round
+                      try match("8", "FT", days: -7), try match("9", "FT", days: -1), try match("9", "NS", days: 1),
+                      try match("10", "NS", days: 7)]
+        XCTAssertEqual(season.currentRound, "9")
+        XCTAssertNil(Array(season.prefix(3)).currentRound)  // season over: stay at the top
+    }
+
     func testPlayerWithoutPositionDecodes() throws {
         let page = try decode(PlayerPage.self, """
-        {"id": 1, "name": "Lineup Only", "photo_url": null, "country_code": null, "country_name": null, "flag_url": null,
-         "position": null, "birth_date": null, "teams": [], "matches": [], "seasons": [], "career": []}
+        {"id": 1, "name": "Lineup Only", "photo_url": null, "country": null,
+         "position": null, "birth_date": null, "club": null, "matches": [], "seasons": [], "career": []}
         """)
         XCTAssertNil(page.position)
     }
@@ -134,14 +245,19 @@ final class DecodingTests: XCTestCase {
         XCTAssertEqual(page.lineups?.home?.starters.first?.subOut, 78)
         XCTAssertEqual(page.lineups?.home?.unavailable.first?.reason, "injury")
         XCTAssertNil(page.lineups?.away)
+        XCTAssertNil(page.lineups?.title)  // no type (older answers) or "standard": the confirmed lineup, no title
+        XCTAssertEqual(page.lineups?.hasStarters, true)
         XCTAssertNil(try decode(MatchPage.self, matchJSON + #", "details": null, "lineups": null}"#).lineups)
+        let context = try decode(MatchPage.self, matchJSON + #", "details": null, "lineups": null, "form": {"home": ["W", "D"], "away": []}, "h2h": {"matches": 2, "home_wins": 1, "draws": 1, "away_wins": 0}}"#)
+        XCTAssertEqual(context.form?.home, ["W", "D"])
+        XCTAssertEqual(context.h2h?.homeWins, 1)
     }
 
     func testPlayerPageDecodes() throws {
         let page = try decode(PlayerPage.self, """
-        {"id": 1467236, "name": "Lamine Yamal", "photo_url": null, "country_code": "ESP", "country_name": "Spain",
-         "flag_url": "https://images.fotmob.com/image_resources/logo/teamlogo/esp.png", "position": "FW",
-         "birth_date": "2007-07-13", "teams": [],
+        {"id": 1467236, "name": "Lamine Yamal", "photo_url": null,
+         "country": {"id": 6720, "name": "Spain", "logo_url": "https://images.fotmob.com/image_resources/logo/teamlogo/esp.png"},
+         "position": "FW", "birth_date": "2007-07-13", "club": {"id": 8634, "name": "Barcelona", "logo_url": null},
          "matches": [\(matchJSON), "rating": 8.1, "minutes": 78, "role": "starter"}],
          "seasons": [{"season": "2025/2026", "competition": {"id": 87, "name": "LaLiga", "logo_url": null},
            "team": {"id": 8634, "name": "Barcelona", "logo_url": null}, "appearances": 30, "goals": 12, "assists": 15,
@@ -149,8 +265,11 @@ final class DecodingTests: XCTestCase {
          "career": [{"id": 5, "kind": "senior", "team": {"id": null, "name": "Barcelona B", "logo_url": null},
            "start_date": "2023-04-29", "end_date": null, "appearances": 2, "goals": 0, "assists": 0}]}
         """)
-        XCTAssertEqual(page.countryName, "Spain")
+        XCTAssertEqual(page.country?.name, "Spain")
+        XCTAssertEqual(page.club?.id, 8634)
         XCTAssertEqual(page.matches.first?.minutes, 78)
+        XCTAssertEqual(page.matches.first?.goals, 0)  // absent in older answers: none
+        XCTAssertEqual(Contributions.spoken(goals: 2, assists: 1), "2 goals, 1 assist")
         XCTAssertEqual(page.matches.first?.match.home.name, "Coventry City")
         XCTAssertEqual(page.seasons.first?.competition.name, "LaLiga")
         XCTAssertNil(page.career.first?.team.id)
@@ -163,11 +282,21 @@ final class DecodingTests: XCTestCase {
            "team": {"id": 9, "name": "Leeds United", "logo_url": null}, "date": "2026-07-01T00:00:00Z",
            "fee_eur": 45000000, "fee_text": "fee", "on_loan": false}],
           "departures": [{"player": {"id": 2, "name": "B", "photo_url": null}, "team": null,
-           "date": "2026-08-01T00:00:00+00:00", "fee_eur": null, "fee_text": "on loan", "on_loan": true}]}}
+           "date": "2026-08-01T00:00:00+00:00", "fee_eur": null, "fee_text": "on loan", "on_loan": true}]},
+         "standings": [{"competition": {"slug": "laliga", "name": "LaLiga", "logo_url": null}, "season": "2026/2027",
+           "groups": [{"group": "", "rows": []}]}],
+         "country": {"id": 6720, "name": "Spain", "logo_url": null},
+         "venue": {"name": "Spotify Camp Nou", "city": "Barcelona", "capacity": 99787, "opened": 1957},
+         "trophies": [{"competition": {"id": 87, "name": "LaLiga", "logo_url": null}, "won": 29, "runner_up": 28,
+           "seasons_won": ["2025/2026"], "seasons_runner_up": []}]}
         """)
         XCTAssertEqual(team.transfers.arrivals.first?.team?.name, "Leeds United")
         XCTAssertEqual(team.transfers.arrivals.first?.feeEur, 45_000_000)
         XCTAssertNil(team.transfers.departures.first?.team)
+        XCTAssertEqual(team.standings.first?.competition.name, "LaLiga")
+        XCTAssertEqual(team.venue?.capacity, 99787)
+        XCTAssertEqual(team.country?.id, 6720)
+        XCTAssertEqual(team.trophies.first?.runnerUp, 28)
     }
 
     func testPitchLayout() {
@@ -206,7 +335,7 @@ final class DecodingTests: XCTestCase {
         defer { NSTimeZone.default = saved }
         NSTimeZone.default = TimeZone(identifier: "Pacific/Auckland")!
         let now = ISO8601DateFormatter().date(from: "2026-10-15T12:00:00Z")!
-        XCTAssertEqual(PlayerPage.ageLine(birthDate: "2000-07-21", now: now), "26 · 21 Jul 2000")
+        XCTAssertEqual(PlayerPage.ageLine(birthDate: "2000-07-21", now: now), "26 (21 Jul 2000)")
         XCTAssertNil(PlayerPage.ageLine(birthDate: "not a date", now: now))
     }
 

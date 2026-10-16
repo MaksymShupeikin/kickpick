@@ -1,8 +1,22 @@
-# Shared by api (/status dashboard) and collector, so both count progress the same way.
-x-backend-env: &backend-env
-  DATABASE_URL: postgresql+psycopg://kickpick:kickpick@db:5432/kickpick
-  HISTORY_SEASONS: "11"     # newest 11 seasons per competition (2016/17 →); 0 = all FotMob has (since 2010)
-  REQUEST_INTERVAL: "0"     # seconds between FotMob requests (+0–0.5 s jitter); one request at a time
+x-db-env: &db-env
+  DATABASE_HOST: db
+  DATABASE_NAME: kickpick
+  HISTORY_SEASONS: "11"
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-backend: &backend
+  build: ./backend
+  read_only: true
+  tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  logging: *logging
 
 services:
   db:
@@ -10,40 +24,143 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: kickpick
-      POSTGRES_PASSWORD: kickpick
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_admin_password
       POSTGRES_DB: kickpick
+    secrets: [postgres_admin_password]
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "kickpick"]
       interval: 5s
       retries: 10
+    logging: *logging
 
-  api:
-    build: ./backend
-    command: sh -c "alembic upgrade head && uvicorn kickpick.api:app --host 0.0.0.0 --port 8000"
-    environment: *backend-env
-    ports:
-      - "8000:8000"
+  db-init:
+    <<: *backend
+    command: python -m kickpick.provision_db
+    environment:
+      <<: *db-env
+      DATABASE_USER: kickpick
+      DATABASE_PASSWORD_FILE: /run/secrets/postgres_admin_password
+    secrets: [postgres_admin_password, api_db_password, collector_db_password, migrator_db_password, predictor_db_password]
     depends_on:
       db:
         condition: service_healthy
+    restart: "no"
+
+  migrate:
+    <<: *backend
+    command: alembic upgrade head
+    environment:
+      <<: *db-env
+      DATABASE_USER: kickpick_migrator
+      DATABASE_PASSWORD_FILE: /run/secrets/migrator_db_password
+    secrets: [migrator_db_password]
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    restart: "no"
+
+  api:
+    <<: *backend
+    command: uvicorn kickpick.api:app --host 0.0.0.0 --port 8000 --workers 2 --limit-concurrency 32 --timeout-keep-alive 5 --no-proxy-headers
+    environment:
+      <<: *db-env
+      DATABASE_USER: kickpick_api
+      DATABASE_PASSWORD_FILE: /run/secrets/api_db_password
+    secrets: [api_db_password]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
       interval: 5s
       retries: 20
     restart: unless-stopped
 
+  gateway:
+    image: nginxinc/nginx-unprivileged:stable-alpine
+    user: "101:101"
+    entrypoint: [nginx, -g, "daemon off;"]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/limits.conf:/etc/nginx/limits.conf:ro
+      - ./deploy/nginx/trusted-proxies.conf:/etc/nginx/trusted-proxies.conf:ro
+    ports:
+      - "${API_BIND:-127.0.0.1}:${API_PORT:-8000}:8080"
+      - "127.0.0.1:${ADMIN_PORT:-8001}:9000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:9000/health"]
+      interval: 10s
+      retries: 3
+    restart: unless-stopped
+    logging: *logging
+
   collector:
-    build: ./backend
+    <<: *backend
     command: python -m kickpick.collector
-    environment: *backend-env
+    environment:
+      <<: *db-env
+      DATABASE_USER: kickpick_collector
+      DATABASE_PASSWORD_FILE: /run/secrets/collector_db_password
+    secrets: [collector_db_password]
     depends_on:
       api:
         condition: service_healthy
     restart: unless-stopped
 
+  predictor:
+    <<: *backend
+    profiles: [ml]
+    build:
+      context: ./backend
+      target: ml
+    command: python -m kickpick.ml worker --model /models --interval 600 --report /state/quality.json
+    environment:
+      ML_DATABASE_HOST: db
+      ML_DATABASE_NAME: kickpick
+      ML_DATABASE_USER: kickpick_predictor
+      ML_DATABASE_PASSWORD_FILE: /run/secrets/predictor_db_password
+    secrets: [predictor_db_password]
+    volumes:
+      - ${ML_MODEL_DIR:-./backend/artifacts/models/2026-10-16-online-v1}:/models:ro
+      - prediction_reports:/state
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=128m
+    cpus: 2
+    mem_limit: 1g
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os,time; assert time.time()-os.stat('/state/quality.json').st_mtime < 1800"]
+      interval: 60s
+      start_period: 90s
+      retries: 3
+    restart: unless-stopped
+
 volumes:
   pgdata:
+  prediction_reports:
+
+secrets:
+  postgres_admin_password:
+    file: ${SECRETS_DIR:-./.secrets}/postgres_admin_password
+  api_db_password:
+    file: ${SECRETS_DIR:-./.secrets}/api_db_password
+  collector_db_password:
+    file: ${SECRETS_DIR:-./.secrets}/collector_db_password
+  migrator_db_password:
+    file: ${SECRETS_DIR:-./.secrets}/migrator_db_password
+  predictor_db_password:
+    file: ${SECRETS_DIR:-./.secrets}/predictor_db_password

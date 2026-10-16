@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KickPick · сбор</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' rx='56' fill='%231A1A1D'/%3E%3Cg transform='translate(28 28) scale(.78125)'%3E%3Cpath fill='%23FFFFFF' d='M76 28.8A112 112 0 0 0 76 227.2ZM116 99.72L116 16.64A112 112 0 0 1 184.45 31.27ZM144.28 128L214.92 57.37A112 112 0 0 1 214.92 198.63ZM116 156.28L184.45 224.73A112 112 0 0 1 116 239.36Z'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+  :root {
+    --text: #fff; --text-2: rgba(255,255,255,.64); --text-3: rgba(255,255,255,.52);
+    --hairline: rgba(255,255,255,.10); --track: rgba(255,255,255,.12); --red: #FF453A;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    min-height: 100vh; display: grid; place-items: center; padding: 16px;
+    font: 15px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; color: var(--text);
+    background:
+      radial-gradient(circle at 10% 8%, rgba(255,255,255,.07), transparent 60vw),
+      radial-gradient(circle at 95% 50%, rgba(255,255,255,.07), transparent 60vw),
+      linear-gradient(#2B2B2F, #1A1A1D) fixed;
+  }
+  .card {
+    width: 100%; max-width: 520px; padding: 28px; border-radius: 20px;
+    background: rgba(255,255,255,.06); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,.14); box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  }
+  .num { font-variant-numeric: tabular-nums; font-stretch: condensed; }
+  .label { color: var(--text-3); font-size: 13px; font-weight: 500; }
+  .eta { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -1px; margin: 6px 0 8px; }
+  .sub { color: var(--text-2); }
+  .rows { margin-top: 24px; border-top: 1px solid var(--hairline); }
+  .row { padding: 14px 0; border-bottom: 1px solid var(--hairline); }
+  .row .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .row .count { font-weight: 600; }
+  .row .count small { color: var(--text-2); font-weight: 400; }
+  .bar { height: 4px; border-radius: 2px; background: var(--track); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--text); border-radius: 2px; transition: width .3s ease; }
+  .foot { margin-top: 16px; display: flex; justify-content: space-between; color: var(--text-3); font-size: 13px; }
+  .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--red); margin-right: 6px; vertical-align: 1px; }
+  @media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
+</style>
+</head>
+<body>
+<main class="card" aria-live="polite">
+  <div class="label">До конца сбора</div>
+  <div class="eta num" id="eta">—</div>
+  <div class="sub num" id="sub">загрузка…</div>
+  <div class="rows" id="rows"></div>
+  <div class="foot"><span id="state"></span><span class="num" id="updated"></span></div>
+</main>
+<script>
+const ROWS = [["seasons", "Сезоны"], ["matches", "Матчи с составами"], ["players", "Профили игроков"], ["squads", "Составы команд"]];
+const fmt = n => n.toLocaleString("ru-RU");
+const history = [];  // [{t, done}] for the measured rate, last 10 minutes
+
+document.getElementById("rows").innerHTML = ROWS.map(([key, title]) => `
+  <div class="row"><div class="top"><span>${title}</span><span class="count num" id="${key}-count"></span></div>
+  <div class="bar" role="progressbar" aria-label="${title}" aria-valuemin="0" aria-valuemax="100" id="${key}-bar"><i></i></div></div>`).join("");
+
+function hours(h) {
+  if (h < 1) return `~${Math.max(1, Math.round(h * 60))} мин`;
+  return h < 48 ? `~${h.toFixed(h < 10 ? 1 : 0)} ч` : `~${(h / 24).toFixed(1)} сут`;
+}
+
+async function refresh() {
+  try {
+    const p = await (await fetch("/status", {cache: "no-store"})).json();
+    const done = ROWS.reduce((sum, [key]) => sum + p[key].done, 0);
+    const now = Date.now();
+    history.push({t: now, done});
+    while (history.length > 2 && now - history[0].t > 10 * 60e3) history.shift();
+    const minutes = (now - history[0].t) / 60e3;
+    const rate = minutes >= 1 ? (done - history[0].done) / minutes : null;
+    const eta = p.remaining === 0 ? 0 : rate > 0 ? p.remaining / rate / 60 : p.eta_hours;
+    document.getElementById("eta").textContent = p.remaining === 0 ? "Готово" : hours(eta);
+    document.getElementById("sub").textContent =
+      `осталось ~${fmt(p.remaining)} запросов` + (rate !== null ? ` · ${fmt(Math.round(rate))} в минуту` : "");
+    for (const [key] of ROWS) {
+      const {done: d, total: t} = p[key];
+      const pct = t ? Math.min(100, d / t * 100) : 0;
+      document.getElementById(`${key}-count`).innerHTML = `${fmt(d)} <small>/ ${fmt(t)}</small>`;
+      const bar = document.getElementById(`${key}-bar`);
+      bar.setAttribute("aria-valuenow", Math.round(pct));
+      bar.firstElementChild.style.width = pct + "%";
+    }
+    document.getElementById("state").innerHTML = p.given_up ? `<span class="dot"></span>отказов: ${fmt(p.given_up)}` : "без отказов";
+    document.getElementById("updated").textContent = new Date().toLocaleTimeString("ru-RU");
+  } catch {
+    document.getElementById("state").innerHTML = `<span class="dot"></span>API недоступен`;
+  }
+}
+refresh();
+setInterval(refresh, 10e3);
+</script>
+</body>
+</html>
