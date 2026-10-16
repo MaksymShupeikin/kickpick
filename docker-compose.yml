@@ -96,6 +96,10 @@ services:
     ports:
       - "${API_BIND:-127.0.0.1}:${API_PORT:-8000}:8080"
       - "127.0.0.1:${ADMIN_PORT:-8001}:9000"
+    networks:
+      default:
+      edge:
+        ipv4_address: 172.31.255.3  # fixed, so it never takes Caddy's address
     depends_on:
       api:
         condition: service_healthy
@@ -149,9 +153,43 @@ services:
       retries: 3
     restart: unless-stopped
 
+  # Public HTTPS entry on a server (profile `public`): Let's Encrypt certificate for PUBLIC_HOST, proxied to the gateway.
+  caddy:
+    image: caddy:2-alpine
+    profiles: [public]
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: [no-new-privileges:true]
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:-}
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    networks:
+      edge:
+        ipv4_address: 172.31.255.2  # the one address the gateway trusts for the client IP (trusted-proxies.conf)
+    depends_on:
+      gateway:
+        condition: service_healthy
+    restart: unless-stopped
+    logging: *logging
+
+networks:
+  edge:
+    ipam:
+      config:
+        - subnet: 172.31.255.0/28
+
 volumes:
   pgdata:
   prediction_reports:
+  caddy_data:
+  caddy_config:
 
 secrets:
   postgres_admin_password:

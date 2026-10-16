@@ -26,6 +26,7 @@ Compose. For whoever runs, changes or deploys the server side.
 | `gateway` | Nginx in front of the API: rate limits, mobile port 8000, admin port 8001 | UID 101 |
 | `collector` | Keeps the database in sync with FotMob | `kickpick_collector` |
 | `predictor` | Optional (profile `ml`): stores and settles match predictions | `kickpick_predictor` |
+| `caddy` | Optional (profile `public`): public HTTPS with a Let's Encrypt certificate for `PUBLIC_HOST` | root, `NET_BIND_SERVICE` only |
 
 ## Running
 
@@ -41,7 +42,8 @@ The mobile API is on `http://localhost:8000`. The progress dashboard and API doc
 a tunnel at it. On the public entry point `/status`, `/dashboard`, `/docs`, `/redoc` and `/openapi.json` return 404.
 
 To ship a code change: `docker compose up -d --build api collector`. To ship a schema change, run
-`docker compose up --build migrate` first.
+`docker compose up --build migrate` first. To put the backend on a server with public HTTPS and the data already
+loaded, follow [deploy/README.md](../deploy/README.md).
 
 ### Upgrading a database created with the old password
 
@@ -68,6 +70,7 @@ not change the password of a database that already exists, which is why an old i
 | `DATABASE_PASSWORD_FILE` | unset | Path to the password secret; required without `DATABASE_URL` |
 | `API_BIND`, `API_PORT`, `ADMIN_PORT`, `DB_PORT` | `127.0.0.1`, `8000`, `8001`, `5432` | Published host addresses and ports |
 | `SECRETS_DIR` | `./.secrets` | Where Compose reads the secrets from |
+| `PUBLIC_HOST`, `HTTP_PORT`, `HTTPS_PORT` | unset, `80`, `443` | Caddy's public address and ports (profile `public`) |
 
 The competitions collected are listed in `kickpick/config.py` (`COMPETITIONS`), in the order the app shows them.
 
@@ -125,7 +128,8 @@ At most 16 concurrent requests per IP and 96 in total. Going over returns a JSON
 The API publishes no port of its own: `localhost:8000` leads to Nginx. Running Uvicorn directly outside Compose skips
 these limits. `X-Forwarded-For` and `X-Real-IP` from an arbitrary client are not trusted as the client IP. Behind
 ngrok or a CDN, requests may count as one proxy IP. On a server, set `deploy/nginx/trusted-proxies.conf` to the exact
-addresses of a trusted ingress that sets the client IP correctly; never trust every address. To publish, use an HTTPS
+addresses of a trusted ingress that sets the client IP correctly; never trust every address. It trusts Caddy's
+fixed address on the `edge` network (`172.31.255.2`), so the bundled HTTPS entry works as is. To publish, use an HTTPS
 ingress, restrict access to the origin and keep the admin port on localhost.
 
 ## Security

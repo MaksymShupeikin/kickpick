@@ -110,7 +110,7 @@ The simulator uses `http://localhost:8000`. A real iPhone reaches the API throug
 │   ├── alembic/           # database migrations
 │   ├── tests/             # pytest suite and FotMob fixtures
 │   └── tools/             # secrets setup, admin password rotation, capacity audit
-├── deploy/nginx/          # gateway config: rate limits, trusted proxies
+├── deploy/               # server guide, Caddy (HTTPS) and Nginx (rate limits) config, restore script
 ├── ios/
 │   ├── KickPick/          # SwiftUI app: API client, design system, features
 │   ├── KickPickTests/     # unit tests
@@ -136,6 +136,7 @@ Backend tests use a separate `kickpick_test` database. Each component's README h
 | [design.md](design.md) | Design system: colour, type, glass, components, motion, states |
 | [backend/README.md](backend/README.md) | Services, configuration, data collection, rate limits, roles, tests |
 | [ios/README.md](ios/README.md) | Building and running the app, real-device setup, tests |
+| [deploy/README.md](deploy/README.md) | Deploying to a server: public HTTPS, loading the database |
 | [backend/kickpick/ml/README.md](backend/kickpick/ml/README.md) | Offline prediction pipeline: data, features, models, evaluation |
 | [backend/kickpick/ml/ONLINE.md](backend/kickpick/ml/ONLINE.md) | Prediction service: running it and updating the model |
 

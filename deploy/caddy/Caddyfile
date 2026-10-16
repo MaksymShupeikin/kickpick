@@ -1,0 +1,6 @@
+# Public HTTPS for the mobile API. PUBLIC_HOST: a domain pointed at this server, or <ip-with-dashes>.sslip.io.
+# Caddy gets and renews the certificate itself (ports 80 and 443 must be open) and sets X-Forwarded-For to the
+# client's address, ignoring whatever the client sent.
+{$PUBLIC_HOST} {
+	reverse_proxy gateway:8080
+}
