@@ -1,3 +1,7 @@
+<div align="center">
+
+<img src="ios/KickPick/Assets.xcassets/AppIcon.appiconset/AppIcon.png" width="128" alt="KickPick app icon">
+
 # KickPick
 
 Football scores, tables, lineups and player stats for the major leagues and tournaments, in a native iOS app.
@@ -11,6 +15,8 @@ Football scores, tables, lineups and player stats for the major leagues and tour
 ![Nginx](https://img.shields.io/badge/Nginx-gateway-009639?logo=nginx&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 ![CatBoost](https://img.shields.io/badge/CatBoost-predictions-FFCC00)
+
+</div>
 
 KickPick collects football data from FotMob into its own Postgres database, serves it through a read-only FastAPI
 API, and shows it in a SwiftUI app with a dark frosted-glass design. The app never talks to FotMob: it reads only
