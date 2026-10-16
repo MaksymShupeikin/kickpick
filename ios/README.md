@@ -18,19 +18,12 @@ cd ios && xcodegen && open KickPick.xcodeproj
 The `.xcodeproj` is generated from `project.yml` and is not in git: change settings in `project.yml`, then run
 `xcodegen` again.
 
-### Simulator
+### API
 
-The simulator reaches the API at `http://localhost:8000` (`API_BASE_URL`).
+The app talks to the deployed API at `https://kickpick.vokh.dev` (`API_BASE_URL` in `project.yml`), on the simulator
+and on a real iPhone. Set `DEVELOPMENT_TEAM` in `project.yml` to your signing team to run on a device.
 
-### Real iPhone
-
-A phone reaches the Mac's API through an HTTPS ngrok tunnel set as `API_BASE_URL[sdk=iphoneos*]` in `project.yml`:
-
-1. Start a tunnel to the gateway: `ngrok http 8000`.
-2. Put its address into `API_BASE_URL[sdk=iphoneos*]` and run `xcodegen`.
-3. Set `DEVELOPMENT_TEAM` in `project.yml` to your signing team, then build and run on the device.
-
-Point the tunnel only at port 8000 (Nginx), never at the admin port 8001.
+To use a local backend in the simulator, set `API_BASE_URL` to `http://localhost:8000` and run `xcodegen` again.
 
 ## Project structure
 

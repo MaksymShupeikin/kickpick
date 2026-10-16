@@ -17,8 +17,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.kickpick.KickPick
         TARGETED_DEVICE_FAMILY: "1"
-        API_BASE_URL: http://localhost:8000
-        API_BASE_URL[sdk=iphoneos*]: https://duncishly-blowsiest-donte.ngrok-free.dev  # a real phone reaches the Mac's API through the ngrok tunnel
+        API_BASE_URL: https://kickpick.vokh.dev  # local backend: http://localhost:8000 (simulator only)
     info:
       path: KickPick/Info.plist
       properties:
